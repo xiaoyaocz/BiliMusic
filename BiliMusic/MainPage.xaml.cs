@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,6 +28,14 @@ namespace BiliMusic
         public MainPage()
         {
             this.InitializeComponent();
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            //Window.Current.SetTitleBar(titleBar);
+            var bar = ApplicationView.GetForCurrentView().TitleBar;
+            var mainColor = (SolidColorBrush)Application.Current.Resources["COLOR_Main"];
+            bar.ButtonBackgroundColor = Colors.Transparent;
+            bar.ButtonHoverBackgroundColor = mainColor.Color;
+            bar.ButtonForegroundColor = Colors.Black;
         }
     }
 }

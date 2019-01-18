@@ -6,9 +6,176 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="56"/>
+        </Grid.RowDefinitions>
+        <!--<SplitView IsPaneOpen="True" DisplayMode="Inline" PaneBackground="{ThemeResource COLOR_PaneBackground}" OpenPaneLength="240">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                      
+                        <RowDefinition/>
+                        <RowDefinition Height="56"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource BackButton}" Height="36" Foreground="Gray">
+                            <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" FontSize="16" Glyph="{StaticResource ICON_Back}" />
+                        </Button>
+                        <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontSize="14">哔哩哔哩音乐</TextBlock>
+                    </StackPanel>
+                   
+                    <Grid Grid.Row="2" Padding="4" BorderThickness="0 1 0 0" BorderBrush="#FFD7D7D7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Width="24" Height="24" Margin="4" Fill="#FFDD8D8D"></Ellipse>
+                        <TextBlock Text="请登录" Grid.Column="1" VerticalAlignment="Center" Margin="4 0 0 0"></TextBlock>
+                        <FontIcon Foreground="Gray" Grid.Column="2" Margin="4" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Setting}" />
+                    </Grid>
+                  
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <ListView SelectionMode="Single" IsItemClickEnabled="True">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Padding" Value="0" ></Setter>
+                                        <Setter Property="FontSize" Value="14" ></Setter>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                        <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListViewItem Foreground="Gray" Padding="0"  >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Background="{StaticResource COLOR_Main}" Width="4"></Border>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="8 0 0 0">
+                                            <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Home}" />
+                                            <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" >发现音乐</TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                   
+                                </ListViewItem>
+                                <ListViewItem Foreground="Gray" Padding="0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Background="{StaticResource COLOR_Main}" Width="4" Visibility="Collapsed"></Border>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="8 0 0 0">
+                                            <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Search}" />
+                                            <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" >搜索</TextBlock>
+                                        </StackPanel>
+                                    </Grid>
 
+                                </ListViewItem>
+                                <ListViewItem Foreground="Gray" Padding="0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Background="{StaticResource COLOR_Main}" Width="4" Visibility="Collapsed"></Border>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="8 0 0 0">
+                                            <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Local}" />
+                                            <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" >本地音乐</TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+
+                                </ListViewItem>
+                            </ListView>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid Height="36" x:Name="titleBar" Background="Transparent"></Grid>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>-->
+        <controls:NavigationView IsSettingsVisible="True" OpenPaneLength="240" PaneDisplayMode="Auto">
+            <controls:NavigationView.MenuItems>
+                <controls:NavigationViewItem Tag="home"  Content="首页">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Home}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItem Tag="search"  Content="搜索">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Search}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItem  Content="本地音乐">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Local}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItemSeparator/>
+                <controls:NavigationViewItemHeader Content="我的"/>
+                <controls:NavigationViewItem  Content="月卡中心">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Card}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItem  Content="我的缓存">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Download}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+               
+                <controls:NavigationViewItem  Content="我的收藏">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Star_Border}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItem  Content="我的关注">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Like_Border}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItemSeparator/>
+                <controls:NavigationViewItemHeader Content="创建的歌单" />
+                <controls:NavigationViewItem  Content="私人歌单">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_SongList}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItemSeparator/>
+                <controls:NavigationViewItemHeader Content="收藏的歌单"/>
+                <controls:NavigationViewItem  Content="[日系]Re:因为我的羽翼 是...">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_SongList}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+               
+                <controls:NavigationViewItem  Content="【日系抒情】早晚终相会 忧...">
+                    <controls:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_SongList}"></FontIcon>
+                    </controls:NavigationViewItem.Icon>
+                </controls:NavigationViewItem>
+            </controls:NavigationView.MenuItems>
+           
+            
+        </controls:NavigationView>
+
+        <Grid Grid.Row="2" Background="{ThemeResource COLOR_BarColor}">
+            
+        </Grid>
     </Grid>
 </Page>
