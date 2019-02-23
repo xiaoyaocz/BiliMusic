@@ -62,6 +62,39 @@ namespace BiliMusic
             return api;
         }
         /// <summary>
+        /// SSO
+        /// </summary>
+        /// <param name="access_key"></param>
+        /// <returns></returns>
+        public static ApiModel SSO(string access_key)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://passport.bilibili.com/api/login/sso",
+                parameter = ApiHelper.MustParameter(false)+ $"&gourl=https%3A%2F%2Faccount.bilibili.com%2Faccount%2Fhome&access_key={access_key}",
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+        /// <summary>
+        /// 读取验证码
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel Captcha()
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = "https://passport.bilibili.com/captcha",
+                headers = Utils.GetDefaultHeaders(),
+                parameter=$"ts={Utils.GetTimestampS()}"
+            };
+            return api;
+
+        }
+        /// <summary>
         /// 读取个人信息
         /// </summary>
         /// <returns></returns>
@@ -103,16 +136,45 @@ namespace BiliMusic
             ApiModel api = new ApiModel()
             {
                 method = RestSharp.Method.GET,
-                baseUrl = "https://api.bilibili.com/audio/music-service-c/firstpage/{id}",
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/firstpage/{id}",
                 parameter = ApiHelper.MustParameter(true),
                 headers = Utils.GetDefaultHeaders()
             };
             api.parameter += ApiHelper.GetSign(api.parameter);
             return api;
         }
-
-
-
+        /// <summary>
+        /// 读取我创建的歌单
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel MyCreate(int page=1,int pagesize=100)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = "https://api.bilibili.com/audio/music-service-c/collections",
+                parameter = ApiHelper.MustParameter(true)+$"&page_index={page}&page_size={pagesize}&mid={UserHelper.mid}",
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+        /// <summary>
+        /// 读取我收藏的歌单
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel MyCollection(int page=1, int pagesize=100)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/users/{UserHelper.mid}/menus",
+                parameter = ApiHelper.MustParameter(true) + $"&page_index={page}&page_size={pagesize}&type=1",
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
     }
 
     public class ApiModel

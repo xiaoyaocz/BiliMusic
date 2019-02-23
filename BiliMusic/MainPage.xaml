@@ -107,7 +107,6 @@
                         <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_SongList}"></FontIcon>
                     </controls:NavigationViewItem.Icon>
                 </controls:NavigationViewItem>
-
                 <controls:NavigationViewItemHeader Content="收藏的歌单" Foreground="{StaticResource COLOR_Foreground}"/>
                 <controls:NavigationViewItem  Content="[日系]Re:因为我的羽翼 是...">
                     <controls:NavigationViewItem.Icon>

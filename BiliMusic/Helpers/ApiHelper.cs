@@ -55,19 +55,12 @@ namespace BiliMusic.Helpers
             var url = "";
             if (needAccesskey&&UserHelper.isLogin)
             {
-                url = $"access_key={UserHelper.access_key}";
+                url = $"access_key={UserHelper.access_key}&";
             }
-            return url+$"appkey={_appkey}&build={_build}&mobi_app={_mobi_app}&platform={_platform}&ts={GetTimestampS()}";
+            return url+$"appkey={_appkey}&build={_build}&mobi_app={_mobi_app}&platform={_platform}&ts={Utils.GetTimestampS()}";
         }
 
-        public static long GetTimestampS()
-        {
-             return Convert.ToInt64((DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0, 0)).TotalSeconds); 
-        }
-        public static long GetTimestampMS()
-        {
-            return Convert.ToInt64((DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0, 0)).TotalMilliseconds);
-        }
+       
     }
     
 }

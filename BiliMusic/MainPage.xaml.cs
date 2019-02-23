@@ -1,4 +1,6 @@
-﻿using BiliMusic.Models.Main;
+﻿using BiliMusic.Helpers;
+using BiliMusic.Models;
+using BiliMusic.Models.Main;
 using BiliMusic.Modules;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -31,6 +34,7 @@ namespace BiliMusic
         public MainPage()
         {
             this.InitializeComponent();
+            //设置标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(titleBar);
@@ -41,15 +45,40 @@ namespace BiliMusic
             bar.ButtonForegroundColor = Colors.Black;
            
         }
+
+       
+
         Main main;
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+           
             MainFrame.Navigate(typeof(Views.HomePage));
             main = new Main();
             this.DataContext = main;
+
+            //设置登录状态
+            var userinfo = SettingHelper.StorageHelper.Read<LoginDataV2Model>(SettingHelper.LoginInfo);
+            if (userinfo != null)
+            {
+                if (userinfo.expires_datetime < DateTime.Now)
+                {
+                    MessageCenter.SendLogout();
+                    await new MessageDialog("登录失效了，请重新登录").ShowAsync();
+                    await Utils.ShowLoginDialog();
+                }
+                else
+                {
+                    UserHelper.isLogin = true;
+                    UserHelper.access_key = userinfo.access_token;
+                    UserHelper.mid = userinfo.mid;
+                    MessageCenter.SendLogined(userinfo);
+                }
+            }
+
             //NavView.MenuItemsSource = main.Menus;
-            
+
+
         }
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
         {
@@ -78,9 +107,58 @@ namespace BiliMusic
             
         }
 
-        private void NavView_ItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)
+        private async void NavView_ItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)
         {
-            MainFrame.Navigate(typeof(Views.SonglistPage));
+            if (args.IsSettingsInvoked)
+            {
+                Utils.ShowMessageToast("你选择了设置");
+                return;
+            }
+            
+
+            var item= args.InvokedItemContainer.Tag as MenuModel;
+            
+            switch (item.openMode)
+            {
+                case MenuOpenMode.Home:
+                    MainFrame.Navigate(typeof(Views.HomePage),item.parameters);
+                    break;
+                case MenuOpenMode.Search:
+                    break;
+                case MenuOpenMode.Download:
+                    break;
+                case MenuOpenMode.LoaclMusic:
+                    break;
+                case MenuOpenMode.Collection:
+                    break;
+                case MenuOpenMode.Attention:
+                    break;
+                case MenuOpenMode.Songlist:
+                    MainFrame.Navigate(typeof(Views.SonglistPage),item.parameters);
+                    break;
+                case MenuOpenMode.Song:
+                    break;
+                case MenuOpenMode.User:
+                    break;
+                case MenuOpenMode.Webpage:
+                    break;
+                case MenuOpenMode.Account:
+                    break;
+                case MenuOpenMode.Rank:
+                    break;
+                case MenuOpenMode.Radio:
+                    break;
+                case MenuOpenMode.Login:
+                    await Utils.ShowLoginDialog();
+                    break;
+                case MenuOpenMode.MyCollect:
+                    break;
+                case MenuOpenMode.MyAttention:
+                    break;
+                default:
+                    break;
+            }
+            
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

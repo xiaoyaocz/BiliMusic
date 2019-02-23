@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="BiliMusic.Views.SonglistPage"
+    x:Class="BiliMusic.Views.WebPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BiliMusic.Views"
@@ -9,6 +9,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock x:Name="title">歌单</TextBlock>
+        <WebView x:Name="webview"></WebView>
     </Grid>
 </Page>

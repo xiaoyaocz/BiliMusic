@@ -28,11 +28,7 @@ namespace BiliMusic.Helpers
             return result;
         }
 
-        public static void SendToast(string message)
-        {
-
-        }
-
+      
 
     }
 }

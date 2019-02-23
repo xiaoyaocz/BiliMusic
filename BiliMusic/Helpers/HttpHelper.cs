@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
 using BiliMusic.Models;
+using System.IO;
 
 namespace BiliMusic.Helpers
 {
@@ -66,6 +67,48 @@ namespace BiliMusic.Helpers
 
             
         }
+
+        /// <summary>
+        /// 发送一个GET请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <param name="cookie"></param>
+        /// <returns></returns>
+        public async static Task<MemoryStream> GetStream(string url, IDictionary<string, string> headers = null, IDictionary<string, string> cookie = null)
+        {
+            try
+            {
+                var client = new RestClient(url);
+                var request = new RestRequest(Method.GET);
+                if (headers != null)
+                {
+                    foreach (var item in headers)
+                    {
+                        request.AddHeader(item.Key, item.Value);
+                    }
+                }
+                if (cookie != null)
+                {
+                    foreach (var item in cookie)
+                    {
+                        request.AddCookie(item.Key, item.Value);
+                    }
+                }
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+
+                return new MemoryStream(response.RawBytes);
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+
+        }
+
         /// <summary>
         /// 发送一个POST请求
         /// </summary>
@@ -119,6 +162,7 @@ namespace BiliMusic.Helpers
         }
         
       
+
 
         private static string StatusCodeToMessage(int code)
         {

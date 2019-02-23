@@ -18,6 +18,9 @@ namespace BiliMusic.Modules
         public event PropertyChangedEventHandler PropertyChanged;
         public Main()
         {
+            //注册登录完成事件
+            MessageCenter.Logined += MessageCenter_Logined;
+
             _TopMenus = new ObservableCollection<MenuModel>() {
                 new MenuModel(){
                     icon=(string)Application.Current.Resources["ICON_Search"],
@@ -61,9 +64,16 @@ namespace BiliMusic.Modules
                     openMode= MenuOpenMode.Login
                 }
             };
+            
             CreateMenus();
            
         }
+
+        private void MessageCenter_Logined(object sender, object e)
+        {
+            Logined();
+        }
+
         /// <summary>
         /// 用于榜单NavView的集合
         /// </summary>
@@ -95,14 +105,14 @@ namespace BiliMusic.Modules
         /// <summary>
         /// 登录完成,设置菜单
         /// </summary>
-        public void Logged()
+        public async void Logined()
         {
             _MyMenus = new ObservableCollection<MenuModel>() {
                 new MenuModel(){
                     icon=(string)Application.Current.Resources["ICON_PermIdentity"],
                     title="个人中心",
                     menuType= MenuType.Menuitem,
-                    openMode= MenuOpenMode.Login
+                    openMode= MenuOpenMode.Account
                 },
                  new MenuModel(){
                     icon=(string)Application.Current.Resources["ICON_Star_Border"],
@@ -118,6 +128,8 @@ namespace BiliMusic.Modules
                 }
             };
             //TODO 更新我的歌单 
+            await GetMyCreate();
+            await GetMyCollection();
             CreateMenus();
         }
         /// <summary>
@@ -139,6 +151,88 @@ namespace BiliMusic.Modules
         }
 
         /// <summary>
+        /// 读取我收藏的歌单
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetMyCollection()
+        {
+            try
+            {
+                var re=await Api.MyCollection().Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return;
+                }
+                var data = re.GetJson<ApiParseModel<MyCollectionMenuModel>>();
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return;
+                }
+                _MyLikeSonglistMenus = new ObservableCollection<MenuModel>();
+                foreach (var item in data.data.list)
+                {
+                    _MyLikeSonglistMenus.Add(new MenuModel()
+                    {
+                        icon = (string)Application.Current.Resources["ICON_SongList"],
+                        title = item.title,
+                        menuType = MenuType.Menuitem,
+                        openMode = MenuOpenMode.Songlist,
+                        parameters = item.menuId
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowMessageToast("读取创建的歌单失败");
+                //TODO 保存错误信息
+            }
+        }
+
+        /// <summary>
+        /// 读取我创建的歌单
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetMyCreate()
+        {
+            try
+            {
+                var re = await Api.MyCreate().Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return;
+                }
+                var data = re.GetJson<ApiParseModel<MyCreateMenuModel>>();
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return;
+                }
+                _MySonglistMenus = new ObservableCollection<MenuModel>();
+                foreach (var item in data.data.list)
+                {
+                    _MySonglistMenus.Add(new MenuModel()
+                    {
+                        icon = (string)Application.Current.Resources["ICON_SongList"],
+                        title = item.title,
+                        menuType = MenuType.Menuitem,
+                        openMode = MenuOpenMode.Songlist,
+                        parameters = item.menu_id
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowMessageToast("读取创建的歌单失败");
+                //TODO 保存错误信息
+            }
+        }
+
+        /// <summary>
         /// 读取首页Tab菜单
         /// </summary>
         private async Task GetHomeMenus()
@@ -148,13 +242,13 @@ namespace BiliMusic.Modules
                 var tab =await Api.Tab().Request();
                 if (!tab.status)
                 {
-                    SystemHelper.SendToast(tab.message);
+                    Utils.ShowMessageToast(tab.message);
                     return;
                 }
                 var data = tab.GetJson<ApiParseModel<List<HomeTabModel>>>();
                 if (data.code != 0)
                 {
-                    SystemHelper.SendToast(data.msg + data.message);
+                    Utils.ShowMessageToast(data.msg + data.message);
                     return;
                 }
                 _HomeMenus = new ObservableCollection<MenuModel>();
@@ -198,15 +292,21 @@ namespace BiliMusic.Modules
             }
             catch (Exception ex)
             {
-                SystemHelper.SendToast(ex.Message);
+               
+                Utils.ShowMessageToast("读取菜单信息失败");
+                //TODO 保存错误信息
             }
-           
+
         }
         /// <summary>
         /// 创建完整的菜单
         /// </summary>
-        private void CreateMenus()
+        private async void CreateMenus()
         {
+            if (_HomeMenus.Count<=3)
+            {
+                await GetHomeMenus();
+            }
             _Menus = new ObservableCollection<MenuModel>();
             foreach (var item in _TopMenus)
             {
@@ -280,9 +380,14 @@ namespace BiliMusic.Modules
                         break;
                     case MenuType.Menuitem:
                         {
+                          
                             Menus.Add(new NavigationViewItem()
                             {
-                                Content = item.title,
+                                Content = new Windows.UI.Xaml.Controls.TextBlock()
+                                {
+                                    Text = item.title,
+                                    TextTrimming = TextTrimming.CharacterEllipsis
+                                },
                                 Icon = new Windows.UI.Xaml.Controls.FontIcon()
                                 {
                                     FontFamily = (Windows.UI.Xaml.Media.FontFamily)Application.Current.Resources["FONTS_MaterialIcons"],
