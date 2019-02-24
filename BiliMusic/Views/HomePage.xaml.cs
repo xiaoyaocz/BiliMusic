@@ -34,15 +34,14 @@ namespace BiliMusic.Views
             homeItemDataTemplateSelector.resource = this.Resources;
         }
         TabDetail tabDetail;
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            loading.Visibility = Visibility.Visible;
             tab_id = Convert.ToInt32(e.Parameter);
             tabDetail = new TabDetail(tab_id);
-            await tabDetail.LoadData();
-            this.DataContext = tabDetail.Datas;
-            loading.Visibility = Visibility.Collapsed;
+            this.DataContext = tabDetail;
+            tabDetail.LoadData();
+
          
         }
 
@@ -51,6 +50,12 @@ namespace BiliMusic.Views
             var data = (sender as ImageEx).DataContext as bannersModel;
             this.Frame.Navigate(typeof(WebPage), data.schema);
             //await Launcher.LaunchUriAsync(new Uri(data.schema));
+        }
+
+        private void SongMenu_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data= e.ClickedItem as menusModel;
+            this.Frame.Navigate(typeof(SonglistPage), data.menuId);
         }
     }
 }

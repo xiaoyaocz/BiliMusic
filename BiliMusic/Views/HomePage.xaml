@@ -6,15 +6,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:controls2="using:AppStudio.Uwp.Controls"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:converts="using:BiliMusic.Converters"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <converts:HomeItemDataTemplateSelector x:Name="homeItemDataTemplateSelector" x:Key="homeItemDataTemplateSelector"></converts:HomeItemDataTemplateSelector>
         <converts:HomeItemStyleSelector  x:Key="homeItemStyleSelector"></converts:HomeItemStyleSelector>
         <DataTemplate x:Key="Recommend">
             <StackPanel Margin="0 8 0 0" >
-                <Grid Margin="0 0 0 8">
+                <Grid Margin="0 0 0 8" >
                     <TextBlock Text="{Binding title}"></TextBlock>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Foreground="{StaticResource COLOR_Main}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
@@ -40,7 +42,7 @@
                                    IsItemClickEnabled="True">
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
-                            <Grid >
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
@@ -82,7 +84,7 @@
                     </StackPanel>
                 </Grid>
 
-                <controls:AdaptiveGridView ItemsSource="{Binding menus}" DesiredWidth="180" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
+                <controls:AdaptiveGridView ItemClick="SongMenu_ItemClick" ItemsSource="{Binding menus}" DesiredWidth="180" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="4" MaxWidth="180">
@@ -182,33 +184,32 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid>
-        <ScrollViewer Padding="8">
+    <Grid Margin="0 32 0 0">
+        <ScrollViewer Padding="8" DataContext="{Binding Datas}">
             <StackPanel MaxWidth="1024" HorizontalAlignment="Center">
-                <controls:Carousel
-                   MinHeight="10"
-                   MaxHeight="160"
-                   InvertPositive="true" ItemDepth="48"
-                   ItemMargin="0" ItemRotationX="0"
-                   ItemRotationY="0" ItemRotationZ="0"
-                    SelectedIndex="0"
-                    
-                ItemsSource="{Binding banners}"
-                   Orientation="Horizontal">
-                    <controls:Carousel.ItemTemplate>
-                        <DataTemplate>
-                            <controls:ImageEx Tapped="Banner_Tapped" Source="{Binding bannerImgUrl}" Style="{StaticResource ImageExBaseStyle}" />
-                        </DataTemplate>
-                    </controls:Carousel.ItemTemplate>
 
-                </controls:Carousel>
+
+                <controls2:Carousel x:Name="control"  ItemsSource="{Binding banners}"
+                         MaxItems="1"  AspectRatio="3.4" GradientOpacity="0" MaxHeight="160" AlignmentX="Left">
+                    <controls2:Carousel.ContentTemplate>
+                        <DataTemplate>
+                            <controls:ImageEx Margin="4" extensions:Mouse.Cursor="Hand"  Tapped="Banner_Tapped" Source="{Binding bannerImgUrl}" Style="{StaticResource ImageExBaseStyle}" />
+                        </DataTemplate>
+                    </controls2:Carousel.ContentTemplate>
+                </controls2:Carousel>
+                <controls2:Indicator x:Name="indicator" Margin="0,9"
+                          ItemsSource="{Binding ItemsSource, ElementName=control, Mode=TwoWay}"
+                          SelectedIndex="{Binding SelectedIndex, ElementName=control, Mode=TwoWay}"
+                          ShapeMode="Ellipse" Background="WhiteSmoke"  SelectedBackground="DimGray" PressedBackground="Gray" />
+
+
                 <ItemsControl ItemsSource="{Binding modules}" ItemContainerStyleSelector="{StaticResource homeItemStyleSelector}" ItemTemplateSelector="{StaticResource ResourceKey=homeItemDataTemplateSelector}">
                     
                 </ItemsControl>
                 
             </StackPanel>
         </ScrollViewer>
-        <ProgressRing x:Name="loading" Foreground="{StaticResource COLOR_Main}" IsActive="True" Width="56" Height="56"></ProgressRing>
+        <ProgressRing x:Name="loading" Visibility="{Binding loading}" Foreground="{StaticResource COLOR_Main}" IsActive="True" Width="56" Height="56"></ProgressRing>
     </Grid>
    
 

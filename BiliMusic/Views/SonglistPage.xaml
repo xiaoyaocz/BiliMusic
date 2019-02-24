@@ -6,9 +6,207 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+       xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.Resources>
+        <MenuFlyout x:Key="menu">
+            <MenuFlyoutItem Icon="Play">播放</MenuFlyoutItem>
+            <MenuFlyoutItem Icon="Download">下载</MenuFlyoutItem>
+            <MenuFlyoutItem Icon="Share">分享</MenuFlyoutItem>
+            <MenuFlyoutItem >查看详细</MenuFlyoutItem>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem>收藏到</MenuFlyoutItem>
+        </MenuFlyout>
+    </Page.Resources>
     <Grid>
-        <TextBlock x:Name="title">歌单</TextBlock>
+        <Grid DataContext="{Binding Datas}">
+            <Grid VerticalAlignment="Top">
+                <Image Source="{Binding Path=menusRespones.bg}" Height="240" Stretch="Fill"></Image>
+                <Border BorderBrush="White" >
+                    <Border.Background>
+                        <media:BackdropBlurBrush Amount="100" />
+                    </Border.Background>
+                </Border>
+                <Border>
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Transparent" Offset="0"/>
+                            <GradientStop Color="White" Offset="1"/>
+                            <GradientStop Color="#80FFFFFF" Offset="0.504"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+            </Grid>
+            <ScrollViewer Margin="0 32 0 0">
+                <StackPanel Margin="24 8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid VerticalAlignment="Top">
+
+                            <controls:ImageEx Stretch="UniformToFill" Width="160" Height="160" PlaceholderStretch="UniformToFill" Style="{StaticResource ImageExBaseStyle}" 
+                                                  Source="{Binding Path=menusRespones.coverUrl}" />
+
+                            <Grid VerticalAlignment="Bottom" >
+                                <Grid.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#7F000000" Offset="1"/>
+                                        <GradientStop Color="#00000000" Offset="0"/>
+                                    </LinearGradientBrush>
+                                </Grid.Background>
+
+                                <StackPanel Orientation="Horizontal" Padding="8 4">
+                                    <FontIcon  Foreground="White" FontSize="14"  VerticalAlignment="Center" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Listen}"></FontIcon>
+                                    <TextBlock Foreground="White"  FontSize="12" VerticalAlignment="Center" Margin="4 0 0 0" Text="{Binding Path=menusRespones.playNum,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                </StackPanel>
+
+                            </Grid>
+                        </Grid>
+
+                        <StackPanel Grid.Column="1" Margin="16 0 0 0">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Margin="0 0 8 0"  VerticalAlignment="Center" BorderThickness="1" CornerRadius="4" Padding="8 2" BorderBrush="{StaticResource COLOR_Main}">
+                                    <TextBlock FontSize="12" Foreground="{StaticResource COLOR_Main}" Text="{Binding Path=menusRespones.toptitle}"></TextBlock>
+                                </Border>
+                                <Border Margin="0 0 8 0" Visibility="{Binding Path=menusRespones.showVip}" VerticalAlignment="Center" BorderThickness="1" CornerRadius="4" Padding="8 2" BorderBrush="DarkOrange">
+                                    <TextBlock FontSize="12" Foreground="DarkOrange">付费</TextBlock>
+                                </Border>
+
+                                <TextBlock TextWrapping="Wrap" FontSize="16" Text="{Binding Path=menusRespones.title}"></TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0 4" Visibility="{Binding Path=menusRespones.showCreate}">
+                                <TextBlock TextWrapping="Wrap"  Foreground="#FF3C3C3C" Margin="0 0 4 0">创建者:</TextBlock>
+                                <Button Style="{StaticResource TextButton}" Content="{Binding Path=menusRespones.uname}"></Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 4" Visibility="{Binding Path=menusRespones.showName}">
+                                <TextBlock TextWrapping="Wrap"  Foreground="#FF3C3C3C" Margin="0 0 4 0">歌手:</TextBlock>
+                                <Button Style="{StaticResource TextButton}"  Content="{Binding Path=menusRespones.mbnames}"></Button>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0 4" Visibility="Collapsed">
+                                <Button Style="{StaticResource TextButton}" Margin="0 0 4 0" BorderThickness="1" BorderBrush="Gray" FontSize="12" Padding="4 2">人声演唱</Button>
+                                <Button Style="{StaticResource TextButton}" Margin="0 0 4 0" BorderThickness="1" BorderBrush="Gray" FontSize="12" Padding="4 2">人声演唱</Button>
+                            </StackPanel>
+
+                            <TextBlock TextWrapping="Wrap"  Visibility="{Binding Path=menusRespones.showIntro}" Foreground="#FF3C3C3C" Margin="0 4">简介: <Run Foreground="Gray" Text="{Binding Path=menusRespones.mbnames}"></Run></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button Margin="0 0 4 0" Style="{StaticResource TextButton}" MinWidth="100" MinHeight="32" Background="#33F5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Star}"></FontIcon>
+                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">收藏(<Run Text="{Binding Path=menusRespones.collectNum,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#33F5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Comment2}"></FontIcon>
+                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">评论(<Run Text="{Binding Path=menusRespones.commentNum,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#33F5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Download}"></FontIcon>
+                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">下载全部</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#33F5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Share}"></FontIcon>
+                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">分享</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Grid>
+                    <ListView SelectionMode="None" Margin="0 8 0 0" IsItemClickEnabled="True" ItemsSource="{Binding songsList}">
+
+                        <ListView.Header>
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock VerticalAlignment="Center" FontSize="18">歌曲列表 <Span FontSize="14" Foreground="Gray">(共<Run Text="{Binding Path=menusRespones.songNum}"/>首)</Span></TextBlock>
+                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <Button Margin="0 0 8 0"  Style="{StaticResource TextButton}" BorderThickness="1" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play1}"></FontIcon>
+                                                <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">播放全部</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button  Style="{StaticResource TextButton}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Select}"></FontIcon>
+                                                <TextBlock Margin="8 0 0 0" FontSize="14" VerticalAlignment="Center">选择</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+
+                                </Grid>
+                                <Grid  Padding="0 8 0 8" BorderThickness="0 0 0 1" BorderBrush="#33808080">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="56"/>
+                                        <ColumnDefinition Width="0.7*"/>
+                                        <ColumnDefinition Width="0.3*"/>
+                                        <ColumnDefinition Width="72"/>
+                                        <ColumnDefinition Width="108"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="1" Foreground="Gray" TextTrimming="CharacterEllipsis">歌曲名称</TextBlock>
+                                    <TextBlock Grid.Column="2" Foreground="Gray" TextTrimming="CharacterEllipsis">歌手</TextBlock>
+                                    <TextBlock Grid.Column="3" Foreground="Gray" TextTrimming="CharacterEllipsis">时长</TextBlock>
+                                    <TextBlock Grid.Column="4" Foreground="Gray" TextTrimming="CharacterEllipsis" Margin="8 0">操作</TextBlock>
+                                </Grid>
+                            </StackPanel>
+
+                        </ListView.Header>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                                <Setter Property="Padding" Value="0 4"></Setter>
+                                <Setter Property="BorderThickness" Value="0 0 0 1"></Setter>
+                                <Setter Property="BorderBrush" Value="#33808080"></Setter>
+
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ContextFlyout="{StaticResource menu}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="56"/>
+                                        <ColumnDefinition Width="0.7*"/>
+                                        <ColumnDefinition Width="0.3*"/>
+                                        <ColumnDefinition Width="72"/>
+                                        <ColumnDefinition Width="108"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center" Grid.Column="0" Foreground="Gray" TextAlignment="Center" Text="{Binding index}"></TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Grid.Column="2" TextTrimming="CharacterEllipsis" Text="{Binding author}"></TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Grid.Column="3" Text="{Binding Path=duration,Converter={StaticResource durationToTimeConvert}}"></TextBlock>
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal" >
+                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36">
+                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play1}"></FontIcon>
+                                        </Button>
+                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36">
+                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Like_Border}"></FontIcon>
+                                        </Button>
+                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36" Flyout="{StaticResource menu}">
+                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_More}"></FontIcon>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+
+                    </ListView>
+                </StackPanel>
+            </ScrollViewer>
+           
+        </Grid>
+        <ProgressRing x:Name="loading" Visibility="{Binding loading}" Foreground="{StaticResource COLOR_Main}" IsActive="True" Width="56" Height="56"></ProgressRing>
     </Grid>
+   
 </Page>
