@@ -106,6 +106,7 @@ namespace BiliMusic.Models.Main
         /// 类型
         /// </summary>
         public MenuType menuType { get; set; } = MenuType.Menuitem;
+        public string name { get; set; } = "";
     }
    
    

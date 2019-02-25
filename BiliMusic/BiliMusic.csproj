@@ -97,6 +97,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HomeGrid.cs" />
     <Compile Include="Controls\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
     </Compile>
@@ -105,7 +106,9 @@
     </Compile>
     <Compile Include="Converters\DurationToTimeConvert.cs" />
     <Compile Include="Converters\HomeItemDataTemplateSelector.cs" />
+    <Compile Include="Converters\HomeItemNarrowStyleSelector.cs" />
     <Compile Include="Converters\HomeItemStyleSelector.cs" />
+    <Compile Include="Converters\ImageCompressionConvert.cs" />
     <Compile Include="Converters\NumberToStringConvert.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\HttpHelper.cs" />
@@ -130,8 +133,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modules\Main.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Views\DesktopLyricsPage.xaml.cs">
+      <DependentUpon>DesktopLyricsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingPage.xaml.cs">
+      <DependentUpon>SettingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SongDetailsPage.xaml.cs">
+      <DependentUpon>SongDetailsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SonglistPage.xaml.cs">
       <DependentUpon>SonglistPage.xaml</DependentUpon>
@@ -153,6 +165,8 @@
     <Content Include="Assets\Login\ic_33.png" />
     <Content Include="Assets\Login\ic_33_hide.png" />
     <Content Include="Assets\Placeholde.png" />
+    <Content Include="Assets\Placeholde1020W300H.png" />
+    <Content Include="Assets\Placeholde300W300H.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -179,7 +193,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\DesktopLyricsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SongDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

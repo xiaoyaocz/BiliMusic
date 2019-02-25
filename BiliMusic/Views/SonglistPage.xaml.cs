@@ -26,21 +26,33 @@ namespace BiliMusic.Views
         public SonglistPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
         MenuDetail detail;
         int menu_id = 0;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            menu_id =(int)e.Parameter;
-            detail = new MenuDetail(menu_id);
-            this.DataContext = detail;
-            detail.LoadData();
-            
+            if (e.NavigationMode == NavigationMode.New || detail == null)
+            {
+                menu_id = (int)e.Parameter;
+                detail = new MenuDetail(menu_id);
+                this.DataContext = detail;
+                detail.LoadData();
+            }
             //title.Text = e.Parameter.ToString();
         }
-
-
-
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (e.SourcePageType == typeof(SonglistPage))
+            {
+                this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            }
+            base.OnNavigatingFrom(e);
+        }
+        private void ListSongsList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            
+        }
     }
 }

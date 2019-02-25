@@ -68,7 +68,8 @@ namespace BiliMusic.Modules
                     Utils.ShowMessageToast(data.msg + data.message);
                     return;
                 }
-               
+
+                data.data.menusTags =await LoadTags();
                 Datas = data.data;
                
             }
@@ -85,5 +86,35 @@ namespace BiliMusic.Modules
 
         }
 
+        public async Task<List<menusTagModel>> LoadTags()
+        {
+            try
+            {
+                loading = true;
+                var re = await Api.SonglistTag(menuid).Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return null;
+                }
+                var data = re.GetJson<ApiParseModel<List<menusTagModel>>>();
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return null;
+                }
+
+
+                return data.data;
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowMessageToast("读取歌单TAG失败");
+                return null;
+                //TODO 保存错误信息
+            }
+           
+        }
     }
 }

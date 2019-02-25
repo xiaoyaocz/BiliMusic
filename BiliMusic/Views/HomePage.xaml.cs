@@ -30,25 +30,35 @@ namespace BiliMusic.Views
         public HomePage()
         {
             this.InitializeComponent();
-
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
             homeItemDataTemplateSelector.resource = this.Resources;
         }
         TabDetail tabDetail;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            tab_id = Convert.ToInt32(e.Parameter);
-            tabDetail = new TabDetail(tab_id);
-            this.DataContext = tabDetail;
-            tabDetail.LoadData();
+            if (e.NavigationMode== NavigationMode.New||tabDetail==null)
+            {
+                tab_id = Convert.ToInt32(e.Parameter);
+                tabDetail = new TabDetail(tab_id);
+                this.DataContext = tabDetail;
+                tabDetail.LoadData();
+            }
 
-         
         }
-
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (e.SourcePageType==typeof(HomePage))
+            {
+                this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            }
+            base.OnNavigatingFrom(e);
+        }
         private void Banner_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var data = (sender as ImageEx).DataContext as bannersModel;
             this.Frame.Navigate(typeof(WebPage), data.schema);
+
             //await Launcher.LaunchUriAsync(new Uri(data.schema));
         }
 
@@ -56,6 +66,11 @@ namespace BiliMusic.Views
         {
             var data= e.ClickedItem as menusModel;
             this.Frame.Navigate(typeof(SonglistPage), data.menuId);
+        }
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            tabDetail.RefreshModule((sender as Button).DataContext as modulesModel);
         }
     }
 }

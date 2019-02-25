@@ -19,7 +19,15 @@
                     <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#FF505050"></SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-
+            <!--图片缩放-->
+            <x:String x:Key="W100">100w</x:String>
+            <x:String x:Key="W300">300w</x:String>
+            <x:String x:Key="W100H100">300w_300h_1e_1c</x:String>
+            <x:String x:Key="W300H300">300w_300h_1e_1c</x:String>
+            <x:String x:Key="W400H400">400w_400h_1e_1c</x:String>
+            <x:String x:Key="W480H300">480w_300h_1e_1c</x:String>
+            <x:String x:Key="W1020H300">1020w_300h_1e_1c</x:String>
+            
             <!--ICON字体文件-->
             <FontFamily x:Key="FONTS_MaterialIcons">ms-appx:///Assets/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
             <!--图标的Unicode-->
@@ -80,9 +88,12 @@
             <muxm:AcrylicBrush x:Key="COLOR_PaneBackground"  BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}"></muxm:AcrylicBrush>
             <muxm:AcrylicBrush x:Key="COLOR_BarColor"  BackgroundSource="HostBackdrop" TintColor="#FFEA92A7" TintOpacity="0.8" FallbackColor="#FFEA92A7"></muxm:AcrylicBrush>
 
+            <muxm:AcrylicBrush x:Key="COLOR_TranBG"  BackgroundSource="HostBackdrop" TintColor="White" TintOpacity="0.01" FallbackColor="White"></muxm:AcrylicBrush>
             <!--转换器-->
             <convert:NumberToStringConvert x:Key="numberToStringConvert"></convert:NumberToStringConvert>
             <convert:DurationToTimeConvert x:Key="durationToTimeConvert"></convert:DurationToTimeConvert>
+            <convert:ImageCompressionConvert x:Key="imageCompressionConvert"></convert:ImageCompressionConvert>
+            
             <!--按钮样式-->
             <Style TargetType="Button" x:Key="BackButton">
                 <Setter Property="Background" Value="Transparent"></Setter>
@@ -105,7 +116,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border CornerRadius="4" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                            <Border CornerRadius="2" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
                                 <Grid x:Name="RootGrid"  >
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="CommonStates">
@@ -162,7 +173,7 @@
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Background" Value="#FFA6A6A6" />
                 <Setter Property="Foreground" Value="White" />
-                <Setter Property="PlaceholderSource" Value="ms-appx:///Assets/Placeholde.png"></Setter>
+                <Setter Property="PlaceholderSource" Value="ms-appx:///Assets/Placeholde300W300H.png"></Setter>
             </Style>
 
             <Style x:Key="MuiscProgressSliderStyle" TargetType="Slider">

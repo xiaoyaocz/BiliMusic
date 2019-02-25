@@ -9,25 +9,27 @@
     xmlns:controls2="using:AppStudio.Uwp.Controls"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:converts="using:BiliMusic.Converters"
+     xmlns:controls3="using:BiliMusic.Controls"
     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <converts:HomeItemDataTemplateSelector x:Name="homeItemDataTemplateSelector" x:Key="homeItemDataTemplateSelector"></converts:HomeItemDataTemplateSelector>
         <converts:HomeItemStyleSelector  x:Key="homeItemStyleSelector"></converts:HomeItemStyleSelector>
+        <converts:HomeItemNarrowStyleSelector  x:Key="homeItemNarrowStyleSelector"></converts:HomeItemNarrowStyleSelector>
         <DataTemplate x:Key="Recommend">
             <StackPanel Margin="0 8 0 0" >
                 <Grid Margin="0 0 0 8" >
                     <TextBlock Text="{Binding title}"></TextBlock>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                         <Button Foreground="{StaticResource COLOR_Main}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
-                                <FontIcon Margin="0 2 0 -2" FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center"  Glyph="{StaticResource ICON_PlaylistPlay}"></FontIcon>
-                                <TextBlock Margin="4 0 0 0">播放全部</TextBlock>
+                                <FontIcon Margin="0 2 0 -2" FontSize="14px" FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center"  Glyph="{StaticResource ICON_PlaylistPlay}"></FontIcon>
+                                <TextBlock Margin="4 0 0 0" FontSize="12px" VerticalAlignment="Center">播放全部</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Margin="16 0 0 0" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
+                        <Button Margin="16 0 8 0" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="0 0 4 0">查看更多</TextBlock>
+                                <TextBlock Margin="0 0 4 0" FontSize="12px">查看更多</TextBlock>
 
                             </StackPanel>
                         </Button>
@@ -47,10 +49,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <controls:ImageEx 
-                        Width="48"
-                        Height="48"
-                        Source="{Binding cover_url}"
+                                <controls:ImageEx  Width="48" Height="48"
+                        Source="{Binding Path=cover_url,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"
                         Style="{StaticResource ImageExBaseStyle}" />
                                 <StackPanel Grid.Column="1" Margin="8 0 0 0" VerticalAlignment="Center">
                                     <TextBlock  Margin="0 4" TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
@@ -68,16 +68,16 @@
             <StackPanel Margin="0 8 0 0">
                 <Grid Margin="0 0 0 8">
                     <TextBlock Text="{Binding title}"></TextBlock>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Foreground="{StaticResource COLOR_Main}" Visibility="{Binding hasRefresh}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <Button Margin="0 0 8 0" Click="Refresh_Click" Foreground="{StaticResource COLOR_Main}" Visibility="{Binding hasRefresh}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
-                                <FontIcon  FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center"  Glyph="{StaticResource ICON_Refresh}"></FontIcon>
-                                <TextBlock Margin="4 0 0 0">换一换</TextBlock>
+                                <FontIcon  FontFamily="{StaticResource FONTS_MaterialIcons}" FontSize="14px" VerticalAlignment="Center"  Glyph="{StaticResource ICON_Refresh}"></FontIcon>
+                                <TextBlock Margin="4 0 0 0" FontSize="12px" VerticalAlignment="Center">换一换</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Margin="16 0 0 0" Style="{StaticResource TextButton}" Visibility="{Binding hasMore}" HorizontalAlignment="Right" >
+                        <Button Margin="8 0 8 0" Style="{StaticResource TextButton}" Visibility="{Binding hasMore}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="0 0 4 0">查看更多</TextBlock>
+                                <TextBlock Margin="0 0 4 0" FontSize="12px">查看更多</TextBlock>
 
                             </StackPanel>
                         </Button>
@@ -87,11 +87,11 @@
                 <controls:AdaptiveGridView ItemClick="SongMenu_ItemClick" ItemsSource="{Binding menus}" DesiredWidth="180" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="4" MaxWidth="180">
+                            <StackPanel Margin="4" >
                                 <Border CornerRadius="4">
                                     <Grid>
-                                        <controls:ImageEx  MaxWidth="300" PlaceholderStretch="UniformToFill" Style="{StaticResource ImageExBaseStyle}" 
-                                                  Source="{Binding coverUrl}" />
+                                        <controls:ImageEx  MaxWidth="400" PlaceholderStretch="UniformToFill" Style="{StaticResource ImageExBaseStyle}" 
+                                                  Source="{Binding Path=coverUrl,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W300H300}}" />
                                         <Border Background="Orange" Visibility="{Binding isVip}" VerticalAlignment="Top" CornerRadius="0 0 0 4" HorizontalAlignment="Right">
                                             <TextBlock Foreground="White" Margin="8 4" FontSize="12">付费</TextBlock>
                                         </Border>
@@ -119,26 +119,25 @@
                             </StackPanel>
                         </DataTemplate>
                     </controls:AdaptiveGridView.ItemTemplate>
-                  
-                   
+
+
                 </controls:AdaptiveGridView>
             </StackPanel>
         </DataTemplate>
-     
         <DataTemplate x:Key="Videos">
             <StackPanel Margin="0 8 0 0" >
                 <Grid Margin="0 0 0 8">
                     <TextBlock Text="{Binding title}"></TextBlock>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Foreground="{StaticResource COLOR_Main}" Visibility="{Binding hasRefresh}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <Button Margin="0 0 8 0" Click="Refresh_Click" Foreground="{StaticResource COLOR_Main}" Visibility="{Binding hasRefresh}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
-                                <FontIcon  FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center"  Glyph="{StaticResource ICON_Refresh}"></FontIcon>
-                                <TextBlock Margin="4 0 0 0">换一换</TextBlock>
+                                <FontIcon  FontFamily="{StaticResource FONTS_MaterialIcons}" FontSize="14px" VerticalAlignment="Center"  Glyph="{StaticResource ICON_Refresh}"></FontIcon>
+                                <TextBlock Margin="4 0 0 0" FontSize="12px" VerticalAlignment="Center">换一换</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Margin="16 0 0 0" Style="{StaticResource TextButton}" Visibility="{Binding hasMore}" HorizontalAlignment="Right" >
+                        <Button Margin="8 0 8 0" Style="{StaticResource TextButton}" Visibility="{Binding hasMore}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="0 0 4 0">查看更多</TextBlock>
+                                <TextBlock Margin="0 0 4 0" FontSize="12px">查看更多</TextBlock>
 
                             </StackPanel>
                         </Button>
@@ -148,11 +147,12 @@
                 <controls:AdaptiveGridView DesiredWidth="256" ItemsSource="{Binding videos}" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="4" MaxWidth="256">
+                            <StackPanel Margin="4">
                                 <Border CornerRadius="4">
                                     <Grid>
                                         <controls:ImageEx Stretch="Fill"  PlaceholderStretch="UniformToFill" Style="{StaticResource ImageExBaseStyle}" 
-                                                  Source="{Binding pic}" />
+                                                          PlaceholderSource="ms-appx:///Assets/Placeholde.png"
+                                                  Source="{Binding Path=pic,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W480H300}}" />
 
                                         <Grid VerticalAlignment="Bottom" >
                                             <Grid.Background>
@@ -170,12 +170,21 @@
                                             </StackPanel>
                                             <TextBlock HorizontalAlignment="Right" Foreground="White"  FontSize="12" VerticalAlignment="Center" Margin="4 0" Text="{Binding Path=duration,Converter={StaticResource durationToTimeConvert}}"></TextBlock>
                                         </Grid>
+                                        <HyperlinkButton Visibility="{Binding hasSong}" HorizontalAlignment="Right" VerticalAlignment="Top"  Padding="0"  Foreground="White">
+                                            <Border VerticalAlignment="Stretch"  Background="{StaticResource COLOR_Main}" HorizontalAlignment="Right" Padding="8 4" CornerRadius="0 0 0 4">
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <FontIcon  FontFamily="{StaticResource FONTS_MaterialIcons}" FontSize="16px" VerticalAlignment="Center"  Glyph="{StaticResource ICON_Listen}"></FontIcon>
+                                                    <TextBlock Margin="8 0 0 0" FontSize="14px" VerticalAlignment="Center">听音频</TextBlock>
+                                                </StackPanel>
+                                            </Border>
+
+                                        </HyperlinkButton>
                                     </Grid>
                                 </Border>
 
                                 <StackPanel Margin="4">
                                     <TextBlock Height="44" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxLines="2" Text="{Binding title}"></TextBlock>
-
+                                   
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>
@@ -185,15 +194,34 @@
         </DataTemplate>
     </Page.Resources>
     <Grid Margin="0 32 0 0">
-        <ScrollViewer Padding="8" DataContext="{Binding Datas}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="840" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="listModules.ItemContainerStyleSelector" Value="{StaticResource ResourceKey=homeItemStyleSelector}"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="listModules.ItemContainerStyleSelector" Value="{StaticResource ResourceKey=homeItemNarrowStyleSelector}"/>
+                    </VisualState.Setters>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <ScrollViewer Padding="8" >
             <StackPanel MaxWidth="1024" HorizontalAlignment="Center">
-
-
                 <controls2:Carousel x:Name="control"  ItemsSource="{Binding banners}"
                          MaxItems="1"  AspectRatio="3.4" GradientOpacity="0" MaxHeight="160" AlignmentX="Left">
                     <controls2:Carousel.ContentTemplate>
                         <DataTemplate>
-                            <controls:ImageEx Margin="4" extensions:Mouse.Cursor="Hand"  Tapped="Banner_Tapped" Source="{Binding bannerImgUrl}" Style="{StaticResource ImageExBaseStyle}" />
+                            <controls:ImageEx Margin="4"  extensions:Mouse.Cursor="Hand"  Tapped="Banner_Tapped" Source="{Binding bannerImgUrl}" Style="{StaticResource ImageExBaseStyle}"  PlaceholderSource="ms-appx:///Assets/Placeholde1020W300H.png"/>
                         </DataTemplate>
                     </controls2:Carousel.ContentTemplate>
                 </controls2:Carousel>
@@ -201,16 +229,20 @@
                           ItemsSource="{Binding ItemsSource, ElementName=control, Mode=TwoWay}"
                           SelectedIndex="{Binding SelectedIndex, ElementName=control, Mode=TwoWay}"
                           ShapeMode="Ellipse" Background="WhiteSmoke"  SelectedBackground="DimGray" PressedBackground="Gray" />
-
-
-                <ItemsControl ItemsSource="{Binding modules}" ItemContainerStyleSelector="{StaticResource homeItemStyleSelector}" ItemTemplateSelector="{StaticResource ResourceKey=homeItemDataTemplateSelector}">
-                    
+                <ItemsControl x:Name="listModules" ItemsSource="{Binding modules}" ItemContainerStyleSelector="{StaticResource homeItemStyleSelector}" ItemTemplateSelector="{StaticResource ResourceKey=homeItemDataTemplateSelector}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls3:HomeGrid x:Name="grid" RowNumber="10">
+                                <controls3:HomeGrid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </controls3:HomeGrid.ColumnDefinitions>
+                            </controls3:HomeGrid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
                 </ItemsControl>
-                
             </StackPanel>
         </ScrollViewer>
         <ProgressRing x:Name="loading" Visibility="{Binding loading}" Foreground="{StaticResource COLOR_Main}" IsActive="True" Width="56" Height="56"></ProgressRing>
     </Grid>
-   
-
 </Page>

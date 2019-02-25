@@ -1,0 +1,139 @@
+﻿<Page
+    x:Class="BiliMusic.Views.SettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BiliMusic.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Flyout x:Name="usedStatement">
+            <StackPanel>
+                <TextBlock>使用声明</TextBlock>
+                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">本程序为哔哩哔哩音乐的第三方客户端，资源均来自哔哩哔哩</TextBlock>
+                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">本程序仅供学习交流编程技术使用，请勿用于非法用途</TextBlock>
+                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">本程序如果侵犯了您的合法权益，请及时联系本人第一时间删除</TextBlock>
+            </StackPanel>
+        </Flyout>
+    </Page.Resources>
+    <Grid Margin="0 32 0 0">
+        <ScrollViewer>
+            <StackPanel Margin="24 8">
+                <TextBlock FontSize="18">常规设置</TextBlock>
+                <ToggleSwitch Header="收费网络播放和下载" Foreground="Black" Margin="0 8 0 4"></ToggleSwitch>
+                <ToggleSwitch Header="加载原图(内存占用大)" Foreground="Black" Margin="0 0 0 4"></ToggleSwitch>
+                
+                <TextBlock FontSize="20" Margin="0 8">播放设置</TextBlock>
+
+                <TextBlock Margin="0 8" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">歌曲默认音质(当歌曲不满足则自动选择)</TextBlock>
+                <RadioButton GroupName="MusicQualities" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>无损音质(付费专享)</TextBlock>
+                        <Border Margin="8 0" BorderThickness="1" BorderBrush="{StaticResource COLOR_Main}" Padding="4 2" VerticalAlignment="Center" CornerRadius="4">
+                            <TextBlock FontSize="10" Foreground="{StaticResource COLOR_Main}">SQ</TextBlock>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="MusicQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>高品质(320kbit/s)</TextBlock>
+                        <Border Margin="8 0" BorderThickness="1" BorderBrush="{StaticResource COLOR_Main}" Padding="4 2" VerticalAlignment="Center" CornerRadius="4">
+                            <TextBlock FontSize="10" Foreground="{StaticResource COLOR_Main}">HQ</TextBlock>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="MusicQualities" IsChecked="True">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>标准(192kbit/s)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="MusicQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>流畅(128kbit/s)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+                <TextBlock Margin="0 8" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">视频默认画质(当视频不满足则自动选择)</TextBlock>
+                <RadioButton GroupName="VideoQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>超清(1080P)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="VideoQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>高清(720P)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="VideoQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>清晰(480P)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="VideoQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>流畅(360P)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+
+                <TextBlock FontSize="20" Margin="0 8">下载设置</TextBlock>
+
+                <TextBlock Margin="0 8" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">歌曲下载默认音质(当歌曲不满足则自动选择)</TextBlock>
+                <RadioButton GroupName="MusicDownlaodQualities" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>无损音质(付费专享)</TextBlock>
+                        <Border Margin="8 0" BorderThickness="1" BorderBrush="{StaticResource COLOR_Main}" Padding="4 2" VerticalAlignment="Center" CornerRadius="4">
+                            <TextBlock FontSize="10" Foreground="{StaticResource COLOR_Main}">SQ</TextBlock>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="MusicDownlaodQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>高品质(320kbit/s)</TextBlock>
+                        <Border Margin="8 0" BorderThickness="1" BorderBrush="{StaticResource COLOR_Main}" Padding="4 2" VerticalAlignment="Center" CornerRadius="4">
+                            <TextBlock FontSize="10" Foreground="{StaticResource COLOR_Main}">HQ</TextBlock>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="MusicDownlaodQualities" IsChecked="True">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>标准(192kbit/s)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton GroupName="MusicDownlaodQualities">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>流畅(128kbit/s)</TextBlock>
+                    </StackPanel>
+                </RadioButton>
+
+                <TextBlock FontSize="20" Margin="0 8" >关于应用</TextBlock>
+                <TextBlock Margin="0 8 0 0">哔哩哔哩音乐 (第三方)</TextBlock>
+                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">Version 1.0.0.0 Beta</TextBlock>
+                <TextBlock FontSize="14" Margin="0 4 0 8"  Foreground="Gray" >@xiaoyaocz 开发</TextBlock>
+                <Button Style="{StaticResource TextButton}" Padding="0 4" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}">
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel>
+                                <TextBlock>联系作者</TextBlock>
+                                <TextBlock Margin="0 4 0 0" IsTextSelectionEnabled="True" Foreground="Gray" FontSize="14">Email：xiaoyaocz@52uwp.com</TextBlock>
+                                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">Q群:530991215</TextBlock>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                    <TextBlock>联系作者</TextBlock>
+                </Button>
+                <Button Style="{StaticResource TextButton}" Flyout="{StaticResource usedStatement}" Padding="0 4" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}">
+                    <TextBlock>使用声明</TextBlock>
+                </Button>
+                <HyperlinkButton NavigateUri="xiaoyaocz@52uwp.com">
+                    <TextBlock>隐私策略</TextBlock>
+                </HyperlinkButton>
+                <HyperlinkButton NavigateUri="https://www.bilibili.com">
+                    <TextBlock>哔哩哔哩官网</TextBlock>
+                </HyperlinkButton>
+                <HyperlinkButton NavigateUri="xiaoyaocz@52uwp.com">
+                    <TextBlock>开放源代码许可</TextBlock>
+                </HyperlinkButton>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

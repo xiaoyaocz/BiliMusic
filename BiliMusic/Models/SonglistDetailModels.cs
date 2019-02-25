@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace BiliMusic.Models
 {
@@ -19,6 +20,7 @@ namespace BiliMusic.Models
                 _songsList = value;
             }
         }
+        public List<menusTagModel> menusTags { get; set; }
     }
     public class menusResponesModel
     {
@@ -26,7 +28,7 @@ namespace BiliMusic.Models
         public int menuId { get; set; }
         public string title { get; set; }
         public string coverUrl { get; set; }
-        public string intro { get; set; }
+        public string intro { get; set; } = "";
         public int type { get; set; }
         public long playNum { get; set; }
         public long collectNum { get; set; }
@@ -73,6 +75,7 @@ namespace BiliMusic.Models
         public string cover_url { get; set; }
         public string author { get; set; }
         public long duration { get; set; }
+
         /// <summary>
         /// 是否收费
         /// </summary>
@@ -83,4 +86,12 @@ namespace BiliMusic.Models
             get { return is_pay == 1; }
         }
     }
+    public class menusTagModel
+    {
+        public int cateId { get; set; }
+        public int itemId { get; set; }
+        public string itemVal { get; set; }
+        public int attr { get; set; }
+    }
+
 }

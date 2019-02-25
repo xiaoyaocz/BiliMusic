@@ -2,16 +2,20 @@
 using BiliMusic.Models;
 using BiliMusic.Models.Main;
 using BiliMusic.Modules;
+using BiliMusic.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Playback;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -31,6 +35,7 @@ namespace BiliMusic
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -43,7 +48,26 @@ namespace BiliMusic
             bar.ButtonBackgroundColor = Colors.Transparent;
             bar.ButtonHoverBackgroundColor = mainColor.Color;
             bar.ButtonForegroundColor = Colors.Black;
-           
+#if DEBUG
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick+=new EventHandler<object>((sender, e)=>{
+                var m = Windows.System.Diagnostics.ProcessDiagnosticInfo.GetForCurrentProcess().MemoryUsage.GetReport().WorkingSetSizeInBytes / 1024.0 / 1024.0;
+                if (m>=300)
+                {
+                    DEBUG_INFO.Text = "内存占用:" + m.ToString("0.00") + "MB";
+                    DEBUG_INFO.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else
+                {
+                    DEBUG_INFO.Text = "";
+                    DEBUG_INFO.Foreground = new SolidColorBrush(Colors.Green);
+                }
+              
+            });
+            timer.Start();
+#endif
+
         }
 
        
@@ -52,11 +76,11 @@ namespace BiliMusic
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-           
-            MainFrame.Navigate(typeof(Views.HomePage));
+          
             main = new Main();
+            main.MenuUpdated += Main_MenuUpdated;
             this.DataContext = main;
-
+            MainFrame.Navigate(typeof(Views.HomePage), 0);
             //设置登录状态
             var userinfo = SettingHelper.StorageHelper.Read<LoginDataV2Model>(SettingHelper.LoginInfo);
             if (userinfo != null)
@@ -75,11 +99,17 @@ namespace BiliMusic
                     MessageCenter.SendLogined(userinfo);
                 }
             }
-
-            //NavView.MenuItemsSource = main.Menus;
-
-
         }
+        string par = "HomePage0";
+        private  void Main_MenuUpdated(object sender, EventArgs e)
+        {
+            main.selectItem = main.Menus.FirstOrDefault(x => x.Name == par);
+            //await Task.Delay(1000);
+            //NavView.SelectedItem = main.Menus.FirstOrDefault(x => x.Name == par);
+            //NavView.IsPaneOpen = !NavView.IsPaneOpen;
+         
+        }
+        
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
         {
             if (MainFrame.CanGoBack)
@@ -90,6 +120,14 @@ namespace BiliMusic
             {
                 BackButton.Visibility = Visibility.Collapsed;
             }
+            if (main==null||main.Menus==null)
+            {
+                return;
+            }
+            par = e.SourcePageType.ToString().Replace("BiliMusic.Views.","")+((e.Parameter!=null)?e.Parameter.ToString():"");
+            //NavView.SelectedItem= main.Menus.FirstOrDefault(x => x.Name == par);
+            main.selectPar = par;
+            //main.selectItem = main.Menus.FirstOrDefault(x => x.Name == par);
         }
 
         private void NavView_PaneClosed(Microsoft.UI.Xaml.Controls.NavigationView sender, object args)
@@ -111,7 +149,8 @@ namespace BiliMusic
         {
             if (args.IsSettingsInvoked)
             {
-                Utils.ShowMessageToast("你选择了设置");
+                MainFrame.Navigate(typeof(Views.SettingPage));
+                //Utils.ShowMessageToast("你选择了设置");
                 return;
             }
             
@@ -168,6 +207,40 @@ namespace BiliMusic
                 MainFrame.GoBack();
             }
            
+        }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            //GC.Collect();
+
+            //CoreApplicationView newView = CoreApplication.CreateNewView();
+            //int newViewId = 1;
+            //await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            //{
+            //    Frame frame = new Frame();
+            //    frame.Navigate(typeof(DesktopLyricsPage));
+            //    Window.Current.Content = frame;
+            //    // You have to activate the window in order to show it later.
+            //    Window.Current.Activate();
+
+            //    newViewId = ApplicationView.GetForCurrentView().Id;
+            //    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay);
+            //});
+
+            //bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+            MediaPlayer _mediaPlayer = new MediaPlayer();
+            _mediaPlayer.AutoPlay = true;
+            _mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media;
+            _mediaPlayer.CommandManager.IsEnabled = true;
+
+            var _mediaPlaybackList = new MediaPlaybackList();
+            _mediaPlaybackList.AutoRepeatEnabled = true;
+
+            
+            _mediaPlaybackList.Items.Add(
+                   new MediaPlaybackItem(Windows.Media.Core.MediaSource.CreateFromUri(new Uri("https://upos-hz-mirrorkodou.acgvideo.com/ugaxcode/m190103ws1t9dd2sorv2yi14b22nv6ui-flac.flac?deadline=1551115476&platform=android&upsig=36b8bd9831a1836b0bc3497d9665cbe4"))));
+            //mediaPlayer.SetUriSource(new Uri("https://upos-hz-mirrorks3u.acgvideo.com/ugaxcode/i180302ws8fxcfx8lnnezazn1t32us83-192k.m4a?deadline=1551115065&platform=android&upsig=7500739fd319a8fc2cc1eb1618fe5357"));
+            _mediaPlayer.Source = _mediaPlaybackList;
         }
     }
 }

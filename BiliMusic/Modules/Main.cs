@@ -16,6 +16,59 @@ namespace BiliMusic.Modules
     public class Main : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler MenuUpdated;
+        /// <summary>
+        /// 用于榜单NavView的集合
+        /// </summary>
+        public ObservableCollection<NavigationViewItemBase> Menus { get; set; }
+        //public string selectPar { get; set; } = "HomePage0";
+
+        private string _selectPar= "HomePage0";
+        public string selectPar
+        {
+            get { return _selectPar; }
+            set
+            {
+                _selectPar = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("selectPar"));
+                selectItem = Menus.FirstOrDefault(x => x.Name == selectPar);
+            }
+        }
+
+        private NavigationViewItemBase _selectItem;
+        public NavigationViewItemBase selectItem
+        {
+            get { return _selectItem; }
+            set
+            {
+                _selectItem = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("selectItem"));
+            }
+        }
+
+
+
+        private ObservableCollection<MenuModel> _Menus { get; set; }
+        /// <summary>
+        /// 顶部两个菜单，固定搜索、本地音乐
+        /// </summary>
+        private ObservableCollection<MenuModel> _TopMenus { get; set; }
+        /// <summary>
+        /// 发现音乐菜单集，固定综合、收音叽、榜单，通过GetHomeMenus读取部分菜单
+        /// </summary>
+        private ObservableCollection<MenuModel> _HomeMenus { get; set; }
+        /// <summary>
+        /// 个人中心菜单集
+        /// </summary>
+        private ObservableCollection<MenuModel> _MyMenus { get; set; }
+        /// <summary>
+        /// 创建的歌单集合
+        /// </summary>
+        private ObservableCollection<MenuModel> _MySonglistMenus { get; set; }
+        /// <summary>
+        /// 收藏的歌单集合
+        /// </summary>
+        private ObservableCollection<MenuModel> _MyLikeSonglistMenus { get; set; }
         public Main()
         {
             //注册登录完成事件
@@ -37,6 +90,7 @@ namespace BiliMusic.Modules
             };
             _HomeMenus = new ObservableCollection<MenuModel>() {
                 new MenuModel(){
+                    name="HomePage0",
                     icon=(string)Application.Current.Resources["ICON_Home"],
                     title="综合",
                     menuType= MenuType.Menuitem,
@@ -64,9 +118,9 @@ namespace BiliMusic.Modules
                     openMode= MenuOpenMode.Login
                 }
             };
-            
+
             CreateMenus();
-           
+
         }
 
         private void MessageCenter_Logined(object sender, object e)
@@ -74,34 +128,7 @@ namespace BiliMusic.Modules
             Logined();
         }
 
-        /// <summary>
-        /// 用于榜单NavView的集合
-        /// </summary>
-        public ObservableCollection<NavigationViewItemBase> Menus { get; set; }
 
-        private ObservableCollection<MenuModel> _Menus { get; set; }
-
-
-        /// <summary>
-        /// 顶部两个菜单，固定搜索、本地音乐
-        /// </summary>
-        private ObservableCollection<MenuModel> _TopMenus { get; set; }
-        /// <summary>
-        /// 发现音乐菜单集，固定综合、收音叽、榜单，通过GetHomeMenus读取部分菜单
-        /// </summary>
-        private ObservableCollection<MenuModel> _HomeMenus { get; set; }
-        /// <summary>
-        /// 个人中心菜单集
-        /// </summary>
-        private ObservableCollection<MenuModel> _MyMenus { get; set; }
-        /// <summary>
-        /// 创建的歌单集合
-        /// </summary>
-        private ObservableCollection<MenuModel> _MySonglistMenus { get; set; }
-        /// <summary>
-        /// 收藏的歌单集合
-        /// </summary>
-        private ObservableCollection<MenuModel> _MyLikeSonglistMenus { get; set; }
         /// <summary>
         /// 登录完成,设置菜单
         /// </summary>
@@ -158,7 +185,7 @@ namespace BiliMusic.Modules
         {
             try
             {
-                var re=await Api.MyCollection().Request();
+                var re = await Api.MyCollection().Request();
                 if (!re.status)
                 {
                     Utils.ShowMessageToast(re.message);
@@ -175,6 +202,7 @@ namespace BiliMusic.Modules
                 {
                     _MyLikeSonglistMenus.Add(new MenuModel()
                     {
+                        name = "SonglistPage" + item.menuId,
                         icon = (string)Application.Current.Resources["ICON_SongList"],
                         title = item.title,
                         menuType = MenuType.Menuitem,
@@ -216,6 +244,7 @@ namespace BiliMusic.Modules
                 {
                     _MySonglistMenus.Add(new MenuModel()
                     {
+                        name = "SonglistPage" + item.menu_id,
                         icon = (string)Application.Current.Resources["ICON_SongList"],
                         title = item.title,
                         menuType = MenuType.Menuitem,
@@ -239,7 +268,7 @@ namespace BiliMusic.Modules
         {
             try
             {
-                var tab =await Api.Tab().Request();
+                var tab = await Api.Tab().Request();
                 if (!tab.status)
                 {
                     Utils.ShowMessageToast(tab.message);
@@ -254,6 +283,7 @@ namespace BiliMusic.Modules
                 _HomeMenus = new ObservableCollection<MenuModel>();
                 _HomeMenus.Add(new MenuModel()
                 {
+                    name = "HomePage0",
                     icon = (string)Application.Current.Resources["ICON_Home"],
                     title = "综合",
                     menuType = MenuType.Menuitem,
@@ -266,6 +296,7 @@ namespace BiliMusic.Modules
                     {
                         _HomeMenus.Add(new MenuModel()
                         {
+                            name = "HomePage" + item.id,
                             icon = (string)Application.Current.Resources["ICON_Music2"],
                             menuType = MenuType.Menuitem,
                             title = item.title,
@@ -292,7 +323,7 @@ namespace BiliMusic.Modules
             }
             catch (Exception ex)
             {
-               
+
                 Utils.ShowMessageToast("读取菜单信息失败");
                 //TODO 保存错误信息
             }
@@ -303,7 +334,7 @@ namespace BiliMusic.Modules
         /// </summary>
         private async void CreateMenus()
         {
-            if (_HomeMenus.Count<=3)
+            if (_HomeMenus.Count <= 3)
             {
                 await GetHomeMenus();
             }
@@ -363,14 +394,14 @@ namespace BiliMusic.Modules
         /// </summary>
         private void MenuitemToViewItem()
         {
-            Menus = new ObservableCollection<NavigationViewItemBase>();
+            var m = new ObservableCollection<NavigationViewItemBase>();
             foreach (var item in _Menus)
             {
                 switch (item.menuType)
                 {
                     case MenuType.Header:
                         {
-                            Menus.Add(new NavigationViewItemHeader()
+                            m.Add(new NavigationViewItemHeader()
                             {
                                 Content = item.title,
                                 Tag = item,
@@ -380,13 +411,14 @@ namespace BiliMusic.Modules
                         break;
                     case MenuType.Menuitem:
                         {
-                          
-                            Menus.Add(new NavigationViewItem()
+                            m.Add(new NavigationViewItem()
                             {
+                                Name = item.name,
                                 Content = new Windows.UI.Xaml.Controls.TextBlock()
                                 {
                                     Text = item.title,
-                                    TextTrimming = TextTrimming.CharacterEllipsis
+                                    TextTrimming = TextTrimming.WordEllipsis,
+                                    Margin = new Thickness(0, 0, 8, 0)
                                 },
                                 Icon = new Windows.UI.Xaml.Controls.FontIcon()
                                 {
@@ -399,14 +431,16 @@ namespace BiliMusic.Modules
                         break;
                     case MenuType.Separator:
                         {
-                            Menus.Add(new NavigationViewItemSeparator());
+                            m.Add(new NavigationViewItemSeparator());
                         }
                         break;
                     default:
                         break;
                 }
             }
+            Menus = m;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Menus"));
+            MenuUpdated?.Invoke(this, null);
         }
 
     }

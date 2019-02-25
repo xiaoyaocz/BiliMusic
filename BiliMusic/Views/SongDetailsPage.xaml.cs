@@ -20,17 +20,11 @@ namespace BiliMusic.Views
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class WebPage : Page
+    public sealed partial class SongDetailsPage : Page
     {
-        public WebPage()
+        public SongDetailsPage()
         {
             this.InitializeComponent();
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            webview.Navigate(new Uri(e.Parameter.ToString()));
-        }
-      
     }
 }

@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace BiliMusic.Converters
 {
-    public class HomeItemStyleSelector : StyleSelector
+    public class HomeItemNarrowStyleSelector : StyleSelector
     {
         protected override Style SelectStyleCore(object item, DependencyObject container)
         {
@@ -20,32 +20,20 @@ namespace BiliMusic.Converters
             st.Setters.Add(new Setter()
             {
                 Property = Grid.ColumnProperty,
-                Value = models.column
+                Value = 0
             });
             st.Setters.Add(new Setter()
             {
                 Property = Grid.RowProperty,
-                Value = models.row
+                Value = models.narrow_row
             });
-            if (models.dataSize == 3 && models.type == 3)
+            st.Setters.Add(new Setter()
             {
-                st.Setters.Add(new Setter()
-                {
-                    Property = Grid.ColumnSpanProperty,
-                    Value = 1
-                });
-            }
-            else
-            {
-                st.Setters.Add(new Setter()
-                {
-                    Property = Grid.ColumnSpanProperty,
-                    Value = 2
-                });
-            }
+                Property = Grid.ColumnSpanProperty,
+                Value = 2
+            });
             return st;
-        }
 
+        }
     }
-   
 }

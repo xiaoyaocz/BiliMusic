@@ -143,6 +143,25 @@ namespace BiliMusic
             api.parameter += ApiHelper.GetSign(api.parameter);
             return api;
         }
+
+        /// <summary>
+        /// 刷新首页中的模块
+        /// </summary>
+        /// <param name="id">Module ID</param>
+        /// <returns></returns>
+        public static ApiModel RefreshModule(int moduleId,int time=1)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/firstpage/shark/{moduleId}",
+                parameter = ApiHelper.MustParameter(true)+"&time="+time,
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+
         /// <summary>
         /// 读取我创建的歌单
         /// </summary>
@@ -176,8 +195,9 @@ namespace BiliMusic
             return api;
         }
 
+
         /// <summary>
-        /// 读取我收藏的歌单
+        /// 歌单详细
         /// </summary>
         /// <returns></returns>
         public static ApiModel SonglistDetail(int menuid)
@@ -192,7 +212,22 @@ namespace BiliMusic
             api.parameter += ApiHelper.GetSign(api.parameter);
             return api;
         }
-
+        /// <summary>
+        /// 歌单TAG
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel SonglistTag(int menuid)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/tags/menus/{menuid}",
+                parameter = ApiHelper.MustParameter(true),
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
     }
 
     public class ApiModel

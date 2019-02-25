@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,9 @@ namespace BiliMusic.Models
 {
     public class TabDetailDataModel
     {
-        public List<bannersModel> banners { get; set; }
-        public List<modulesModel> modules { get; set; }
+        public ObservableCollection<bannersModel> banners { get; set; }
+        public ObservableCollection<modulesModel> modules { get; set; }
+        
     }
     public class bannersModel
     {
@@ -23,6 +25,19 @@ namespace BiliMusic.Models
     }
     public class modulesModel
     {
+        /// <summary>
+        /// 用于Grid布局行
+        /// </summary>
+        public int row { get; set; }
+        /// <summary>
+        /// 用于Grid窄布局行
+        /// </summary>
+        public int narrow_row { get; set; }
+        /// <summary>
+        /// 用于Grid布局列
+        /// </summary>
+        public int column { get; set; }
+
         public int id { get; set; }
         public string title { get; set; }
         public int type { get; set; }
@@ -30,6 +45,9 @@ namespace BiliMusic.Models
         public int layout { get; set; }
         public string target { get; set; }
         public int shark { get; set; }
+        public int time { get; set; } = 1;
+
+
         public bool hasMore
         {
             get
@@ -56,6 +74,15 @@ namespace BiliMusic.Models
         public long duration { get; set; }
         public long view { get; set; }
         public long reply { get; set; }
+        public songsModel song { get; set; }
+
+        public bool hasSong
+        {
+            get
+            {
+                return song!=null&&song.id!=0;
+            }
+        }
     }
     public class songsModel
     {
@@ -64,7 +91,7 @@ namespace BiliMusic.Models
         public string cover_url { get; set; }
         public string author { get; set; }
         public int song_id { get; set; }
-
+        public string schema { get; set; }
     }
     public class menusModel
     {

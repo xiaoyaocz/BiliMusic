@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="BiliMusic.Views.SongDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BiliMusic.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid>
+            <Image Stretch="UniformToFill" Source="http://i0.hdslb.com/bfs/music/61d3f8cfdce14d2d1b006af59559c9bd22a2d21b.jpg"></Image>
+            <Border BorderBrush="White" >
+                <Border.Background>
+                    <media:BackdropBlurBrush Amount="100" FallbackColor="White"/>
+                </Border.Background>
+            </Border>
+            <Grid Background="#4CFFFFFF">
+                
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
