@@ -103,6 +103,7 @@ namespace BiliMusic.Modules
             }
             catch (Exception ex)
             {
+                LogHelper.Log("登录错误", LogType.ERROR, ex);
                 return new LoginCallbackModel()
                 {
                     status = LoginStatus.Error,

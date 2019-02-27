@@ -1,4 +1,5 @@
-﻿using BiliMusic.Helpers;
+﻿using BiliMusic.Controls;
+using BiliMusic.Helpers;
 using BiliMusic.Models;
 using BiliMusic.Models.Main;
 using BiliMusic.Modules;
@@ -6,6 +7,7 @@ using BiliMusic.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -13,7 +15,9 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -35,7 +39,8 @@ namespace BiliMusic
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
+        public Main main;
+        public MusicPlay musicPlay;
         public MainPage()
         {
             this.InitializeComponent();
@@ -47,7 +52,7 @@ namespace BiliMusic
             var mainColor = (SolidColorBrush)Application.Current.Resources["COLOR_Main"];
             bar.ButtonBackgroundColor = Colors.Transparent;
             bar.ButtonHoverBackgroundColor = mainColor.Color;
-            bar.ButtonForegroundColor = Colors.Black;
+            bar.ButtonForegroundColor = Colors.Gray;
 #if DEBUG
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -67,19 +72,24 @@ namespace BiliMusic
             });
             timer.Start();
 #endif
+            main = new Main();
+            main.MenuUpdated += Main_MenuUpdated;
+            NavView.DataContext = main;
+
+            musicPlay = new MusicPlay();
+            player.DataContext = musicPlay;
 
         }
 
        
 
-        Main main;
+        
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
           
-            main = new Main();
-            main.MenuUpdated += Main_MenuUpdated;
-            this.DataContext = main;
+            
+
             MainFrame.Navigate(typeof(Views.HomePage), 0);
             //设置登录状态
             var userinfo = SettingHelper.StorageHelper.Read<LoginDataV2Model>(SettingHelper.LoginInfo);
@@ -99,15 +109,12 @@ namespace BiliMusic
                     MessageCenter.SendLogined(userinfo);
                 }
             }
+            
         }
         string par = "HomePage0";
         private  void Main_MenuUpdated(object sender, EventArgs e)
         {
             main.selectItem = main.Menus.FirstOrDefault(x => x.Name == par);
-            //await Task.Delay(1000);
-            //NavView.SelectedItem = main.Menus.FirstOrDefault(x => x.Name == par);
-            //NavView.IsPaneOpen = !NavView.IsPaneOpen;
-         
         }
         
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
@@ -124,10 +131,17 @@ namespace BiliMusic
             {
                 return;
             }
+           
             par = e.SourcePageType.ToString().Replace("BiliMusic.Views.","")+((e.Parameter!=null)?e.Parameter.ToString():"");
+            if (par== "SettingPage")
+            {
+                NavView.SelectedItem = NavView.SettingsItem;
+                return;
+            }
             //NavView.SelectedItem= main.Menus.FirstOrDefault(x => x.Name == par);
             main.selectPar = par;
             //main.selectItem = main.Menus.FirstOrDefault(x => x.Name == par);
+           
         }
 
         private void NavView_PaneClosed(Microsoft.UI.Xaml.Controls.NavigationView sender, object args)
@@ -209,8 +223,11 @@ namespace BiliMusic
            
         }
 
-        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
+            musicPlay.playInfo = await musicPlay.LoadMusicInfo(259494);
+            musicPlay.mediaPlaybackList.Items.Add(new MediaPlaybackItem(MediaSource.CreateFromUri(musicPlay.playInfo.play_url)));
+
             //GC.Collect();
 
             //CoreApplicationView newView = CoreApplication.CreateNewView();
@@ -227,20 +244,105 @@ namespace BiliMusic
             //    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay);
             //});
 
+            //Utils.ShowMessageToast("试听中,开通会员听完整",new List<MyUICommand> {
+            //    new MyUICommand("开通会员",(toast,command)=>{
+            //        Debug.WriteLine("开通会员");
+            //    }),
+            //    new MyUICommand("关闭",(toast,command)=>{
+            //        (toast as MessageToast).Close();
+            //    }),
+            //});
+
+            //try
+            //{
+            //    modulesModel modules=null;
+            //    var y = modules.id;
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogHelper.Log("测试一下", LogType.DEBUG, ex);
+            //    LogHelper.Log(ex.Message, LogType.ERROR,ex);
+            //    LogHelper.Log(ex.Message, LogType.FATAL, ex);
+            //    await Launcher.LaunchFolderAsync(Windows.Storage.ApplicationData.Current.LocalFolder);
+            //}
+
             //bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-            MediaPlayer _mediaPlayer = new MediaPlayer();
-            _mediaPlayer.AutoPlay = true;
-            _mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media;
-            _mediaPlayer.CommandManager.IsEnabled = true;
+            //MediaPlayer _mediaPlayer = new MediaPlayer();
+            //_mediaPlayer.AutoPlay = true;
+            //_mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media;
+            //_mediaPlayer.CommandManager.IsEnabled = true;
 
-            var _mediaPlaybackList = new MediaPlaybackList();
-            _mediaPlaybackList.AutoRepeatEnabled = true;
+            //var _mediaPlaybackList = new MediaPlaybackList();
+            //_mediaPlaybackList.AutoRepeatEnabled = true;
 
+
+            //_mediaPlaybackList.Items.Add(
+            //       new MediaPlaybackItem(Windows.Media.Core.MediaSource.CreateFromUri(new Uri("https://upos-hz-mirrorkodou.acgvideo.com/ugaxcode/m190103ws1t9dd2sorv2yi14b22nv6ui-flac.flac?deadline=1551115476&platform=android&upsig=36b8bd9831a1836b0bc3497d9665cbe4"))));
+            ////mediaPlayer.SetUriSource(new Uri("https://upos-hz-mirrorks3u.acgvideo.com/ugaxcode/i180302ws8fxcfx8lnnezazn1t32us83-192k.m4a?deadline=1551115065&platform=android&upsig=7500739fd319a8fc2cc1eb1618fe5357"));
+            //_mediaPlayer.Source = _mediaPlaybackList;
+        }
+
+        private void SliderPosition_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
+        {
+            //Utils.ShowMessageToast("123");
+
+        }
+
+        private void SliderPosition_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //Utils.ShowMessageToast(sliderPosition.Value.ToString());
+
+            musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(sliderPosition.Value);
+            sliderPosition.SetBinding(Slider.ValueProperty,new Binding() {
+                Path= new PropertyPath("position"),
+                Mode= BindingMode.OneWay
+            });
+        }
+
+        private void SliderPosition_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+            musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(sliderPosition.Value);
+            sliderPosition.SetBinding(Slider.ValueProperty, new Binding()
+            {
+                Path = new PropertyPath("position"),
+                Mode = BindingMode.OneWay
+            });
+        }
+
+        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        {
             
-            _mediaPlaybackList.Items.Add(
-                   new MediaPlaybackItem(Windows.Media.Core.MediaSource.CreateFromUri(new Uri("https://upos-hz-mirrorkodou.acgvideo.com/ugaxcode/m190103ws1t9dd2sorv2yi14b22nv6ui-flac.flac?deadline=1551115476&platform=android&upsig=36b8bd9831a1836b0bc3497d9665cbe4"))));
-            //mediaPlayer.SetUriSource(new Uri("https://upos-hz-mirrorks3u.acgvideo.com/ugaxcode/i180302ws8fxcfx8lnnezazn1t32us83-192k.m4a?deadline=1551115065&platform=android&upsig=7500739fd319a8fc2cc1eb1618fe5357"));
-            _mediaPlayer.Source = _mediaPlaybackList;
+            musicPlay.mediaPlayer.Play();
+        }
+
+        private void BtnPause_Click(object sender, RoutedEventArgs e)
+        {
+            if (musicPlay.mediaPlayer.PlaybackSession.CanPause)
+            {
+                musicPlay.mediaPlayer.Pause();
+            }
+           
+        }
+
+        private void BtnNext_Click(object sender, RoutedEventArgs e)
+        {
+            if (!musicPlay.mediaPlaybackList.AutoRepeatEnabled&&!musicPlay.mediaPlaybackList.ShuffleEnabled&& musicPlay.mediaPlaybackList.CurrentItemIndex+1>= musicPlay.mediaPlaybackList.Items.Count)
+            {
+                Utils.ShowMessageToast("后面没有了");
+                return;
+            }
+            musicPlay.mediaPlaybackList.MoveNext();
+        }
+
+        private void BtnPrevious_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (!musicPlay.mediaPlaybackList.AutoRepeatEnabled && !musicPlay.mediaPlaybackList.ShuffleEnabled&& Convert.ToInt64(musicPlay.mediaPlaybackList.CurrentItemIndex)-1<0)
+            {
+                Utils.ShowMessageToast("前面没有了");
+                return;
+            }
+            musicPlay.mediaPlaybackList.MovePrevious();
         }
     }
 }

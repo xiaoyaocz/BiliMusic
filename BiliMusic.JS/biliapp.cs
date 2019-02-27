@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
 using Windows.UI.Popups;
 
-namespace BiliJS
+namespace BiliMusic.JS
 {
     [AllowForWeb]
     public sealed class biliapp
@@ -14,9 +14,7 @@ namespace BiliJS
         public void Alert(string message)
         {
             MessageDialog md;
-
             md = new MessageDialog(message);
-
             md.ShowAsync();
         }
         public event EventHandler<string> ValidateLoginEvent;

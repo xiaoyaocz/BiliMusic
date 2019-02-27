@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BiliMusic.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,10 @@ namespace BiliMusic.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            if (SettingHelper.LoadOriginalImage)
+            {
+                return value;
+            }
             //使用webp图片能更小，可惜UWP还不支持
             return value.ToString()+"@"+ parameter.ToString()+".jpg";
         }

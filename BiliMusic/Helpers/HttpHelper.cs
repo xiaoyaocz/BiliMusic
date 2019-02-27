@@ -102,7 +102,9 @@ namespace BiliMusic.Helpers
             }
             catch (Exception ex)
             {
+                LogHelper.Log("读取Stream失败"+url, LogType.ERROR, ex);
                 return null;
+
             }
 
 

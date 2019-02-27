@@ -155,7 +155,7 @@ namespace BiliMusic
             {
                 method = RestSharp.Method.GET,
                 baseUrl = $"https://api.bilibili.com/audio/music-service-c/firstpage/shark/{moduleId}",
-                parameter = ApiHelper.MustParameter(true)+"&time="+time,
+                parameter = ApiHelper.MustParameter()+"&time="+time,
                 headers = Utils.GetDefaultHeaders()
             };
             api.parameter += ApiHelper.GetSign(api.parameter);
@@ -222,7 +222,43 @@ namespace BiliMusic
             {
                 method = RestSharp.Method.GET,
                 baseUrl = $"https://api.bilibili.com/audio/music-service-c/tags/menus/{menuid}",
-                parameter = ApiHelper.MustParameter(true),
+                parameter = ApiHelper.MustParameter(),
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+
+        /// <summary>
+        /// 歌曲详细信息
+        /// </summary>
+        /// <param name="songid">歌曲ID</param>
+        /// <returns></returns>
+        public static ApiModel SongDetail(int songid)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/songs/playing",
+                parameter = ApiHelper.MustParameter(true)+$"&song_id={songid}"+(UserHelper.isLogin?$"&mid={UserHelper.mid}":""),
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+
+        /// <summary>
+        /// 歌曲播放地址
+        /// </summary>
+        /// <param name="songid">歌曲ID</param>
+        /// <returns></returns>
+        public static ApiModel SongUrl(int songid,int quality)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/url",
+                parameter = ApiHelper.MustParameter(true) + $"&songid={songid}&quality={quality}&privilege=2" + (UserHelper.isLogin ? $"&mid={UserHelper.mid}" : ""),
                 headers = Utils.GetDefaultHeaders()
             };
             api.parameter += ApiHelper.GetSign(api.parameter);

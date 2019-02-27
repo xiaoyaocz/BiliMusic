@@ -33,14 +33,9 @@
                         <media:BackdropBlurBrush Amount="200" FallbackColor="White"/>
                     </Border.Background>
                 </Border>
-                <Border>
-                    <Border.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#4CFFFFFF" Offset="0"/>
-                            <GradientStop Color="White" Offset="1"/>
+                <Border Background="{ThemeResource COLOR_BgTransparentColor}">
+                   
 
-                        </LinearGradientBrush>
-                    </Border.Background>
                 </Border>
             </Grid>
             <ScrollViewer Margin="0 32 0 0">
@@ -84,12 +79,12 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0 4" Visibility="{Binding Path=menusRespones.showCreate}">
-                                <TextBlock TextWrapping="Wrap"  Foreground="#FF3C3C3C" Margin="0 0 4 0">创建者:</TextBlock>
-                                <Button Style="{StaticResource TextButton}" Foreground="#FF3C3C3C" Content="{Binding Path=menusRespones.uname}"></Button>
+                                <TextBlock TextWrapping="Wrap"  Foreground="{ThemeResource COLOR_Text}" Margin="0 0 4 0">创建者:</TextBlock>
+                                <Button Style="{StaticResource TextButton}" Foreground="{ThemeResource COLOR_Text}" Content="{Binding Path=menusRespones.uname}"></Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 4" Visibility="{Binding Path=menusRespones.showName}">
-                                <TextBlock TextWrapping="Wrap"  Foreground="#FF3C3C3C" Margin="0 0 4 0">歌手:</TextBlock>
-                                <Button Style="{StaticResource TextButton}" Foreground="#FF3C3C3C" Content="{Binding Path=menusRespones.mbnames}"></Button>
+                                <TextBlock TextWrapping="Wrap"  Foreground="{ThemeResource COLOR_Text}" Margin="0 0 4 0">歌手:</TextBlock>
+                                <Button Style="{StaticResource TextButton}" Foreground="{ThemeResource COLOR_Text}" Content="{Binding Path=menusRespones.mbnames}"></Button>
                             </StackPanel>
                             <ItemsControl ItemsSource="{Binding menusTags}">
                                 <ItemsControl.ItemsPanel>
@@ -99,8 +94,8 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <HyperlinkButton Foreground="#FF3C3C3C" FontSize="12" Padding="0" Margin="0 4 8 4">
-                                            <Border BorderThickness="1" Padding="8 2" CornerRadius="8" BorderBrush="#FF3C3C3C" >
+                                        <HyperlinkButton Foreground="{ThemeResource COLOR_Text}" FontSize="12" Padding="0" Margin="0 4 8 4">
+                                            <Border BorderThickness="1" Padding="8 2" CornerRadius="8" BorderBrush="{ThemeResource COLOR_Text}" >
                                                 <TextBlock FontSize="12" Text="{Binding itemVal}"></TextBlock>
                                             </Border>
                                         </HyperlinkButton>
@@ -108,14 +103,14 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                           
+
                             <!--<StackPanel Orientation="Horizontal" Margin="0 4" >
                                 
                                
                                 <Button Style="{StaticResource TextButton}" Margin="0 0 4 0" BorderThickness="1" BorderBrush="Gray" FontSize="12" Padding="4 2">人声演唱</Button>
                             </StackPanel>-->
 
-                            <TextBlock TextWrapping="Wrap"  Visibility="{Binding Path=menusRespones.showIntro}" Foreground="#FF3C3C3C" Margin="0 4" IsTextSelectionEnabled="True">简介: <Run  Text="{Binding Path=menusRespones.intro}"></Run></TextBlock>
+                            <TextBlock TextWrapping="Wrap"  Visibility="{Binding Path=menusRespones.showIntro}" Foreground="{ThemeResource COLOR_Text}" Margin="0 4" IsTextSelectionEnabled="True">简介: <Run  Text="{Binding Path=menusRespones.intro}"></Run></TextBlock>
                             <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
 
                                 <Button Margin="0 0 4 0" Style="{StaticResource TextButton}" MinWidth="100" MinHeight="32" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="Gainsboro" Padding="8 4">
@@ -210,7 +205,7 @@
                                         </Border>
                                         <TextBlock VerticalAlignment="Center"  TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
                                     </StackPanel>
-                                   
+
                                     <!--<Button Style="{StaticResource TextButton}"  VerticalAlignment="Center" Grid.Column="2" Content="{Binding author}">
                                         
                                     </Button>-->
@@ -235,9 +230,9 @@
                     </ListView>
                 </StackPanel>
             </ScrollViewer>
-           
+
         </Grid>
         <ProgressRing x:Name="loading" Visibility="{Binding loading}" Foreground="{StaticResource COLOR_Main}" IsActive="True" Width="56" Height="56"></ProgressRing>
     </Grid>
-   
+
 </Page>

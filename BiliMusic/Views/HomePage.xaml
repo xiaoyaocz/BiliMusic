@@ -41,6 +41,7 @@
                                    DesiredWidth="300"
                                    SelectionMode="None"
                                    Padding="0"
+                                   ItemClick="LsRecommend_ItemClick"
                                    IsItemClickEnabled="True">
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
@@ -218,7 +219,7 @@
         <ScrollViewer Padding="8" >
             <StackPanel MaxWidth="1024" HorizontalAlignment="Center">
                 <controls2:Carousel x:Name="control"  ItemsSource="{Binding banners}"
-                         MaxItems="1"  AspectRatio="3.4" GradientOpacity="0" MaxHeight="160" AlignmentX="Left">
+                         MaxItems="1"  AspectRatio="3.4" GradientOpacity="0" MaxHeight="160" >
                     <controls2:Carousel.ContentTemplate>
                         <DataTemplate>
                             <controls:ImageEx Margin="4"  extensions:Mouse.Cursor="Hand"  Tapped="Banner_Tapped" Source="{Binding bannerImgUrl}" Style="{StaticResource ImageExBaseStyle}"  PlaceholderSource="ms-appx:///Assets/Placeholde1020W300H.png"/>
@@ -232,12 +233,26 @@
                 <ItemsControl x:Name="listModules" ItemsSource="{Binding modules}" ItemContainerStyleSelector="{StaticResource homeItemStyleSelector}" ItemTemplateSelector="{StaticResource ResourceKey=homeItemDataTemplateSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <controls3:HomeGrid x:Name="grid" RowNumber="10">
-                                <controls3:HomeGrid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
-                                </controls3:HomeGrid.ColumnDefinitions>
-                            </controls3:HomeGrid>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

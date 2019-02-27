@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using BiliMusic.Models;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace BiliMusic.Helpers
 {
@@ -29,6 +31,12 @@ namespace BiliMusic.Helpers
             UserHelper.mid = 0;
             Logouted?.Invoke(null,null);
         }
+
+        public static BiliMusic.Modules.MusicPlay GetMusicPlay()
+        {
+            return ((Window.Current.Content as Frame).Content as MainPage).musicPlay;
+        }
+
 
     }
 }

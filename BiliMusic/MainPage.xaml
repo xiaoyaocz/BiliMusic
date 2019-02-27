@@ -6,11 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:controls2="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.Resources>
-        
-    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -25,10 +24,12 @@
                                  PaneOpening="NavView_PaneOpened" 
                                  IsBackButtonVisible="Collapsed"  
                                  OpenPaneLength="240" 
+                                 IsPaneOpen="True"
                                  PaneDisplayMode="Auto" 
                                  SelectedItem="{Binding Path=selectItem,Mode=TwoWay}"
                                  ItemInvoked="NavView_ItemInvoked"
                                  SelectionChanged="NavView_SelectionChanged">
+           
             <controls:NavigationView.PaneToggleButtonStyle>
                 <Style TargetType="Button">
                     <Setter Property="Height" Value="48"></Setter>
@@ -129,7 +130,7 @@
             </controls:NavigationView.Content>
         </controls:NavigationView>
 
-        <Grid Grid.Row="2" Background="{ThemeResource COLOR_BarColor}">
+        <Grid x:Name="player" Grid.Row="2" Background="{ThemeResource COLOR_BarColor}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  Width="Auto"/>
@@ -137,23 +138,23 @@
                     <ColumnDefinition  Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="12 0">
-                    <HyperlinkButton Foreground="#CCFFFFFF" Padding="0" Margin="4 0">
+                    <HyperlinkButton x:Name="btnPrevious" Click="BtnPrevious_Click" Foreground="#CCFFFFFF" Padding="0" Margin="4 0">
                         <Border Width="36" Height="36" BorderThickness="2" BorderBrush="#CCFFFFFF" CornerRadius="18">
                             <FontIcon FontSize="24" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Previous}" />
                         </Border>
                     </HyperlinkButton>
 
-                    <HyperlinkButton Click="HyperlinkButton_Click" Foreground="#CCFFFFFF" Padding="0" Margin="4 0" FontFamily="Material Icons">
+                    <HyperlinkButton x:Name="btnPlay" Click="BtnPlay_Click" Visibility="{Binding showPlay}" Foreground="#CCFFFFFF" Padding="0" Margin="4 0" FontFamily="Material Icons">
                         <Border Width="48" Height="48" BorderThickness="2" BorderBrush="#CCFFFFFF" CornerRadius="24">
                             <FontIcon FontSize="36" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Play}" />
                         </Border>
                     </HyperlinkButton>
-                    <HyperlinkButton Visibility="Collapsed" Foreground="#CCFFFFFF" Padding="0" Margin="4 0">
+                    <HyperlinkButton  x:Name="btnPause" Click="BtnPause_Click" Visibility="{Binding showPasue}" Foreground="#CCFFFFFF" Padding="0" Margin="4 0">
                         <Border Width="48" Height="48" BorderThickness="2" BorderBrush="#CCFFFFFF" CornerRadius="24">
                             <FontIcon FontSize="36" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Pause}" />
                         </Border>
                     </HyperlinkButton>
-                    <HyperlinkButton Foreground="#CCFFFFFF" Padding="0" Margin="4 0">
+                    <HyperlinkButton  x:Name="btnNext" Click="BtnNext_Click" Foreground="#CCFFFFFF" Padding="0" Margin="4 0">
                         <Border Width="36" Height="36" BorderThickness="2" BorderBrush="#CCFFFFFF" CornerRadius="18">
                             <FontIcon FontSize="24" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Next}" />
                         </Border>
@@ -168,12 +169,27 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Image Grid.RowSpan="2" Width="48" Margin="0 0 8 0" Height="48" VerticalAlignment="Center" Source="https://wxt.sinaimg.cn/thumb300/4a90c0b8gy1fxfzkudvfsj22o03mahdy.jpg?tags=%5B%5D"></Image>
+                    <controls2:ImageEx Grid.RowSpan="2" Background="#99FFFFFF" Width="48" Margin="0 0 8 0" Height="48" VerticalAlignment="Center" Source="{Binding Path=playInfo.pic}"></controls2:ImageEx>
                     <Grid  Grid.Column="1">
-                        <TextBlock  VerticalAlignment="Bottom" FontSize="14" Foreground="#E5FFFFFF">深夜书店 - 许嵩/洛天依</TextBlock>
-                        <TextBlock VerticalAlignment="Bottom" FontSize="12" HorizontalAlignment="Right" Foreground="White" FocusVisualPrimaryBrush="#7F000000">00:00 / 04:00</TextBlock>
+                        <TextBlock  VerticalAlignment="Bottom" FontSize="14" Foreground="#E5FFFFFF"><Run FontSize="12" Text="{Binding tag}"></Run><Run Text="{Binding Path=playInfo.title}"></Run></TextBlock>
+                        <TextBlock VerticalAlignment="Bottom" FontSize="12" HorizontalAlignment="Right" Foreground="White" FocusVisualPrimaryBrush="#7F000000" Text="{Binding durationStr}"></TextBlock>
                     </Grid>
-                    <Slider VerticalAlignment="Center" Style="{StaticResource MuiscProgressSliderStyle}"  Grid.Column="1" Grid.Row="1" Value="2" Background="#66808080" Foreground="White"></Slider>
+                    <Grid Grid.Column="1" Grid.Row="1">
+                        <Slider VerticalAlignment="Center"  Style="{StaticResource MuiscProgressSliderBGStyle}"  Background="#00000000" Value="{Binding Path=bufferingProgress,Mode=TwoWay}" Maximum="100" Foreground="#7FFFFFFF"></Slider>
+                        <Slider VerticalAlignment="Center"
+                                x:Name="sliderPosition"
+                                Maximum="{Binding totalDuration}" 
+                                Value="{Binding Path=position,Mode=OneWay}"
+                                ThumbToolTipValueConverter="{StaticResource progressToTimeConverter}"  
+                                Style="{StaticResource MuiscProgressSliderStyle}"
+                                Background="#66808080" Foreground="White" 
+                                ManipulationStarting="SliderPosition_ManipulationStarting"
+                                ManipulationMode="All"
+                                Tapped="SliderPosition_Tapped" 
+                                ManipulationCompleted="SliderPosition_ManipulationCompleted" ></Slider>
+                        <ProgressBar Visibility="{Binding loading}"  Background="#00000000" IsIndeterminate="True" Foreground="White"></ProgressBar>
+                    </Grid>
+                   
                 </Grid>
                 <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Margin="12 0">
                     <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
@@ -186,7 +202,11 @@
                         <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Repeat}" />
                     </HyperlinkButton>
                     <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
-                        <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_List}" />
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_List}" />
+                            <TextBlock FontSize="14" Text="{Binding Path=playList.Count}" Margin="4 0 0 0"></TextBlock>
+                        </StackPanel>
+                       
                     </HyperlinkButton>
                 </StackPanel>
             </Grid>
@@ -200,7 +220,7 @@
                 <FontIcon FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Back}" />
             </Button>
             <Grid Grid.Column="1" x:Name="titleBar" Background="#00FF8080">
-                <TextBlock x:Name="titleBarTitle" Margin="8 0" VerticalAlignment="Center" FontSize="14" Foreground="{StaticResource COLOR_Foreground}">哔哩哔哩音乐 <Run Foreground="Gray" x:Name="DEBUG_INFO"></Run></TextBlock>
+                <TextBlock x:Name="titleBarTitle" Margin="8 0" VerticalAlignment="Center" FontSize="14" Foreground="{ThemeResource COLOR_Text}">哔哩哔哩音乐 <Run Foreground="Gray" x:Name="DEBUG_INFO"></Run></TextBlock>
             </Grid>
         </Grid>
 

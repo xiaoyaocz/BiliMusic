@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BiliMusic.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,8 +40,10 @@ namespace BiliMusic
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            
 
+            Frame rootFrame = Window.Current.Content as Frame;
+            
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
             if (rootFrame == null)
@@ -54,11 +57,23 @@ namespace BiliMusic
                 {
                     //TODO: 从之前挂起的应用程序加载状态
                 }
-
+                switch (SettingHelper.StorageHelper.Read<int>(SettingHelper.Theme, 1))
+                {
+                    case 1:
+                        rootFrame.RequestedTheme = ElementTheme.Light;
+                        break;
+                    case 2:
+                        rootFrame.RequestedTheme = ElementTheme.Dark;
+                        break;
+                    default:
+                        rootFrame.RequestedTheme = ElementTheme.Default;
+                        break;
+                }
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
-            }
 
+            }
+           
             if (e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)

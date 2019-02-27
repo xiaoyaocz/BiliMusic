@@ -123,7 +123,7 @@ namespace BiliMusic.Modules
             catch (Exception ex)
             {
                 Utils.ShowMessageToast("读取首页信息失败");
-                //TODO 保存错误信息
+                LogHelper.Log("读取首页信息失败TABID："+ tab_id, LogType.ERROR, ex);
             }
             finally
             {
@@ -158,7 +158,7 @@ namespace BiliMusic.Modules
             catch (Exception ex)
             {
                 Utils.ShowMessageToast("刷新信息失败");
-                //TODO 保存错误信息
+                LogHelper.Log("刷新信息失败", LogType.ERROR, ex);
             }
             finally
             {

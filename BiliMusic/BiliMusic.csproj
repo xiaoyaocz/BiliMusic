@@ -104,15 +104,19 @@
     <Compile Include="Controls\MessageToast.xaml.cs">
       <DependentUpon>MessageToast.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MyUICommand.cs" />
     <Compile Include="Converters\DurationToTimeConvert.cs" />
     <Compile Include="Converters\HomeItemDataTemplateSelector.cs" />
     <Compile Include="Converters\HomeItemNarrowStyleSelector.cs" />
     <Compile Include="Converters\HomeItemStyleSelector.cs" />
     <Compile Include="Converters\ImageCompressionConvert.cs" />
     <Compile Include="Converters\NumberToStringConvert.cs" />
+    <Compile Include="Converters\ProgressToTimeConverter.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\HttpHelper.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MessageCenter.cs" />
+    <Compile Include="Modules\MusicPlay.cs" />
     <Compile Include="Helpers\SettingHelper.cs" />
     <Compile Include="Helpers\SystemHelper.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
@@ -124,7 +128,11 @@
     <Compile Include="Models\MainModels.cs" />
     <Compile Include="Models\MyCollectionMenuModel.cs" />
     <Compile Include="Models\MyCreateMenuModels.cs" />
+    <Compile Include="Models\PlayModel.cs" />
+    <Compile Include="Models\QualitiesModel.cs" />
     <Compile Include="Models\SonglistDetailModels.cs" />
+    <Compile Include="Models\SongsDetailModels.cs" />
+    <Compile Include="Models\SongsUrlModel.cs" />
     <Compile Include="Models\TabDetailModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Modules\Account.cs" />
@@ -160,6 +168,11 @@
     <None Include="BiliMusic_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\LargeTile.scale-100.png" />
+    <Content Include="Assets\LargeTile.scale-125.png" />
+    <Content Include="Assets\LargeTile.scale-150.png" />
+    <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\LargeTile.scale-400.png" />
     <Content Include="Assets\Login\ic_22.png" />
     <Content Include="Assets\Login\ic_22_hide.png" />
     <Content Include="Assets\Login\ic_33.png" />
@@ -167,13 +180,47 @@
     <Content Include="Assets\Placeholde.png" />
     <Content Include="Assets\Placeholde1020W300H.png" />
     <Content Include="Assets\Placeholde300W300H.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-125.png" />
+    <Content Include="Assets\SmallTile.scale-150.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-400.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
@@ -190,8 +237,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DesktopLyricsPage.xaml">
       <SubType>Designer</SubType>
@@ -219,6 +266,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite">
+      <Version>2.2.2</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
     </PackageReference>
@@ -234,8 +284,11 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
     </PackageReference>
+    <PackageReference Include="NLog.Config">
+      <Version>4.5.11</Version>
+    </PackageReference>
     <PackageReference Include="RestSharp">
-      <Version>106.6.7</Version>
+      <Version>106.6.8</Version>
     </PackageReference>
     <PackageReference Include="WindowsAppStudio.Common">
       <Version>1.4.6</Version>
@@ -248,9 +301,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BiliJS\BiliJS.csproj">
-      <Project>{02a60d3e-eacf-4416-88c7-824976dcc70c}</Project>
-      <Name>BiliJS</Name>
+    <ProjectReference Include="..\BiliMusic.JS\BiliMusic.JS.csproj">
+      <Project>{97c7b171-e341-4ac4-9720-14e7b1ecf2a3}</Project>
+      <Name>BiliMusic.JS</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

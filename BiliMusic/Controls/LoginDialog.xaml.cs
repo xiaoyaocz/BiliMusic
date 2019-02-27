@@ -45,8 +45,8 @@ namespace BiliMusic.Controls
             //throw new NotImplementedException();
         }
 
-        BiliJS.biliapp _biliapp = new BiliJS.biliapp();
-        BiliJS.secure _secure = new BiliJS.secure();
+        JS.biliapp _biliapp = new JS.biliapp();
+        JS.secure _secure = new JS.secure();
         private void _biliapp_CloseBrowserEvent(object sender, string e)
         {
             this.Hide();
@@ -182,7 +182,7 @@ namespace BiliMusic.Controls
             }
             catch (Exception ex)
             {
-               
+                LogHelper.Log("注入JS对象失败", LogType.ERROR, ex);
             }
 
         }

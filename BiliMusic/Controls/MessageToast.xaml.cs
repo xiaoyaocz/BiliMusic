@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp.UI.Animations;
+using Windows.UI.Popups;
 
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
@@ -45,17 +46,39 @@ namespace BiliMusic.Controls
             this.m_TextBlockContent = content;
             this.m_ShowTime = showTime;
         }
-
-        public MessageToast(string content) : this(content, TimeSpan.FromSeconds(2))
+        public MessageToast(string content, TimeSpan showTime,List<MyUICommand> commands) : this()
         {
+            if (m_TextBlockContent == null)
+            {
+                m_TextBlockContent = "";
+            }
+            this.m_TextBlockContent = content;
+            this.m_ShowTime = showTime;
+            foreach (var item in commands)
+            {
+                HyperlinkButton button = new HyperlinkButton() {
+                    Margin=new Thickness(8,0,0,0),
+                    VerticalAlignment= VerticalAlignment.Center,
+                    Content=new TextBlock() { Text=item.Label}
+                };
+                button.Click += new RoutedEventHandler((sender,e)=> {
+                    item.Invoked?.Invoke(this,item);
+                });
+                btns.Children.Add(button);
+            }
         }
+
 
         public void Show()
         {
             this.m_Popup.IsOpen = true;
             
         }
-
+        public async void Close()
+        {
+            await this.Offset(offsetX: 0, offsetY: (float)border.ActualHeight, duration: 200, delay: 0, easingType: EasingType.Default).StartAsync();
+            this.m_Popup.IsOpen = false;
+        }
         private async void NotifyPopup_Loaded(object sender, RoutedEventArgs e)
         {
             if (m_TextBlockContent == null)
@@ -64,10 +87,9 @@ namespace BiliMusic.Controls
             }
             this.tbNotify.Text = m_TextBlockContent;
             Window.Current.SizeChanged += Current_SizeChanged;
-            var height = (float)border.ActualHeight + 72;
-            await this.Offset(offsetX: 0, offsetY: height, duration: 0, delay: 0, easingType: EasingType.Default).StartAsync();
-            await this.Offset(offsetX: 0, offsetY: 0, duration: 200, delay: 0, easingType: EasingType.Default).StartAsync();
-            await this.Offset(offsetX: 0, offsetY: height, duration: 200, delay: 2000, easingType: EasingType.Default).StartAsync();
+         
+            await this.Offset(offsetX: 0, offsetY: -72, duration: 200, delay: 0, easingType: EasingType.Default).StartAsync();
+            await this.Offset(offsetX: 0, offsetY: (float)border.ActualHeight, duration: 200, delay: m_ShowTime.TotalMilliseconds, easingType: EasingType.Default).StartAsync();
             this.m_Popup.IsOpen = false;
         }
 
@@ -85,4 +107,5 @@ namespace BiliMusic.Controls
 
 
     }
+
 }

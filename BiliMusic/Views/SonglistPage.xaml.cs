@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using BiliMusic.Modules;
+using BiliMusic.Helpers;
+using BiliMusic.Models;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -52,7 +54,21 @@ namespace BiliMusic.Views
         }
         private void ListSongsList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            
+            var item = (e.ClickedItem as songsListModel);
+            var player = MessageCenter.GetMusicPlay();
+            player.AddPlay(new PlayModel()
+            {
+                author = item.author,
+                title = item.title,
+                pic = item.cover_url,
+                songid = item.id,
+                play_url = new Uri("music://" + item.id)
+            });
+            //var data = await player.LoadMusicInfo((e.ClickedItem as songsListModel).id);
+            //if (data != null)
+            //{
+            //    player.AddPlay(data);
+            //}
         }
     }
 }

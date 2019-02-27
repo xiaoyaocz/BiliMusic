@@ -10,6 +10,8 @@ using Windows.UI.Xaml;
 using System.ComponentModel;
 using BiliMusic.Helpers;
 using BiliMusic.Models;
+using Windows.UI.Xaml.Data;
+using Windows.UI;
 
 namespace BiliMusic.Modules
 {
@@ -154,7 +156,6 @@ namespace BiliMusic.Modules
                     openMode= MenuOpenMode.MyAttention
                 }
             };
-            //TODO 更新我的歌单 
             await GetMyCreate();
             await GetMyCollection();
             CreateMenus();
@@ -214,8 +215,9 @@ namespace BiliMusic.Modules
             }
             catch (Exception ex)
             {
-                Utils.ShowMessageToast("读取创建的歌单失败");
-                //TODO 保存错误信息
+                Utils.ShowMessageToast("读取收藏的歌单失败");
+                LogHelper.Log("读取收藏的歌单失败", LogType.ERROR, ex);
+                
             }
         }
 
@@ -257,7 +259,7 @@ namespace BiliMusic.Modules
             catch (Exception ex)
             {
                 Utils.ShowMessageToast("读取创建的歌单失败");
-                //TODO 保存错误信息
+                LogHelper.Log("读取创建的歌单失败", LogType.ERROR, ex);
             }
         }
 
@@ -325,7 +327,7 @@ namespace BiliMusic.Modules
             {
 
                 Utils.ShowMessageToast("读取菜单信息失败");
-                //TODO 保存错误信息
+                LogHelper.Log("读取菜单信息失败", LogType.ERROR, ex);
             }
 
         }
@@ -394,6 +396,7 @@ namespace BiliMusic.Modules
         /// </summary>
         private void MenuitemToViewItem()
         {
+            
             var m = new ObservableCollection<NavigationViewItemBase>();
             foreach (var item in _Menus)
             {
@@ -401,12 +404,13 @@ namespace BiliMusic.Modules
                 {
                     case MenuType.Header:
                         {
-                            m.Add(new NavigationViewItemHeader()
+                            var header = new NavigationViewItemHeader()
                             {
                                 Content = item.title,
                                 Tag = item,
-                                Foreground = (Windows.UI.Xaml.Media.SolidColorBrush)Application.Current.Resources["COLOR_Foreground"]
-                            });
+                                Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Gray)
+                            };
+                            m.Add(header);
                         }
                         break;
                     case MenuType.Menuitem:
@@ -440,7 +444,10 @@ namespace BiliMusic.Modules
             }
             Menus = m;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Menus"));
+            
             MenuUpdated?.Invoke(this, null);
+           
+            
         }
 
     }

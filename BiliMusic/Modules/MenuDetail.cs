@@ -77,7 +77,7 @@ namespace BiliMusic.Modules
             {
                 
                 Utils.ShowMessageToast("读取歌单信息失败");
-                //TODO 保存错误信息
+                LogHelper.Log("读取歌单信息失败", LogType.ERROR, ex);
             }
             finally
             {
@@ -111,8 +111,8 @@ namespace BiliMusic.Modules
             catch (Exception ex)
             {
                 Utils.ShowMessageToast("读取歌单TAG失败");
+                LogHelper.Log("读取歌单TAG失败", LogType.ERROR, ex);
                 return null;
-                //TODO 保存错误信息
             }
            
         }

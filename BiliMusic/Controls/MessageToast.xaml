@@ -10,12 +10,22 @@
     d:DesignWidth="400">
 
     <Grid x:Name="mainGrid" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Border x:Name="border" Grid.Row="1" BorderThickness="2" BorderBrush="#b1b1b1" Background="#e7e7e7"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="36,0,36,72" Padding="16,8" >
-            <TextBlock x:Name="tbNotify" TextWrapping="Wrap"  Text=""/>
+       
+        
+        <Border x:Name="border" Grid.Row="1" BorderThickness="2" BorderBrush="#b1b1b1" Background="#e7e7e7"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="36,0,36,0" Padding="16,8" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="tbNotify" VerticalAlignment="Center" TextWrapping="Wrap"  Text=""/>
+                <StackPanel Grid.Column="1" x:Name="btns" Orientation="Horizontal">
+                   
+                </StackPanel>
+                
+            </Grid>
+           
         </Border>
+        
     </Grid>
 </UserControl>

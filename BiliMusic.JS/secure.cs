@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
 using Windows.UI.Popups;
-namespace BiliJS
+namespace BiliMusic.JS
 {
     [AllowForWeb]
     public sealed class secure

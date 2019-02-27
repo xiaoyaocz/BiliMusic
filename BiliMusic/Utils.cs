@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BiliMusic.Controls;
+using Windows.UI.Popups;
 
 namespace BiliMusic
 {
@@ -70,6 +71,11 @@ namespace BiliMusic
         public static void ShowMessageToast(string message)
         {
             MessageToast ms = new MessageToast(message, TimeSpan.FromSeconds(2));
+            ms.Show();
+        }
+        public static void ShowMessageToast(string message,List<MyUICommand> commands, int seconds = 15)
+        {
+            MessageToast ms = new MessageToast(message, TimeSpan.FromSeconds(seconds), commands);
             ms.Show();
         }
 

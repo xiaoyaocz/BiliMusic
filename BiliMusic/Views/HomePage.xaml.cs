@@ -16,6 +16,10 @@ using BiliMusic.Models;
 using BiliMusic.Modules;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.System;
+using BiliMusic.Models;
+using Windows.Media.Playback;
+using Windows.Media.Core;
+using BiliMusic.Helpers;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -37,7 +41,7 @@ namespace BiliMusic.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.NavigationMode== NavigationMode.New||tabDetail==null)
+            if (e.NavigationMode == NavigationMode.New || tabDetail == null)
             {
                 tab_id = Convert.ToInt32(e.Parameter);
                 tabDetail = new TabDetail(tab_id);
@@ -48,7 +52,7 @@ namespace BiliMusic.Views
         }
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-            if (e.SourcePageType==typeof(HomePage))
+            if (e.SourcePageType == typeof(HomePage))
             {
                 this.NavigationCacheMode = NavigationCacheMode.Disabled;
             }
@@ -64,13 +68,24 @@ namespace BiliMusic.Views
 
         private void SongMenu_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var data= e.ClickedItem as menusModel;
+            var data = e.ClickedItem as menusModel;
             this.Frame.Navigate(typeof(SonglistPage), data.menuId);
         }
 
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             tabDetail.RefreshModule((sender as Button).DataContext as modulesModel);
+        }
+
+
+        private async void LsRecommend_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var player = MessageCenter.GetMusicPlay();
+            var data = await player.LoadMusicInfo((e.ClickedItem as songsModel).song_id);
+            if (data != null)
+            {
+                player.AddPlay(data);
+            }
         }
     }
 }
