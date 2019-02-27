@@ -141,7 +141,7 @@
 
                         </StackPanel>
                     </Grid>
-                    <ListView x:Name="listSongsList" ItemClick="ListSongsList_ItemClick" SelectionMode="None" Margin="0 8 0 0" IsItemClickEnabled="True" ItemsSource="{Binding songsList}">
+                    <ListView x:Name="listSongsList" ScrollViewer.VerticalScrollMode="Disabled" ItemClick="ListSongsList_ItemClick" SelectionMode="None" Margin="0 8 0 0" IsItemClickEnabled="True" ItemsSource="{Binding songsList}">
 
                         <ListView.Header>
                             <StackPanel>
@@ -213,7 +213,7 @@
                                     <TextBlock VerticalAlignment="Center" Grid.Column="3" Text="{Binding Path=duration,Converter={StaticResource durationToTimeConvert}}"></TextBlock>
                                     <StackPanel Grid.Column="4" Orientation="Horizontal" >
                                         <Button Style="{StaticResource TextButton}" Width="36" Height="36">
-                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play1}"></FontIcon>
+                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play}"></FontIcon>
                                         </Button>
                                         <Button Style="{StaticResource TextButton}" Width="36" Height="36">
                                             <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Like_Border}"></FontIcon>

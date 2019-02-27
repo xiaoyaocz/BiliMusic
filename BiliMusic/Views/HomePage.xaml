@@ -35,7 +35,8 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-                <controls:AdaptiveGridView 
+                <controls:AdaptiveGridView
+                    ScrollViewer.VerticalScrollMode="Disabled"
                                    ItemsSource="{Binding songs}"
                                    OneRowModeEnabled="False"
                                    DesiredWidth="300"
@@ -85,7 +86,7 @@
                     </StackPanel>
                 </Grid>
 
-                <controls:AdaptiveGridView ItemClick="SongMenu_ItemClick" ItemsSource="{Binding menus}" DesiredWidth="180" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
+                <controls:AdaptiveGridView ScrollViewer.VerticalScrollMode="Disabled" ItemClick="SongMenu_ItemClick" ItemsSource="{Binding menus}" DesiredWidth="180" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="4" >
@@ -145,7 +146,7 @@
                     </StackPanel>
                 </Grid>
 
-                <controls:AdaptiveGridView DesiredWidth="256" ItemsSource="{Binding videos}" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
+                <controls:AdaptiveGridView ScrollViewer.VerticalScrollMode="Disabled" DesiredWidth="256" ItemsSource="{Binding videos}" SelectionMode="None" IsItemClickEnabled="True" Padding="0" >
                     <controls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="4">

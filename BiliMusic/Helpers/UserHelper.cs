@@ -20,7 +20,7 @@ namespace BiliMusic.Helpers
     {
         public static bool isLogin { get; set; } = false;
         public static string access_key { get; set; }
-        public static long mid { get; set; }
+        public static long mid { get; set; } = 0;
 
     }
 }

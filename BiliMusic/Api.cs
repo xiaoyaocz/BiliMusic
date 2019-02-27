@@ -258,7 +258,7 @@ namespace BiliMusic
             {
                 method = RestSharp.Method.GET,
                 baseUrl = $"https://api.bilibili.com/audio/music-service-c/url",
-                parameter = ApiHelper.MustParameter(true) + $"&songid={songid}&quality={quality}&privilege=2" + (UserHelper.isLogin ? $"&mid={UserHelper.mid}" : ""),
+                parameter = ApiHelper.MustParameter(true) + $"&songid={songid}&quality={quality}&privilege=2&mid={UserHelper.mid}",
                 headers = Utils.GetDefaultHeaders()
             };
             api.parameter += ApiHelper.GetSign(api.parameter);

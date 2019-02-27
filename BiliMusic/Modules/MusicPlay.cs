@@ -190,7 +190,7 @@ namespace BiliMusic.Modules
 
         private void MediaPlaybackList_ItemOpened(MediaPlaybackList sender, MediaPlaybackItemOpenedEventArgs args)
         {
-            
+
         }
 
         private void MediaPlaybackList_ItemFailed(MediaPlaybackList sender, MediaPlaybackItemFailedEventArgs args)
@@ -236,10 +236,10 @@ namespace BiliMusic.Modules
             {
                 Utils.ShowMessageToast("123");
             });
-           
+
         }
 
-       
+
 
         private void PlaybackSession_PlaybackStateChanged(MediaPlaybackSession sender, object args)
         {
@@ -292,16 +292,23 @@ namespace BiliMusic.Modules
             {
                 return;
             }
-            playInfo = playList[Convert.ToInt32(mediaPlaybackList.CurrentItemIndex)];
+            if (args.NewItem==null)
+            {
+                playInfo = null;
+                loading = true;
+                return;
+            }
+            playInfo = playList[mediaPlaybackList.Items.IndexOf(args.NewItem)];
 
 
             var _systemMediaTransportControls = mediaPlayer.SystemMediaTransportControls;
             SystemMediaTransportControlsDisplayUpdater updater = _systemMediaTransportControls.DisplayUpdater;
             updater.Type = MediaPlaybackType.Music;
-            updater.MusicProperties.Artist = playList[Convert.ToInt32(mediaPlaybackList.CurrentItemIndex)].author;
-            updater.MusicProperties.Title = playList[Convert.ToInt32(mediaPlaybackList.CurrentItemIndex)].title;
+            updater.MusicProperties.Artist = playList[mediaPlaybackList.Items.IndexOf(args.NewItem)].author;
+            updater.MusicProperties.Title = playList[mediaPlaybackList.Items.IndexOf(args.NewItem)].title;
             updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri(playList[Convert.ToInt32(mediaPlaybackList.CurrentItemIndex)].pic));
             updater.Update();
+            loading = false;
         }
 
 
@@ -319,7 +326,7 @@ namespace BiliMusic.Modules
         {
             playList.Add(play);
             mediaPlaybackList.Items.Add(new MediaPlaybackItem(MediaSource.CreateFromUri(play.play_url)));
-           
+
         }
 
 
@@ -331,13 +338,19 @@ namespace BiliMusic.Modules
                 var re = await Api.SongDetail(songid).Request();
                 if (!re.status)
                 {
-                    Utils.ShowMessageToast(re.message);
+                    await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    {
+                        Utils.ShowMessageToast(re.message);
+                    });
                     return null;
                 }
                 var data = re.GetJson<ApiParseModel<SongsDetailModel>>();
                 if (data.code != 0)
                 {
-                    Utils.ShowMessageToast(data.msg + data.message);
+                    await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    {
+                        Utils.ShowMessageToast(data.msg + data.message);
+                    });
                     return null;
                 }
 
@@ -357,14 +370,17 @@ namespace BiliMusic.Modules
                     play_url = new Uri(url.cdns[0]),
                     qualities = url.qualities,
                     songid = data.data.id,
-                    title = data.data.title+" - "+data.data.author,
+                    title = data.data.title + " - " + data.data.author,
                     songinfo = data.data
                 };
                 return m;
             }
             catch (Exception ex)
             {
-                Utils.ShowMessageToast("读取歌曲信息失败");
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                {
+                    Utils.ShowMessageToast("读取歌曲信息失败");
+                });
                 LogHelper.Log("读取歌曲信息失败" + songid, LogType.ERROR, ex);
                 return null;
             }
@@ -383,20 +399,29 @@ namespace BiliMusic.Modules
                 var re = await Api.SongUrl(songid, q).Request();
                 if (!re.status)
                 {
-                    Utils.ShowMessageToast(re.message);
+                    await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                     {
+                         Utils.ShowMessageToast(re.message);
+                     });
                     return null;
                 }
                 var data = re.GetJson<ApiParseModel<SongsUrlModel>>();
                 if (data.code != 0)
                 {
-                    Utils.ShowMessageToast(data.msg + data.message);
+                    await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    {
+                        Utils.ShowMessageToast(data.msg + data.message);
+                    });
                     return null;
                 }
                 return data.data;
             }
             catch (Exception ex)
             {
-                Utils.ShowMessageToast("读取歌曲地址失败");
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                {
+                    Utils.ShowMessageToast("读取歌曲地址失败");
+                });
                 LogHelper.Log("读取歌曲地址失败" + songid, LogType.ERROR, ex);
                 return null;
             }
