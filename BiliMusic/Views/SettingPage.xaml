@@ -122,7 +122,7 @@
                 </StackPanel>
                 <TextBlock FontSize="20" Margin="0 8" >关于应用</TextBlock>
                 <TextBlock Margin="0 8 0 0">哔哩哔哩音乐 (第三方)</TextBlock>
-                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">Version 1.0.0.0 Beta</TextBlock>
+                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">Version <Run x:Name="Version"/> 开发中的版本</TextBlock>
                 <TextBlock FontSize="14" Margin="0 4 0 8"  Foreground="Gray" >@xiaoyaocz 开发</TextBlock>
                 <Button Style="{StaticResource TextButton}" Padding="0 4" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}">
                     <Button.Flyout>
@@ -130,7 +130,7 @@
                             <StackPanel>
                                 <TextBlock>联系作者</TextBlock>
                                 <TextBlock Margin="0 4 0 0" IsTextSelectionEnabled="True" Foreground="Gray" FontSize="14">Email：xiaoyaocz@52uwp.com</TextBlock>
-                                <TextBlock Margin="0 4 0 0" Foreground="Gray" FontSize="14">Q群:530991215</TextBlock>
+                                <TextBlock Margin="0 4 0 0" IsTextSelectionEnabled="True"  Foreground="Gray" FontSize="14">Q群:677139729</TextBlock>
                             </StackPanel>
                         </Flyout>
                     </Button.Flyout>

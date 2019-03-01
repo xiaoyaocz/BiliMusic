@@ -1,4 +1,5 @@
 ﻿using BiliMusic.Helpers;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace BiliMusic.Views
         }
         private void LoadSetting()
         {
+            
             //读取主题
             var theme = SettingHelper.StorageHelper.Read<int>(SettingHelper.Theme, 0);
             foreach (RadioButton item in stTheme.Children)
@@ -71,6 +73,8 @@ namespace BiliMusic.Views
 
 
             switchOriginal.IsOn= SettingHelper.StorageHelper.Read<bool>(SettingHelper.OriginalImage,false);
+            var version = SystemInformation.ApplicationVersion;
+            Version.Text = $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
 
             GetCacheSize();
         }

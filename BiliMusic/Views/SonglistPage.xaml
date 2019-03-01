@@ -10,19 +10,7 @@
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
-        <MenuFlyout x:Key="menu" x:Name="menu">
-            <MenuFlyoutItem Icon="Play">播放</MenuFlyoutItem>
-            <MenuFlyoutItem Icon="Download">下载</MenuFlyoutItem>
-            <MenuFlyoutItem Icon="Share">分享</MenuFlyoutItem>
-            <MenuFlyoutSubItem Icon="OutlineStar" Text="收藏到">
-                <MenuFlyoutItem>默认收藏夹</MenuFlyoutItem>
-                <MenuFlyoutItem>XX收藏夹</MenuFlyoutItem>
-            </MenuFlyoutSubItem>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem>歌曲详情</MenuFlyoutItem>
-
-
-        </MenuFlyout>
+     
     </Page.Resources>
     <Grid>
         <Grid DataContext="{Binding Datas}">
@@ -50,7 +38,7 @@
                             <controls:ImageEx Stretch="UniformToFill" Width="160" Height="160" PlaceholderStretch="UniformToFill" Style="{StaticResource ImageExBaseStyle}" 
                                                   Source="{Binding Path=menusRespones.coverUrl,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W300H300}}" />
 
-                            <Grid VerticalAlignment="Bottom" >
+                            <Grid VerticalAlignment="Bottom" Visibility="{Binding Path=menusRespones.showPlayNum}">
                                 <Grid.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#7F000000" Offset="1"/>
@@ -111,7 +99,7 @@
                             </StackPanel>-->
 
                             <TextBlock TextWrapping="Wrap"  Visibility="{Binding Path=menusRespones.showIntro}" Foreground="{ThemeResource COLOR_Text}" Margin="0 4" IsTextSelectionEnabled="True">简介: <Run  Text="{Binding Path=menusRespones.intro}"></Run></TextBlock>
-                            <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+                            <StackPanel Orientation="Horizontal" Margin="0 4 0 0" Visibility="{Binding Path=menusRespones.showPlayNum}">
 
                                 <Button Margin="0 0 4 0" Style="{StaticResource TextButton}" MinWidth="100" MinHeight="32" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="Gainsboro" Padding="8 4">
                                     <StackPanel Orientation="Horizontal">
@@ -141,14 +129,14 @@
 
                         </StackPanel>
                     </Grid>
-                    <ListView x:Name="listSongsList" ScrollViewer.VerticalScrollMode="Disabled" ItemClick="ListSongsList_ItemClick" SelectionMode="None" Margin="0 8 0 0" IsItemClickEnabled="True" ItemsSource="{Binding songsList}">
+                    <ListView x:Name="listSongsList" ScrollViewer.VerticalScrollMode="Disabled" SelectionMode="None" Margin="0 8 0 0" IsItemClickEnabled="True" ItemsSource="{Binding songsList}">
 
                         <ListView.Header>
                             <StackPanel>
                                 <Grid>
-                                    <TextBlock VerticalAlignment="Center" FontSize="18">歌曲列表 <Span FontSize="14" Foreground="Gray">(共<Run Text="{Binding Path=menusRespones.songNum}"/>首)</Span></TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="18">歌曲列表 <Span FontSize="14" Foreground="Gray">(共<Run Text="{Binding Path=songsList.Count}"/>首)</Span></TextBlock>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <Button Margin="0 0 8 0"  Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                        <Button Margin="0 0 8 0" x:Name="btnPlayAll" Click="BtnPlayAll_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
                                             <StackPanel Orientation="Horizontal">
                                                 <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play1}"></FontIcon>
                                                 <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">播放全部</TextBlock>
@@ -190,7 +178,7 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid ContextFlyout="{StaticResource menu}" Background="#00FFFFFF">
+                                <Grid FlyoutBase.AttachedFlyout="{StaticResource song_menu}" RightTapped="Grid_RightTapped" DoubleTapped="Grid_DoubleTapped" Background="#00FFFFFF">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="56"/>
                                         <ColumnDefinition Width="0.7*"/>
@@ -218,15 +206,13 @@
                                         <Button Style="{StaticResource TextButton}" Width="36" Height="36">
                                             <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Like_Border}"></FontIcon>
                                         </Button>
-                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36" Flyout="{StaticResource menu}">
+                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36" Flyout="{StaticResource song_menu}">
                                             <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_More}"></FontIcon>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-
-
                     </ListView>
                 </StackPanel>
             </ScrollViewer>

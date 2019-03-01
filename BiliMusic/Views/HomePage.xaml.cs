@@ -16,7 +16,6 @@ using BiliMusic.Models;
 using BiliMusic.Modules;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.System;
-using BiliMusic.Models;
 using Windows.Media.Playback;
 using Windows.Media.Core;
 using BiliMusic.Helpers;
@@ -78,14 +77,70 @@ namespace BiliMusic.Views
         }
 
 
-        private async void LsRecommend_ItemClick(object sender, ItemClickEventArgs e)
+        private void LsRecommend_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var item = e.ClickedItem as songsModel;
             var player = MessageCenter.GetMusicPlay();
-            var data = await player.LoadMusicInfo((e.ClickedItem as songsModel).song_id);
-            if (data != null)
+            player.AddPlay(new PlayModel()
             {
-                player.AddPlay(data);
+                author = item.author,
+                title = item.title,
+                pic = item.cover_url,
+                songid = item.id
+            });
+        }
+
+        private void BtnShowMoreRecommend_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as modulesModel;
+            this.Frame.Navigate(typeof(SonglistPage),new object[] { data.id,"Recommend" });
+        }
+
+        private async void BtnPlayAll_Click(object sender, RoutedEventArgs e)
+        {
+            tabDetail.loading = true;
+
+            try
+            {
+                var player = MessageCenter.GetMusicPlay();
+                var module = (sender as Button).DataContext as modulesModel;
+
+                var re = await Api.RecommendDetail(module.id).Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return;
+                }
+                var data = re.GetJson<ApiParseModel<SonglistDetailModel>>();
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return;
+                }
+                List<PlayModel> ls = new List<PlayModel>();
+                foreach (var item in data.data.songsList)
+                {
+                    ls.Add(new PlayModel()
+                    {
+                        author = item.author,
+                        title = item.title,
+                        pic = item.cover_url,
+                        songid = item.id
+                    });
+                }
+                player.ReplacePlayList(ls);
             }
+            catch (Exception ex)
+            {
+                Utils.ShowMessageToast("播放全部推荐歌曲失败");
+                LogHelper.Log("首页播放全部推荐歌曲失败", LogType.ERROR, ex);
+            }
+            finally
+            {
+                tabDetail.loading = false;
+            }
+          
+           
         }
     }
 }

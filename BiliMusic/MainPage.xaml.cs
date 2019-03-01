@@ -41,6 +41,7 @@ namespace BiliMusic
     {
         public Main main;
         public MusicPlay musicPlay;
+        public SongFlyoutMenu songFlyout;
         public MainPage()
         {
             this.InitializeComponent();
@@ -56,9 +57,10 @@ namespace BiliMusic
 #if DEBUG
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick+=new EventHandler<object>((sender, e)=>{
+            timer.Tick += new EventHandler<object>((sender, e) =>
+            {
                 var m = Windows.System.Diagnostics.ProcessDiagnosticInfo.GetForCurrentProcess().MemoryUsage.GetReport().WorkingSetSizeInBytes / 1024.0 / 1024.0;
-                if (m>=300)
+                if (m >= 300)
                 {
                     DEBUG_INFO.Text = "内存占用:" + m.ToString("0.00") + "MB";
                     DEBUG_INFO.Foreground = new SolidColorBrush(Colors.Red);
@@ -68,28 +70,34 @@ namespace BiliMusic
                     DEBUG_INFO.Text = "";
                     DEBUG_INFO.Foreground = new SolidColorBrush(Colors.Green);
                 }
-              
+
             });
             timer.Start();
 #endif
+           
+
             main = new Main();
             main.MenuUpdated += Main_MenuUpdated;
+            main.MyCreateUpdated += Main_MyCreateUpdated;    
             NavView.DataContext = main;
+
+            songFlyout = new SongFlyoutMenu(main);
 
             musicPlay = new MusicPlay();
             player.DataContext = musicPlay;
 
+           
+            //(App.Current.Resources["song_menu"] as MenuFlyout).Items
+        }
+       
+        private void Main_MyCreateUpdated(object sender, ObservableCollection<MenuModel> e)
+        {
+            songFlyout.SetMenu();
         }
 
-       
-
-        
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-          
-            
-
             MainFrame.Navigate(typeof(Views.HomePage), 0);
             //设置登录状态
             var userinfo = SettingHelper.StorageHelper.Read<LoginDataV2Model>(SettingHelper.LoginInfo);
@@ -109,14 +117,14 @@ namespace BiliMusic
                     MessageCenter.SendLogined(userinfo);
                 }
             }
-            
+            songFlyout.SetMenu();
         }
         string par = "HomePage0";
-        private  void Main_MenuUpdated(object sender, EventArgs e)
+        private void Main_MenuUpdated(object sender, EventArgs e)
         {
             main.selectItem = main.Menus.FirstOrDefault(x => x.Name == par);
         }
-        
+
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
         {
             if (MainFrame.CanGoBack)
@@ -127,13 +135,13 @@ namespace BiliMusic
             {
                 BackButton.Visibility = Visibility.Collapsed;
             }
-            if (main==null||main.Menus==null)
+            if (main == null || main.Menus == null)
             {
                 return;
             }
-           
-            par = e.SourcePageType.ToString().Replace("BiliMusic.Views.","")+((e.Parameter!=null)?e.Parameter.ToString():"");
-            if (par== "SettingPage")
+
+            par = e.SourcePageType.ToString().Replace("BiliMusic.Views.", "") + ((e.Parameter != null) ? e.Parameter.ToString() : "");
+            if (par == "SettingPage")
             {
                 NavView.SelectedItem = NavView.SettingsItem;
                 return;
@@ -141,7 +149,7 @@ namespace BiliMusic
             //NavView.SelectedItem= main.Menus.FirstOrDefault(x => x.Name == par);
             main.selectPar = par;
             //main.selectItem = main.Menus.FirstOrDefault(x => x.Name == par);
-           
+
         }
 
         private void NavView_PaneClosed(Microsoft.UI.Xaml.Controls.NavigationView sender, object args)
@@ -156,7 +164,7 @@ namespace BiliMusic
 
         private void NavView_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
-            
+
         }
 
         private async void NavView_ItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)
@@ -167,14 +175,14 @@ namespace BiliMusic
                 //Utils.ShowMessageToast("你选择了设置");
                 return;
             }
-            
 
-            var item= args.InvokedItemContainer.Tag as MenuModel;
-            
+
+            var item = args.InvokedItemContainer.Tag as MenuModel;
+
             switch (item.openMode)
             {
                 case MenuOpenMode.Home:
-                    MainFrame.Navigate(typeof(Views.HomePage),item.parameters);
+                    MainFrame.Navigate(typeof(Views.HomePage), item.parameters);
                     break;
                 case MenuOpenMode.Search:
                     break;
@@ -187,7 +195,7 @@ namespace BiliMusic
                 case MenuOpenMode.Attention:
                     break;
                 case MenuOpenMode.Songlist:
-                    MainFrame.Navigate(typeof(Views.SonglistPage),item.parameters);
+                    MainFrame.Navigate(typeof(Views.SonglistPage), item.parameters);
                     break;
                 case MenuOpenMode.Song:
                     break;
@@ -211,7 +219,7 @@ namespace BiliMusic
                 default:
                     break;
             }
-            
+
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -220,7 +228,7 @@ namespace BiliMusic
             {
                 MainFrame.GoBack();
             }
-           
+
         }
 
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
@@ -285,23 +293,6 @@ namespace BiliMusic
         private void SliderPosition_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {
             //Utils.ShowMessageToast("123");
-
-        }
-
-        private void SliderPosition_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            //Utils.ShowMessageToast(sliderPosition.Value.ToString());
-
-            musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(sliderPosition.Value);
-            sliderPosition.SetBinding(Slider.ValueProperty,new Binding() {
-                Path= new PropertyPath("position"),
-                Mode= BindingMode.OneWay
-            });
-        }
-
-        private void SliderPosition_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-        {
-            musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(sliderPosition.Value);
             sliderPosition.SetBinding(Slider.ValueProperty, new Binding()
             {
                 Path = new PropertyPath("position"),
@@ -309,9 +300,31 @@ namespace BiliMusic
             });
         }
 
+        private void SliderPosition_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //Utils.ShowMessageToast(sliderPosition.Value.ToString());
+            //musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(sliderPosition.Value);
+            //sliderPosition.SetBinding(Slider.ValueProperty, new Binding()
+            //{
+            //    Path = new PropertyPath("position"),
+            //    Mode = BindingMode.TwoWay
+            //});
+
+        }
+        private void SliderPosition_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+           
+            musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(sliderPosition.Value);
+            sliderPosition.SetBinding(Slider.ValueProperty, new Binding()
+            {
+                Path = new PropertyPath("position"),
+                Mode = BindingMode.TwoWay
+            });
+        }
+
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            
+
             musicPlay.mediaPlayer.Play();
         }
 
@@ -321,28 +334,77 @@ namespace BiliMusic
             {
                 musicPlay.mediaPlayer.Pause();
             }
-           
+
         }
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
-            if (!musicPlay.mediaPlaybackList.AutoRepeatEnabled&&!musicPlay.mediaPlaybackList.ShuffleEnabled&& musicPlay.mediaPlaybackList.CurrentItemIndex+1>= musicPlay.mediaPlaybackList.Items.Count)
+            if (!musicPlay.mediaPlaybackList.AutoRepeatEnabled && !musicPlay.mediaPlaybackList.ShuffleEnabled && musicPlay.mediaPlaybackList.CurrentItemIndex + 1 >= musicPlay.mediaPlaybackList.Items.Count)
             {
                 Utils.ShowMessageToast("后面没有了");
                 return;
             }
             musicPlay.mediaPlaybackList.MoveNext();
+            
         }
 
         private void BtnPrevious_Click(object sender, RoutedEventArgs e)
         {
-
-            if (!musicPlay.mediaPlaybackList.AutoRepeatEnabled && !musicPlay.mediaPlaybackList.ShuffleEnabled&& Convert.ToInt64(musicPlay.mediaPlaybackList.CurrentItemIndex)-1<0)
+            if (!musicPlay.mediaPlaybackList.AutoRepeatEnabled && !musicPlay.mediaPlaybackList.ShuffleEnabled && Convert.ToInt64(musicPlay.mediaPlaybackList.CurrentItemIndex) - 1 < 0)
+            {
+                Utils.ShowMessageToast("前面没有了");
+                return;
+            }
+            if (musicPlay.mediaPlaybackList.Items.Count==0)
             {
                 Utils.ShowMessageToast("前面没有了");
                 return;
             }
             musicPlay.mediaPlaybackList.MovePrevious();
+            if (musicPlay.mediaPlayer.PlaybackSession.PlaybackState!= MediaPlaybackState.Playing)
+            {
+                musicPlay.mediaPlayer.Play();
+
+            }
+        }
+
+        private void Playlist_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            musicPlay.mediaPlaybackList.MoveTo(Convert.ToUInt32(musicPlay.playList.IndexOf((sender as Grid).DataContext as PlayModel)));
+        }
+
+        private void BtnChangePlayMode_Click(object sender, RoutedEventArgs e)
+        {
+            musicPlay.ChangeMusicPlayMode();
+        }
+
+        private void BtnDeleteOne_Click(object sender, RoutedEventArgs e)
+        {
+            musicPlay.DeletePlayitem((sender as Button).DataContext as PlayModel);
+        }
+
+        private void BtnClear_Click(object sender, RoutedEventArgs e)
+        {
+            musicPlay.ClearPlaylist();
+        }
+
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+           
+            FlyoutBase.ShowAttachedFlyout(sender as Grid);
+        }
+
+        private void SliderPosition_ManipulationStarting_1(object sender, ManipulationStartingRoutedEventArgs e)
+        {
+
+        }
+
+        private void SliderPosition_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (Math.Abs(e.NewValue - e.OldValue)>1)
+            {
+                musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(e.NewValue);
+            }
         }
     }
 }

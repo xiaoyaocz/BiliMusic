@@ -19,6 +19,7 @@ namespace BiliMusic.Modules
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler MenuUpdated;
+        public event EventHandler<ObservableCollection<MenuModel>> MyCreateUpdated;
         /// <summary>
         /// 用于榜单NavView的集合
         /// </summary>
@@ -66,7 +67,7 @@ namespace BiliMusic.Modules
         /// <summary>
         /// 创建的歌单集合
         /// </summary>
-        private ObservableCollection<MenuModel> _MySonglistMenus { get; set; }
+        public ObservableCollection<MenuModel> _MySonglistMenus { get; set; }
         /// <summary>
         /// 收藏的歌单集合
         /// </summary>
@@ -254,7 +255,7 @@ namespace BiliMusic.Modules
                         parameters = item.menu_id
                     });
                 }
-
+                MyCreateUpdated?.Invoke(this, _MySonglistMenus);
             }
             catch (Exception ex)
             {

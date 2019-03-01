@@ -28,7 +28,14 @@ namespace BiliMusic.Helpers
             return result;
         }
 
-      
+        public static void SetClipboard(string text)
+        {
+            Windows.ApplicationModel.DataTransfer.DataPackage pack = new Windows.ApplicationModel.DataTransfer.DataPackage();
+            pack.SetText(text);
+            Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(pack); // 保存 DataPackage 对象到剪切板
+            Windows.ApplicationModel.DataTransfer.Clipboard.Flush();
+        }
+
 
     }
 }

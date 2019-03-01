@@ -212,6 +212,25 @@ namespace BiliMusic
             api.parameter += ApiHelper.GetSign(api.parameter);
             return api;
         }
+
+        /// <summary>
+        /// 编辑推荐详细
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel RecommendDetail(int id)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/firstpage/hit-songs/{id}",
+                parameter = ApiHelper.MustParameter(true),
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+
+
         /// <summary>
         /// 歌单TAG
         /// </summary>

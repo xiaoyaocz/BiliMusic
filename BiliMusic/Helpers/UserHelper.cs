@@ -22,5 +22,9 @@ namespace BiliMusic.Helpers
         public static string access_key { get; set; }
         public static long mid { get; set; } = 0;
 
+        public static void Collect()
+        {
+
+        }
     }
 }

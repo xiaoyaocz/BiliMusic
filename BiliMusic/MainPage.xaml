@@ -8,8 +8,12 @@
     mc:Ignorable="d"
     xmlns:controls2="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:convert="using:BiliMusic.Converters"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.Resources>
+        <convert:MusicPlayModeConvert x:Key="musicPlayModeConvert"></convert:MusicPlayModeConvert>
+       
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -144,7 +148,7 @@
                         </Border>
                     </HyperlinkButton>
 
-                    <HyperlinkButton x:Name="btnPlay" Click="BtnPlay_Click" Visibility="{Binding showPlay}" Foreground="#CCFFFFFF" Padding="0" Margin="4 0" FontFamily="Material Icons">
+                    <HyperlinkButton  Click="BtnPlay_Click" Visibility="{Binding showPlay}" Foreground="#CCFFFFFF" Padding="0" Margin="4 0" FontFamily="Material Icons">
                         <Border Width="48" Height="48" BorderThickness="2" BorderBrush="#CCFFFFFF" CornerRadius="24">
                             <FontIcon FontSize="36" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Play}" />
                         </Border>
@@ -171,21 +175,22 @@
                     </Grid.RowDefinitions>
                     <controls2:ImageEx Grid.RowSpan="2" Background="#99FFFFFF" Width="48" Margin="0 0 8 0" Height="48" VerticalAlignment="Center" Source="{Binding Path=playInfo.pic}"></controls2:ImageEx>
                     <Grid  Grid.Column="1">
-                        <TextBlock  VerticalAlignment="Bottom" FontSize="14" Foreground="#E5FFFFFF"><Run FontSize="12" Text="{Binding tag}"></Run><Run Text="{Binding Path=playInfo.title}"></Run></TextBlock>
+                        <TextBlock  VerticalAlignment="Bottom" FontSize="14" Foreground="#E5FFFFFF"><Run FontSize="12" Text="{Binding Path=playInfo.tag}"></Run><Run Text="{Binding Path=playInfo.title_show}"></Run></TextBlock>
                         <TextBlock VerticalAlignment="Bottom" FontSize="12" HorizontalAlignment="Right" Foreground="White" FocusVisualPrimaryBrush="#7F000000" Text="{Binding durationStr}"></TextBlock>
                     </Grid>
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Slider VerticalAlignment="Center"  Style="{StaticResource MuiscProgressSliderBGStyle}"  Background="#00000000" Value="{Binding Path=bufferingProgress,Mode=TwoWay}" Maximum="100" Foreground="#7FFFFFFF"></Slider>
                         <Slider VerticalAlignment="Center"
+                                ValueChanged="SliderPosition_ValueChanged"
                                 x:Name="sliderPosition"
                                 Maximum="{Binding totalDuration}" 
-                                Value="{Binding Path=position,Mode=OneWay}"
+                                Value="{Binding Path=position,Mode=TwoWay}"
                                 ThumbToolTipValueConverter="{StaticResource progressToTimeConverter}"  
                                 Style="{StaticResource MuiscProgressSliderStyle}"
                                 Background="#66808080" Foreground="White" 
-                                ManipulationStarting="SliderPosition_ManipulationStarting"
                                 ManipulationMode="All"
                                 Tapped="SliderPosition_Tapped" 
+                                ManipulationStarting="SliderPosition_ManipulationStarting"
                                 ManipulationCompleted="SliderPosition_ManipulationCompleted" ></Slider>
                         <ProgressBar Visibility="{Binding loading}"  Background="#00000000" IsIndeterminate="True" Foreground="White"></ProgressBar>
                     </Grid>
@@ -198,16 +203,117 @@
                     <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
                         <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Volume}" />
                     </HyperlinkButton>
-                    <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
+                    <HyperlinkButton Margin="8 0" 
+                                     Click="BtnChangePlayMode_Click"
+                                     Visibility="{Binding Path=musicPlayMode,Converter={StaticResource musicPlayModeConvert},ConverterParameter={StaticResource Loop}}" 
+                                     ToolTipService.ToolTip="列表循环" Foreground="#CCFFFFFF" Padding="0" >
                         <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Repeat}" />
                     </HyperlinkButton>
-                    <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
+                    <HyperlinkButton Margin="8 0" 
+                                      Click="BtnChangePlayMode_Click"
+                                      Visibility="{Binding Path=musicPlayMode,Converter={StaticResource musicPlayModeConvert},ConverterParameter={StaticResource Single}}" 
+                                     ToolTipService.ToolTip="单曲循环"  Foreground="#CCFFFFFF" Padding="0" >
+                        <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_RepeatOne}" />
+                    </HyperlinkButton>
+                    <HyperlinkButton Margin="8 0" 
+                                      Click="BtnChangePlayMode_Click"
+                                      Visibility="{Binding Path=musicPlayMode,Converter={StaticResource musicPlayModeConvert},ConverterParameter={StaticResource Shuffle}}" 
+                                     ToolTipService.ToolTip="随机播放" Foreground="#CCFFFFFF" Padding="0" >
+                        <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Shuffle}" />
+                    </HyperlinkButton>
+                    <HyperlinkButton Margin="8 0" 
+                                      Click="BtnChangePlayMode_Click"
+                                      Visibility="{Binding Path=musicPlayMode,Converter={StaticResource musicPlayModeConvert},ConverterParameter={StaticResource Sequence}}" 
+                                     ToolTipService.ToolTip="顺序播放" Foreground="#CCFFFFFF" Padding="0" >
+                        <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Sequence}" />
+                    </HyperlinkButton>
+                    <Button Style="{StaticResource TextButton}" Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_List}" />
+                            <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_SongList}" />
                             <TextBlock FontSize="14" Text="{Binding Path=playList.Count}" Margin="4 0 0 0"></TextBlock>
                         </StackPanel>
-                       
-                    </HyperlinkButton>
+                        <Button.Flyout>
+                            <Flyout>
+                                <Grid Height="400" Width="400" RowSpacing="4" Margin="-8">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Padding="0 4 0 8" Background="#00D6D6D6" BorderThickness="0 0 0 1" BorderBrush="#33808080">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock  VerticalAlignment="Center" Margin="24 0 0 0" >播放列表(<Run Text="{Binding Path=playList.Count}"/>)</TextBlock>
+                                        <Button Grid.Column="1" Margin="0 0 12 0" Click="BtnClear_Click" Style="{StaticResource TextButton}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Delete}"></FontIcon>
+                                                <TextBlock FontSize="14" Margin="4 0 0 0">清空</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+                                    </Grid>
+                                    <ListView ItemsSource="{Binding Path=playList}"  Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                                <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                                                <Setter Property="Padding" Value="0 0 16 0"></Setter>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid RightTapped="Grid_RightTapped" Background="#00FFFFFF" FlyoutBase.AttachedFlyout="{StaticResource song_menu}" DoubleTapped="Playlist_DoubleTapped">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="24"/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <FontIcon Margin="0 0 4 0" Foreground="{Binding color}" Visibility="{Binding select}" FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Play}"></FontIcon>
+                                                    <TextBlock ToolTipService.ToolTip="{Binding title}" TextTrimming="CharacterEllipsis" Margin="0 0 8 0" Foreground="{Binding color}" VerticalAlignment="Center" Grid.Column="1" Text="{Binding title}"></TextBlock>
+                                                    <TextBlock ToolTipService.ToolTip="{Binding author}" TextTrimming="CharacterEllipsis"  Foreground="{Binding color}" FontSize="14" VerticalAlignment="Center"  Grid.Column="2"  Opacity="0.8" Text="{Binding author}"></TextBlock>
+                                                    <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8 0 0 0">
+                                                        <Button VerticalAlignment="Center" Flyout="{StaticResource song_menu}" Height="24" HorizontalAlignment="Right" Width="32" Style="{StaticResource TextButton}" >
+                                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_More}"></FontIcon>
+                                                        </Button>
+                                                        <Button  Click="BtnDeleteOne_Click" VerticalAlignment="Center" Height="24" HorizontalAlignment="Right" Width="32" Style="{StaticResource TextButton}" >
+                                                            <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Close}"></FontIcon>
+                                                        </Button>
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <!--<ListViewItem Foreground="{StaticResource COLOR_Main}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0"  BorderBrush="#FFCFCFCF">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="24"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <FontIcon Margin="0 0 4 0" FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Play}"></FontIcon>
+                                                <TextBlock VerticalAlignment="Center" Grid.Column="1">清明雨上</TextBlock>
+                                                <TextBlock FontSize="14" VerticalAlignment="Center"  Grid.Column="2"  Opacity="0.8" FontFamily="Segoe UI">许嵩/咯天意</TextBlock>
+                                                <StackPanel Orientation="Horizontal" Grid.Column="3" Margin="8 0 0 0">
+                                                    <Button VerticalAlignment="Center" Height="24" HorizontalAlignment="Right" Width="32" Style="{StaticResource TextButton}" >
+                                                        <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_More}"></FontIcon>
+                                                    </Button>
+                                                    <Button VerticalAlignment="Center" Height="24"  HorizontalAlignment="Right" Width="32" Style="{StaticResource TextButton}" >
+                                                        <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Close}"></FontIcon>
+                                                    </Button>
+                                                </StackPanel>
+
+                                            </Grid>
+
+                                        </ListViewItem>-->
+                                       
+                                    </ListView>
+                                </Grid>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -223,6 +329,7 @@
                 <TextBlock x:Name="titleBarTitle" Margin="8 0" VerticalAlignment="Center" FontSize="14" Foreground="{ThemeResource COLOR_Text}">哔哩哔哩音乐 <Run Foreground="Gray" x:Name="DEBUG_INFO"></Run></TextBlock>
             </Grid>
         </Grid>
-
+        
+       
     </Grid>
 </Page>

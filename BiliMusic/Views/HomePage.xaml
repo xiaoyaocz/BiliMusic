@@ -21,13 +21,13 @@
                 <Grid Margin="0 0 0 8" >
                     <TextBlock Text="{Binding title}"></TextBlock>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
-                        <Button Foreground="{StaticResource COLOR_Main}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
+                        <Button Click="BtnPlayAll_Click" Foreground="{StaticResource COLOR_Main}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon Margin="0 2 0 -2" FontSize="14px" FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center"  Glyph="{StaticResource ICON_PlaylistPlay}"></FontIcon>
                                 <TextBlock Margin="4 0 0 0" FontSize="12px" VerticalAlignment="Center">播放全部</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Margin="16 0 8 0" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
+                        <Button Margin="16 0 8 0" Click="BtnShowMoreRecommend_Click" Style="{StaticResource TextButton}" HorizontalAlignment="Right" >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="0 0 4 0" FontSize="12px">查看更多</TextBlock>
 
@@ -196,7 +196,7 @@
         </DataTemplate>
     </Page.Resources>
     <Grid Margin="0 32 0 0">
-        <VisualStateManager.VisualStateGroups>
+        <!--<VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
@@ -216,7 +216,7 @@
                 </VisualState>
 
             </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        </VisualStateManager.VisualStateGroups>-->
         <ScrollViewer Padding="8" >
             <StackPanel MaxWidth="1024" HorizontalAlignment="Center">
                 <controls2:Carousel x:Name="control"  ItemsSource="{Binding banners}"
@@ -231,7 +231,9 @@
                           ItemsSource="{Binding ItemsSource, ElementName=control, Mode=TwoWay}"
                           SelectedIndex="{Binding SelectedIndex, ElementName=control, Mode=TwoWay}"
                           ShapeMode="Ellipse" Background="WhiteSmoke"  SelectedBackground="DimGray" PressedBackground="Gray" />
-                <ItemsControl x:Name="listModules" ItemsSource="{Binding modules}" ItemContainerStyleSelector="{StaticResource homeItemStyleSelector}" ItemTemplateSelector="{StaticResource ResourceKey=homeItemDataTemplateSelector}">
+                <ItemsControl x:Name="listModules" ItemsSource="{Binding modules}" 
+                              ItemContainerStyleSelector="{StaticResource homeItemStyleSelector}" 
+                              ItemTemplateSelector="{StaticResource ResourceKey=homeItemDataTemplateSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Grid>

@@ -45,18 +45,36 @@ namespace BiliMusic.Modules
                 }
             }
         }
-        public int menuid { get; set; }
-        public MenuDetail(int id)
+        /// <summary>
+        /// 歌单ID
+        /// </summary>
+        public int menuId { get; set; }
+        /// <summary>
+        /// 编辑推荐ID
+        /// </summary>
+        public int recommedId { get; set; }
+        public MenuDetail(int id,int recommed_id = 0)
         {
-            menuid = id;
+            menuId = id;
+            recommedId = recommed_id;
         }
-
+        /// <summary>
+        /// 加载歌单信息
+        /// </summary>
         public async void LoadData()
         {
             try
             {
                 loading = true;
-                var re = await Api.SonglistDetail(menuid).Request();
+                IHttpResults re;
+                if (recommedId == 0)
+                {
+                    re = await Api.SonglistDetail(menuId).Request();
+                }
+                else
+                {
+                    re = await Api.RecommendDetail(recommedId).Request();
+                }
                 if (!re.status)
                 {
                     Utils.ShowMessageToast(re.message);
@@ -68,8 +86,11 @@ namespace BiliMusic.Modules
                     Utils.ShowMessageToast(data.msg + data.message);
                     return;
                 }
-
-                data.data.menusTags =await LoadTags();
+                if (recommedId == 0)
+                {
+                    data.data.menusTags = await LoadTags();
+                }
+              
                 Datas = data.data;
                
             }
@@ -86,12 +107,21 @@ namespace BiliMusic.Modules
 
         }
 
+        /// <summary>
+        /// 加载歌单TAG信息
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<menusTagModel>> LoadTags()
         {
             try
             {
+                if (menuId==0)
+                {
+                    return null;
+                }
                 loading = true;
-                var re = await Api.SonglistTag(menuid).Request();
+
+                var re = await Api.SonglistTag(menuId).Request();
                 if (!re.status)
                 {
                     Utils.ShowMessageToast(re.message);

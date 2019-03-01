@@ -21,24 +21,33 @@ namespace BiliMusic.Models
             }
         }
         public List<menusTagModel> menusTags { get; set; }
+       
     }
     public class menusResponesModel
     {
-     
         public int menuId { get; set; }
         public string title { get; set; }
         public string coverUrl { get; set; }
         public string intro { get; set; } = "";
         public int type { get; set; }
-        public long playNum { get; set; }
-        public long collectNum { get; set; }
-        public long commentNum { get; set; }
-        public int songNum { get; set; }
+        public long? playNum { get; set; } = 0;
+        public long? collectNum { get; set; } = 0;
+        public long? commentNum { get; set; } = 0;
+        public int? songNum { get; set; } = 0;
         public string toptitle { get; set; }
         public string face { get; set; }
         public string uname { get; set; }
-        public long uid { get; set; }
-        public string mbnames { get; set; }
+        public long? uid { get; set; } = 0;
+        public string mbnames { get; set; } = "";
+
+        public bool showPlayNum
+        {
+            get
+            {
+                return playNum != null && playNum != 0;
+            }
+        }
+
         public bool showIntro
         {
             get
@@ -59,7 +68,7 @@ namespace BiliMusic.Models
         }
         public bool showName
         {
-            get { return mbnames != ""; }
+            get { return mbnames!=null&&mbnames != ""; }
         }
         public bool showVip
         {

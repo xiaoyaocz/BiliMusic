@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BiliMusic.Helpers
 {
-    public class SettingHelper
+    public static class SettingHelper
     {
         /// <summary>
         /// 用户登录信息
@@ -29,8 +29,18 @@ namespace BiliMusic.Helpers
         /// 应用主题，0跟随系统，1浅色，2深色
         /// </summary>
         public const string Theme = "Theme";
-
+        /// <summary>
+        /// 加载原图
+        /// </summary>
         public const string OriginalImage = "OriginalImage";
+        /// <summary>
+        /// 音量
+        /// </summary>
+        public const string Volume = "Volume";
+        /// <summary>
+        /// 播放模式
+        /// </summary>
+        public const string PlayMode = "PlayMode";
 
 
         public static bool LoadOriginalImage { get; set; } = false;

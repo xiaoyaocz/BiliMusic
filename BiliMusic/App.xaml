@@ -6,6 +6,7 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:convert="using:BiliMusic.Converters"
     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+    xmlns:modules="using:BiliMusic.Modules"
     xmlns:local="using:BiliMusic">
     <Application.Resources>
         <ResourceDictionary>
@@ -17,6 +18,7 @@
                     <SolidColorBrush x:Key="SystemColorHighlightTextColor" Color="#FFEA92A7"></SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlForegroundAccentBrush"  Color="#FFEA92A7"></SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#FF505050"></SolidColorBrush>
+                   
                     <SolidColorBrush x:Key="COLOR_Text" Color="#FF3C3C3C"></SolidColorBrush>
                     <LinearGradientBrush x:Key="COLOR_BgTransparentColor" EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#7FFFFFFF"/>
@@ -37,6 +39,17 @@
                     <muxm:AcrylicBrush x:Key="COLOR_Pane" BackgroundSource="Backdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumLowColor}" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+
+            <MenuFlyout x:Key="song_menu">
+                <MenuFlyoutItem x:Name="menuPlay" Icon="Play">播放</MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="menuDown" Icon="Download">下载</MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="menuShare" Icon="Share">分享</MenuFlyoutItem>
+                <MenuFlyoutSubItem x:Name="menuCollect" Icon="OutlineStar" Text="收藏到">
+                </MenuFlyoutSubItem>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem x:Name="menuInfo">歌曲详情</MenuFlyoutItem>
+            </MenuFlyout>
+
             <!--图片缩放-->
             <x:String x:Key="W100">100w</x:String>
             <x:String x:Key="W300">300w</x:String>
@@ -45,6 +58,12 @@
             <x:String x:Key="W400H400">400w_400h_1e_1c</x:String>
             <x:String x:Key="W480H300">480w_300h_1e_1c</x:String>
             <x:String x:Key="W1020H300">1020w_300h_1e_1c</x:String>
+
+            <!--播放模式-->
+            <x:String x:Key="Sequence">Sequence</x:String>
+            <x:String x:Key="Loop">Loop</x:String>
+            <x:String x:Key="Shuffle">Shuffle</x:String>
+            <x:String x:Key="Single">Single</x:String>
             
             <!--ICON字体文件-->
             <FontFamily x:Key="FONTS_MaterialIcons">ms-appx:///Assets/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
@@ -77,7 +96,7 @@
             <x:String x:Key="ICON_List">&#xE241;</x:String>
             <x:String x:Key="ICON_VolumeMute">&#xE04F;</x:String>
             <x:String x:Key="ICON_Volume">&#xE050;</x:String>
-
+            <x:String x:Key="ICON_Mute">&#xE04E;</x:String>
             <x:String x:Key="ICON_Radio">&#xE03E;</x:String>
             <x:String x:Key="ICON_Rank">&#xE01D;</x:String>
             <x:String x:Key="ICON_PermIdentity">&#xE8A6;</x:String>
@@ -85,7 +104,8 @@
             <x:String x:Key="ICON_Repeat">&#xE040;</x:String>
             <x:String x:Key="ICON_RepeatOne">&#xE041;</x:String>
             <x:String x:Key="ICON_Shuffle">&#xE043;</x:String>
-
+            <x:String x:Key="ICON_Sequence">&#xE05F;</x:String>
+            
             <x:String x:Key="ICON_PlaylistAdd">&#xE03B;</x:String>
             <x:String x:Key="ICON_PlaylistPlay">&#xE05F;</x:String>
             <x:String x:Key="ICON_PlaylistCheck">&#xE065;</x:String>
@@ -100,6 +120,9 @@
 
             <x:String x:Key="ICON_Select">&#xE065;</x:String>
             <x:String x:Key="ICON_More">&#xE5D3;</x:String>
+            <x:String x:Key="ICON_Delete">&#xE872;</x:String>
+            <x:String x:Key="ICON_Close">&#xE5CD;</x:String>
+            
             <!--主颜色-->
             <SolidColorBrush x:Key="COLOR_Main" Color="#FFEA92A7"></SolidColorBrush>
             <StaticResource x:Key="COLOR_Foreground" ResourceKey="SystemControlForegroundBaseHighBrush"></StaticResource>
@@ -108,6 +131,23 @@
             <convert:DurationToTimeConvert x:Key="durationToTimeConvert"></convert:DurationToTimeConvert>
             <convert:ImageCompressionConvert x:Key="imageCompressionConvert"></convert:ImageCompressionConvert>
             <convert:ProgressToTimeConverter x:Key="progressToTimeConverter"></convert:ProgressToTimeConverter>
+
+           
+            
+            <!--播放列表非选中样式-->
+            <Style x:Key="playlistItem"  TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="Padding" Value="0"></Setter>
+            </Style>
+            <!--播放列表选择样式-->
+            <Style x:Key="playlistItemSelect" TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="Padding" Value="0"></Setter>
+                <Setter Property="Foreground" Value="{StaticResource COLOR_Main}"></Setter>
+            </Style>
+            
             <!--按钮样式-->
             <Style TargetType="Button" x:Key="BackButton">
                 <Setter Property="Background" Value="Transparent"></Setter>

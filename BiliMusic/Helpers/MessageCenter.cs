@@ -36,7 +36,10 @@ namespace BiliMusic.Helpers
         {
             return ((Window.Current.Content as Frame).Content as MainPage).musicPlay;
         }
-
+        public static BiliMusic.Modules.Main GetMainInfo()
+        {
+            return ((Window.Current.Content as Frame).Content as MainPage).main;
+        }
 
     }
 }

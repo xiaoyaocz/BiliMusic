@@ -147,7 +147,7 @@ namespace BiliMusic.Modules
             }
             catch (Exception ex)
             {
-
+                LogHelper.Log("安全验证后设置保存信息失败", LogType.ERROR, ex);
                 return false;
             }
         }
