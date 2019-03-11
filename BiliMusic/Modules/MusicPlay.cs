@@ -30,7 +30,7 @@ namespace BiliMusic.Modules
         /// <summary>
         /// 顺序播放
         /// </summary>
-        Sequence=0,
+        Sequence = 0,
         /// <summary>
         /// 列表循环
         /// </summary>
@@ -46,10 +46,22 @@ namespace BiliMusic.Modules
     }
     public class MusicPlay : INotifyPropertyChanged
     {
-        public ObservableCollection<PlayModel> playList { get; set; }
+        //public ObservableCollection<PlayModel> playList { get; set; }
+
+        private ObservableCollection<PlayModel> _playList;
+
+        public ObservableCollection<PlayModel> playList
+        {
+            get { return _playList; }
+            set {
+                _playList = value;
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private PlayModel _playInfo = new PlayModel()
+        private PlayModel _playInfo =  new PlayModel()
         {
             title = "哔哩哔哩 (゜-゜)つロ 干杯~",
             pic = "ms-appx:///Assets/StoreLogo.scale-100.png"
@@ -70,7 +82,7 @@ namespace BiliMusic.Modules
             }
         }
 
-        private MusicPlayMode _musicPlayMode =  MusicPlayMode.Loop;
+        private MusicPlayMode _musicPlayMode = MusicPlayMode.Loop;
         public MusicPlayMode musicPlayMode
         {
             get { return _musicPlayMode; }
@@ -189,6 +201,7 @@ namespace BiliMusic.Modules
             }
         }
 
+
         private string _durationStr = "00:00 / 00:00";
         public string durationStr
         {
@@ -206,13 +219,15 @@ namespace BiliMusic.Modules
             }
         }
 
-        private double _volume = 100;
+        private double _volume = SettingHelper.StorageHelper.Read<double>("volume", 100);
         public double volume
         {
             get { return _volume; }
             set
             {
                 _volume = value;
+                mediaPlayer.Volume = value / 100;
+
                 if (PropertyChanged != null)
                 {
                     DispatcherHelper.ExecuteOnUIThreadAsync(() =>
@@ -220,9 +235,43 @@ namespace BiliMusic.Modules
                         PropertyChanged(this, new PropertyChangedEventArgs("volume"));
                     });
                 }
+                SettingHelper.StorageHelper.Save<double>("volume", value);
             }
         }
 
+        private bool _isMute = false;
+        public bool isMute
+        {
+            get { return _isMute; }
+            set
+            {
+                _isMute = value;
+                if (PropertyChanged != null)
+                {
+                    DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("isMute"));
+                    });
+                }
+            }
+        }
+
+        private bool _showMute = true;
+        public bool showMute
+        {
+            get { return _showMute; }
+            set
+            {
+                _showMute = value;
+                if (PropertyChanged != null)
+                {
+                    DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("showMute"));
+                    });
+                }
+            }
+        }
 
 
         public MediaPlayer mediaPlayer;
@@ -232,9 +281,11 @@ namespace BiliMusic.Modules
             playList = new ObservableCollection<PlayModel>();
             //播放器
             mediaPlayer = new MediaPlayer();
+            mediaPlayer.Volume = volume / 100;
             mediaPlayer.AutoPlay = true;
             mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media;
             mediaPlayer.CommandManager.IsEnabled = true;
+
             //状态变更
             mediaPlayer.PlaybackSession.BufferingEnded += PlaybackSession_BufferingEnded;
             mediaPlayer.PlaybackSession.BufferingStarted += PlaybackSession_BufferingStarted;
@@ -242,6 +293,8 @@ namespace BiliMusic.Modules
             mediaPlayer.PlaybackSession.PositionChanged += PlaybackSession_PositionChanged;
             mediaPlayer.PlaybackSession.NaturalDurationChanged += PlaybackSession_NaturalDurationChanged;
             mediaPlayer.PlaybackSession.PlaybackStateChanged += PlaybackSession_PlaybackStateChanged;
+            mediaPlayer.VolumeChanged += MediaPlayer_VolumeChanged;
+            mediaPlayer.IsMutedChanged += MediaPlayer_IsMutedChanged;
 
             //播放列表
             mediaPlaybackList = new MediaPlaybackList();
@@ -253,23 +306,35 @@ namespace BiliMusic.Modules
             MessageCenter.Logined += MessageCenter_Logined;
 
             //读取播放模式
-            var mode= SettingHelper.StorageHelper.Read<int>(SettingHelper.PlayMode, 1);
+            var mode = SettingHelper.StorageHelper.Read<int>(SettingHelper.PlayMode, 1);
+
             musicPlayMode = (MusicPlayMode)mode;
             SetMusicPlayMode(false);
-
-           
             mediaPlayer.Source = mediaPlaybackList;
+
+        }
+
+        private void MediaPlayer_IsMutedChanged(MediaPlayer sender, object args)
+        {
+            isMute = mediaPlayer.IsMuted;
+            showMute = !isMute;
+
+        }
+
+        private void MediaPlayer_VolumeChanged(MediaPlayer sender, object args)
+        {
+            volume = mediaPlayer.Volume * 100;
         }
 
         private void MessageCenter_Logined(object sender, object e)
         {
-            if (mediaPlaybackList.Items.Count==0)
+            if (mediaPlaybackList.Items.Count == 0)
             {
                 return;
             }
             PlayModel[] list = new PlayModel[playList.Count];
             playList.CopyTo(list, 0);
-            
+
             var now = playInfo;
 
             ReplacePlayList(list);
@@ -285,13 +350,13 @@ namespace BiliMusic.Modules
         public void ChangeMusicPlayMode()
         {
             int now = (int)musicPlayMode;
-            if (now==3)
+            if (now == 3)
             {
                 musicPlayMode = MusicPlayMode.Sequence;
             }
             else
             {
-                musicPlayMode = (MusicPlayMode)now+1;
+                musicPlayMode = (MusicPlayMode)now + 1;
             }
 
             SetMusicPlayMode(true);
@@ -329,7 +394,7 @@ namespace BiliMusic.Modules
                 default:
                     break;
             }
-            SettingHelper.StorageHelper.Save(SettingHelper.PlayMode,(int)musicPlayMode);
+            SettingHelper.StorageHelper.Save(SettingHelper.PlayMode, (int)musicPlayMode);
             if (!show)
             {
                 return;
@@ -353,13 +418,13 @@ namespace BiliMusic.Modules
                     default:
                         break;
                 }
-                
+
             });
         }
 
         private void MediaPlaybackList_ItemOpened(MediaPlaybackList sender, MediaPlaybackItemOpenedEventArgs args)
         {
-
+            totalDuration = mediaPlayer.PlaybackSession.NaturalDuration.TotalSeconds;
         }
 
         private void MediaPlaybackList_ItemFailed(MediaPlaybackList sender, MediaPlaybackItemFailedEventArgs args)
@@ -449,12 +514,13 @@ namespace BiliMusic.Modules
         private void PlaybackSession_PositionChanged(MediaPlaybackSession sender, object args)
         {
             position = sender.Position.TotalSeconds;
+            totalDuration = mediaPlayer.PlaybackSession.NaturalDuration.TotalSeconds;
             durationStr = $"{sender.Position.ToString(@"mm\:ss")} / {sender.NaturalDuration.ToString(@"mm\:ss")}";
         }
 
         private void MediaPlaybackList_CurrentItemChanged(MediaPlaybackList sender, CurrentMediaPlaybackItemChangedEventArgs args)
         {
-           
+
             if (mediaPlaybackList.Items.Count == 0)
             {
                 return;
@@ -466,7 +532,7 @@ namespace BiliMusic.Modules
                 loading = true;
                 return;
             }
-            if (musicPlayMode== MusicPlayMode.Single)
+            if (musicPlayMode == MusicPlayMode.Single)
             {
                 SetMusicPlayMode(false);
             }
@@ -479,6 +545,7 @@ namespace BiliMusic.Modules
             this.durationStr = "00:00 / 00:00";
             var songid = (int)args.NewItem.Source.CustomProperties["id"];
             playInfo = playList.FirstOrDefault(x => x.songid == songid);
+            //SettingHelper.StorageHelper.Save<PlayModel>("playInfo", playInfo);
             //显示试听信息
             if (playInfo.is_preview)
             {
@@ -501,7 +568,7 @@ namespace BiliMusic.Modules
                     });
                 });
             }
-            
+
 
             foreach (var item in playList)
             {
@@ -560,7 +627,7 @@ namespace BiliMusic.Modules
             source.CustomProperties["id"] = play.songid;
             mediaPlaybackList.Items.Add(new MediaPlaybackItem(source));
 
-
+         
             //var item = new MediaPlaybackItem(MediaSource.CreateFromUri(play.play_url));
             //mediaPlaybackList.Items.Add(item);
 
@@ -638,11 +705,12 @@ namespace BiliMusic.Modules
                 loading = false;
                 return;
             }
-            if (url.type==-1)
+            if (url.type == -1)
             {
                 item.is_preview = true;
             }
-            else {
+            else
+            {
                 item.is_preview = false;
             }
 

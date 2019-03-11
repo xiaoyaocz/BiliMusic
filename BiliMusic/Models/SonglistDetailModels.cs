@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace BiliMusic.Models
 {
@@ -23,7 +24,7 @@ namespace BiliMusic.Models
         public List<menusTagModel> menusTags { get; set; }
        
     }
-    public class menusResponesModel
+    public class menusResponesModel:System.ComponentModel.INotifyPropertyChanged
     {
         public int menuId { get; set; }
         public string title { get; set; }
@@ -39,6 +40,21 @@ namespace BiliMusic.Models
         public string uname { get; set; }
         public long? uid { get; set; } = 0;
         public string mbnames { get; set; } = "";
+
+        private int? _collected;
+
+        public int? collected
+        {
+            get { return _collected; }
+            set { _collected = value;
+                PropertyChanged?.Invoke(this,new PropertyChangedEventArgs("collected"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("showCollect"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("showCancelCollect"));
+            }
+        }
+
+
+
 
         public bool showPlayNum
         {
@@ -74,6 +90,23 @@ namespace BiliMusic.Models
         {
             get { return type == 5; }
         }
+
+        public bool showCollect
+        {
+            get
+            {
+                return playNum!=null&&collected == 0;
+            }
+        }
+        public bool showCancelCollect
+        {
+            get
+            {
+                return playNum != null && collected == 1;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
     public class songsListModel
     {

@@ -108,6 +108,82 @@ namespace BiliMusic.Modules
         }
 
         /// <summary>
+        /// 收藏歌单
+        /// </summary>
+        /// <param name="menuId"></param>
+        public async void CollectMenu()
+        {
+            try
+            {
+                loading = true;
+                IHttpResults re= await Api.MenuCollect(menuId).Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return;
+                }
+                var data = re.GetJson<ApiParseModel<object>>();
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return;
+                }
+                Datas.menusRespones.collected = 1;
+                Utils.ShowMessageToast("收藏成功");
+                MessageCenter.GetMainInfo().Logined();
+            }
+            catch (Exception ex)
+            {
+
+                Utils.ShowMessageToast("读取歌单信息失败");
+                LogHelper.Log("读取歌单信息失败", LogType.ERROR, ex);
+            }
+            finally
+            {
+                loading = false;
+            }
+        }
+        
+        /// <summary>
+        /// 收藏歌单
+        /// </summary>
+        /// <param name="menuId"></param>
+        public async void CancelCollectMenu()
+        {
+            try
+            {
+                loading = true;
+                IHttpResults re = await Api.CancelMenuCollect(menuId).Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return;
+                }
+                var data = re.GetJson<ApiParseModel<object>>();
+                
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return;
+                }
+                Datas.menusRespones.collected = 0;
+                Utils.ShowMessageToast("已经取消收藏");
+                MessageCenter.GetMainInfo().Logined();
+            }
+            catch (Exception ex)
+            {
+
+                Utils.ShowMessageToast("读取歌单信息失败");
+                LogHelper.Log("读取歌单信息失败", LogType.ERROR, ex);
+            }
+            finally
+            {
+                loading = false;
+            }
+        }
+
+
+        /// <summary>
         /// 加载歌单TAG信息
         /// </summary>
         /// <returns></returns>

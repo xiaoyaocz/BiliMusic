@@ -119,5 +119,27 @@ namespace BiliMusic.Views
             
             FlyoutBase.ShowAttachedFlyout(sender as Grid);
         }
+
+       
+        private async void BtnCollect_Click(object sender, RoutedEventArgs e)
+        {
+            if (UserHelper.isLogin||await Utils.ShowLoginDialog())
+            {
+                if (detail.Datas.menusRespones.collected == 0)
+                {
+                    detail.CollectMenu();
+                }
+                else
+                {
+                    detail.CancelCollectMenu();
+                }
+            }
+            else
+            {
+                Utils.ShowMessageToast("请先登录");
+            }
+
+          
+        }
     }
 }

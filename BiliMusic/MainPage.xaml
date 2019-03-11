@@ -183,7 +183,7 @@
                         <Slider VerticalAlignment="Center"
                                 ValueChanged="SliderPosition_ValueChanged"
                                 x:Name="sliderPosition"
-                                Maximum="{Binding totalDuration}" 
+                                Maximum="{Binding Path=totalDuration,Mode=TwoWay}" 
                                 Value="{Binding Path=position,Mode=TwoWay}"
                                 ThumbToolTipValueConverter="{StaticResource progressToTimeConverter}"  
                                 Style="{StaticResource MuiscProgressSliderStyle}"
@@ -197,12 +197,26 @@
                    
                 </Grid>
                 <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Margin="12 0">
-                    <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
+                    <HyperlinkButton x:Name="btnLike" Click="BtnLike_Click" Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
                         <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Like}" />
                     </HyperlinkButton>
-                    <HyperlinkButton Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
+                    <Button Style="{StaticResource TextButton}" Margin="8 0" Foreground="#CCFFFFFF" Padding="0" >
+                        <Button.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Horizontal" Padding="8">
+
+                                    <Button x:Name="btnMute" Click="BtnMute_Click" Style="{StaticResource TextButton}" Visibility="{Binding Path=showMute}">
+                                        <FontIcon FontSize="20" Foreground="Gray" FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center" Glyph="{StaticResource ICON_Volume}" />
+                                    </Button>
+                                    <Button x:Name="btnCancelMute" Visibility="{Binding Path=isMute}" Click="BtnCancelMute_Click" Style="{StaticResource TextButton}">
+                                        <FontIcon FontSize="20" Foreground="Gray"  FontFamily="{StaticResource FONTS_MaterialIcons}" VerticalAlignment="Center" Glyph="{StaticResource ICON_VolumeMute}" />
+                                    </Button>
+                                    <Slider  VerticalAlignment="Center" Value="{Binding Path=volume,Mode=TwoWay}" Margin="8 4 0 0" Style="{StaticResource MuiscProgressSliderStyle}" Background="#66808080" Foreground="{ThemeResource COLOR_Main}"  Width="200"></Slider>
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
                         <FontIcon FontSize="20" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Volume}" />
-                    </HyperlinkButton>
+                    </Button>
                     <HyperlinkButton Margin="8 0" 
                                      Click="BtnChangePlayMode_Click"
                                      Visibility="{Binding Path=musicPlayMode,Converter={StaticResource musicPlayModeConvert},ConverterParameter={StaticResource Loop}}" 
@@ -329,7 +343,7 @@
                 <TextBlock x:Name="titleBarTitle" Margin="8 0" VerticalAlignment="Center" FontSize="14" Foreground="{ThemeResource COLOR_Text}">哔哩哔哩音乐 <Run Foreground="Gray" x:Name="DEBUG_INFO"></Run></TextBlock>
             </Grid>
         </Grid>
-        
-       
+      
+
     </Grid>
 </Page>

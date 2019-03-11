@@ -194,6 +194,22 @@ namespace BiliMusic
             api.parameter += ApiHelper.GetSign(api.parameter);
             return api;
         }
+        /// <summary>
+        /// 读取我收藏的专辑
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel MyAlbum(int page = 1, int pagesize = 100)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/users/{UserHelper.mid}/menus",
+                parameter = ApiHelper.MustParameter(true) + $"&page_index={page}&page_size={pagesize}&type=2",
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
 
 
         /// <summary>
@@ -283,6 +299,78 @@ namespace BiliMusic
             api.parameter += ApiHelper.GetSign(api.parameter);
             return api;
         }
+
+        /// <summary>
+        /// 收藏歌单
+        /// </summary>
+        /// <param name="menuid">歌单ID</param>
+        /// <returns></returns>
+        public static ApiModel MenuCollect(int menuid)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/menucollect/add",
+                parameter = ApiHelper.MustParameter(true) + $"&menuId={menuid}&mid={UserHelper.mid}",
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+
+        /// <summary>
+        /// 取消收藏歌单
+        /// </summary>
+        /// <param name="menuid">歌单ID</param>
+        /// <returns></returns>
+        public static ApiModel CancelMenuCollect(int menuid)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/menucollect/del",
+                parameter = ApiHelper.MustParameter(true) + $"&menuId={menuid}&mid={UserHelper.mid}",
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
+
+        /// <summary>
+        /// 收藏歌曲
+        /// </summary>
+        /// <param name="songId">歌曲ID</param>
+        /// <param name="menuId">歌单ID</param>
+        /// <returns></returns>
+        public static ApiModel CollectSong(int songId,int menuId)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.POST,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/collections/songs/{songId}",
+                body = ApiHelper.MustParameter(true) +$"&collection_id_list={menuId}&mid={UserHelper.mid}&song_id={songId}"
+            };
+            api.body += ApiHelper.GetSign(api.body);
+            return api;
+        }
+        /// <summary>
+        /// 取消收藏歌曲
+        /// </summary>
+        /// <param name="songId">歌曲ID</param>
+        /// <param name="menuId">歌单ID</param>
+        /// <returns></returns>
+        public static ApiModel CancelCollectSong(int songId)
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.POST,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/collections/songs/{songId}",
+                body = ApiHelper.MustParameter(true) + $"collection_id_list=&mid={UserHelper.mid}&song_id={songId}"
+            };
+            api.body += ApiHelper.GetSign(api.body);
+            return api;
+        }
+
     }
 
     public class ApiModel

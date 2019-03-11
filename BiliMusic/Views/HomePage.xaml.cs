@@ -57,10 +57,20 @@ namespace BiliMusic.Views
             }
             base.OnNavigatingFrom(e);
         }
-        private void Banner_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void Banner_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var data = (sender as ImageEx).DataContext as bannersModel;
-            this.Frame.Navigate(typeof(WebPage), data.schema);
+
+            if (data.schema.Contains("bilibili://"))
+            {
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(data.schema));
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(WebPage), data.schema);
+            }
+
+           
 
             //await Launcher.LaunchUriAsync(new Uri(data.schema));
         }

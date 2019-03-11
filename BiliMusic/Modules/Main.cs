@@ -20,6 +20,7 @@ namespace BiliMusic.Modules
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler MenuUpdated;
         public event EventHandler<ObservableCollection<MenuModel>> MyCreateUpdated;
+
         /// <summary>
         /// 用于榜单NavView的集合
         /// </summary>
@@ -72,6 +73,11 @@ namespace BiliMusic.Modules
         /// 收藏的歌单集合
         /// </summary>
         private ObservableCollection<MenuModel> _MyLikeSonglistMenus { get; set; }
+        /// <summary>
+        /// 收藏的专辑集合
+        /// </summary>
+        private ObservableCollection<MenuModel> _MyAlbumMenus { get; set; }
+
         public Main()
         {
             //注册登录完成事件
@@ -159,6 +165,7 @@ namespace BiliMusic.Modules
             };
             await GetMyCreate();
             await GetMyCollection();
+            await GetMyAlbum();
             CreateMenus();
         }
         /// <summary>
@@ -252,7 +259,8 @@ namespace BiliMusic.Modules
                         title = item.title,
                         menuType = MenuType.Menuitem,
                         openMode = MenuOpenMode.Songlist,
-                        parameters = item.menu_id
+                        parameters = item.menu_id,
+                        parameters2=item.id
                     });
                 }
                 MyCreateUpdated?.Invoke(this, _MySonglistMenus);
@@ -263,6 +271,50 @@ namespace BiliMusic.Modules
                 LogHelper.Log("读取创建的歌单失败", LogType.ERROR, ex);
             }
         }
+
+        /// <summary>
+        /// 读取我收藏的专辑
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetMyAlbum()
+        {
+            try
+            {
+                var re = await Api.MyAlbum().Request();
+                if (!re.status)
+                {
+                    Utils.ShowMessageToast(re.message);
+                    return;
+                }
+                var data = re.GetJson<ApiParseModel<MyCollectionMenuModel>>();
+                if (data.code != 0)
+                {
+                    Utils.ShowMessageToast(data.msg + data.message);
+                    return;
+                }
+                _MyAlbumMenus = new ObservableCollection<MenuModel>();
+                foreach (var item in data.data.list)
+                {
+                    _MyAlbumMenus.Add(new MenuModel()
+                    {
+                        name = "SonglistPage" + item.menuId,
+                        icon = (string)Application.Current.Resources["ICON_SongList"],
+                        title = item.title,
+                        menuType = MenuType.Menuitem,
+                        openMode = MenuOpenMode.Songlist,
+                        parameters = item.menuId
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowMessageToast("读取收藏的专辑失败");
+                LogHelper.Log("读取收藏的专辑失败", LogType.ERROR, ex);
+
+            }
+        }
+
 
         /// <summary>
         /// 读取首页Tab菜单
@@ -389,7 +441,18 @@ namespace BiliMusic.Modules
                     _Menus.Add(item);
                 }
             }
-
+            if (_MyAlbumMenus != null && _MyAlbumMenus.Count != 0)
+            {
+                _Menus.Add(new MenuModel()
+                {
+                    title = "收藏的专辑",
+                    menuType = MenuType.Header
+                });
+                foreach (var item in _MyAlbumMenus)
+                {
+                    _Menus.Add(item);
+                }
+            }
             MenuitemToViewItem();
         }
         /// <summary>

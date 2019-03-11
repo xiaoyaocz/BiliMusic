@@ -102,6 +102,9 @@ namespace BiliMusic.Models.Main
         /// 参数
         /// </summary>
         public object parameters { get; set; }
+
+        public object parameters2 { get; set; }
+
         /// <summary>
         /// 类型
         /// </summary>

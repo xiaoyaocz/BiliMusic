@@ -406,5 +406,22 @@ namespace BiliMusic
                 musicPlay.mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(e.NewValue);
             }
         }
+
+        private void BtnMute_Click(object sender, RoutedEventArgs e)
+        {
+            musicPlay.mediaPlayer.IsMuted = true;
+        }
+
+        private void BtnCancelMute_Click(object sender, RoutedEventArgs e)
+        {
+            musicPlay.mediaPlayer.IsMuted = false;
+        }
+
+        private void BtnLike_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        
     }
 }

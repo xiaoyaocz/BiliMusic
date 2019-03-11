@@ -101,10 +101,12 @@
                             <TextBlock TextWrapping="Wrap"  Visibility="{Binding Path=menusRespones.showIntro}" Foreground="{ThemeResource COLOR_Text}" Margin="0 4" IsTextSelectionEnabled="True">简介: <Run  Text="{Binding Path=menusRespones.intro}"></Run></TextBlock>
                             <StackPanel Orientation="Horizontal" Margin="0 4 0 0" Visibility="{Binding Path=menusRespones.showPlayNum}">
 
-                                <Button Margin="0 0 4 0" Style="{StaticResource TextButton}" MinWidth="100" MinHeight="32" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="Gainsboro" Padding="8 4">
+                                <Button Margin="0 0 4 0" x:Name="btnCollect" Click="BtnCollect_Click" Style="{StaticResource TextButton}" MinWidth="100" MinHeight="32" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="Gainsboro" Padding="8 4">
                                     <StackPanel Orientation="Horizontal">
-                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Star}"></FontIcon>
-                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">收藏(<Run Text="{Binding Path=menusRespones.collectNum,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}" Visibility="{Binding  Path=menusRespones.showCollect}" Glyph="{StaticResource ICON_Star_Border}"></FontIcon>
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}" Visibility="{Binding  Path=menusRespones.showCancelCollect}"  Glyph="{StaticResource ICON_Star}"></FontIcon>
+                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center" Visibility="{Binding  Path=menusRespones.showCollect}">收藏(<Run Text="{Binding Path=menusRespones.collectNum,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
+                                        <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center" Visibility="{Binding  Path=menusRespones.showCancelCollect}" >取消收藏</TextBlock>
                                     </StackPanel>
                                 </Button>
                                 <Button Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
