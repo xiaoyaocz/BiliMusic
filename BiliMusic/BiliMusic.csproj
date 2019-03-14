@@ -103,6 +103,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CollectionsDialog.xaml.cs">
+      <DependentUpon>CollectionsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HomeGrid.cs" />
     <Compile Include="Controls\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
@@ -127,6 +130,7 @@
     <Compile Include="Helpers\HttpHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MessageCenter.cs" />
+    <Compile Include="Models\SearchModels.cs" />
     <Compile Include="Modules\MusicPlay.cs" />
     <Compile Include="Helpers\SettingHelper.cs" />
     <Compile Include="Helpers\SystemHelper.cs" />
@@ -148,6 +152,8 @@
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Modules\Account.cs" />
     <Compile Include="Modules\MenuDetail.cs" />
+    <Compile Include="Modules\Search.cs" />
+    <Compile Include="Modules\SongDetail.cs" />
     <Compile Include="Modules\SongFlyoutMenu.cs" />
     <Compile Include="Modules\TabDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,6 +164,9 @@
     </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
@@ -242,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\CollectionsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LoginDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -266,6 +279,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SettingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -284,9 +301,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite">
-      <Version>2.2.2</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
     </PackageReference>

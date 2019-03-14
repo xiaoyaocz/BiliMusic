@@ -21,31 +21,38 @@ namespace BiliMusic.Views
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SongDetailsPage : Page
+    public sealed partial class SearchPage : Page
     {
-        public SongDetailsPage()
+        public SearchPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+           
         }
-        SongDetail songDetail;
-        int songId = 0;
+        Search search;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.NavigationMode == NavigationMode.New|| songDetail==null)
+            if (e.NavigationMode== NavigationMode.New)
             {
-                songId = Convert.ToInt32(e.Parameter);
-                id.Text = e.Parameter.ToString();
+                search = new Search();
+                DataContext = search;
             }
         }
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        private void TxtSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (e.SourcePageType == typeof(SonglistPage))
+            if (txtSearch.Text.Length==0)
             {
-                this.NavigationCacheMode = NavigationCacheMode.Disabled;
+                Utils.ShowMessageToast("请输入关键字!");
+                return;
             }
-            base.OnNavigatingFrom(e);
+            searchInfo.Visibility = Visibility.Collapsed;
+            pivotResults.Visibility = Visibility.Visible;
+
+        }
+
+        private void BtnWord_Click(object sender, RoutedEventArgs e)
+        {
+            txtSearch.Text = (sender as HyperlinkButton).DataContext.ToString();
         }
     }
 }

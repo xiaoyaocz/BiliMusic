@@ -31,10 +31,10 @@ namespace BiliMusic.Models
         public string coverUrl { get; set; }
         public string intro { get; set; } = "";
         public int type { get; set; }
-        public long? playNum { get; set; } = 0;
+        public long? playNum { get; set; } = -1;
         public long? collectNum { get; set; } = 0;
         public long? commentNum { get; set; } = 0;
-        public int? songNum { get; set; } = 0;
+        public int? songNum { get; set; } = -1;
         public string toptitle { get; set; }
         public string face { get; set; }
         public string uname { get; set; }
@@ -60,7 +60,7 @@ namespace BiliMusic.Models
         {
             get
             {
-                return playNum != null && playNum != 0;
+                return songNum != null && songNum != -1;
             }
         }
 

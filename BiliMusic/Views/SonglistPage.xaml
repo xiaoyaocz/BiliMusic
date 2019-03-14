@@ -121,7 +121,7 @@
                                         <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">下载全部</TextBlock>
                                     </StackPanel>
                                 </Button>
-                                <Button Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
+                                <Button x:Name="btnShare" Click="BtnShare_Click" Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
                                     <StackPanel Orientation="Horizontal">
                                         <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Share}"></FontIcon>
                                         <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">分享</TextBlock>
@@ -137,21 +137,57 @@
                             <StackPanel>
                                 <Grid>
                                     <TextBlock VerticalAlignment="Center" FontSize="18">歌曲列表 <Span FontSize="14" Foreground="Gray">(共<Run Text="{Binding Path=songsList.Count}"/>首)</Span></TextBlock>
-                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <Button Margin="0 0 8 0" x:Name="btnPlayAll" Click="BtnPlayAll_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                    <StackPanel x:Name="notSelectCommands"  HorizontalAlignment="Right" Orientation="Horizontal" >
+                                        <Button  x:Name="btnPlayAll" Click="BtnPlayAll_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
                                             <StackPanel Orientation="Horizontal">
                                                 <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play1}"></FontIcon>
                                                 <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">播放全部</TextBlock>
                                             </StackPanel>
                                         </Button>
-                                        <Button  Style="{StaticResource TextButton}" Padding="8 4">
+                                        <Button  x:Name="btnAddToPlay" Click="BtnAddToPlay_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Add}"></FontIcon>
+                                                <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">追加播放</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button x:Name="btnSelect" Click="BtnSelect_Click" Style="{StaticResource TextButton}" Padding="8 4">
                                             <StackPanel Orientation="Horizontal">
                                                 <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Select}"></FontIcon>
                                                 <TextBlock Margin="8 0 0 0" FontSize="14" VerticalAlignment="Center">选择</TextBlock>
                                             </StackPanel>
                                         </Button>
                                     </StackPanel>
-
+                                    <StackPanel x:Name="selectCommands" Visibility="Collapsed" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <Button  x:Name="BtnSelectAddToPlay" Click="BtnSelectAddToPlay_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Add}"></FontIcon>
+                                                <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">追加播放</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button  x:Name="btnSelectDownload" Click="BtnSelectDownload_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Download}"></FontIcon>
+                                                <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">下载</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button  x:Name="btnSelectLike" Click="BtnSelectLike_Click" Style="{StaticResource TextButton}" BorderThickness="0" BorderBrush="{StaticResource COLOR_Main}" Foreground="{StaticResource COLOR_Main}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Like_Border}"></FontIcon>
+                                                <TextBlock Margin="4 0 0 0" FontSize="14" VerticalAlignment="Center">收藏</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button x:Name="btnSelectAll"  Click="BtnSelectAll_Click" Style="{StaticResource TextButton}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_SelectAll}"></FontIcon>
+                                                <TextBlock Margin="8 0 0 0" FontSize="14" VerticalAlignment="Center">全选/取消全选</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button x:Name="btnCancelSelect" Click="BtnCancelSelect_Click" Style="{StaticResource TextButton}" Padding="8 4">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock  FontSize="14" VerticalAlignment="Center">取消选择</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
                                 </Grid>
                                 <Grid  Padding="0 8 0 8" BorderThickness="0 0 0 1" BorderBrush="#33808080">
                                     <Grid.ColumnDefinitions>
@@ -202,10 +238,10 @@
                                     <TextBlock VerticalAlignment="Center" Grid.Column="2" TextTrimming="CharacterEllipsis" Text="{Binding author}"></TextBlock>
                                     <TextBlock VerticalAlignment="Center" Grid.Column="3" Text="{Binding Path=duration,Converter={StaticResource durationToTimeConvert}}"></TextBlock>
                                     <StackPanel Grid.Column="4" Orientation="Horizontal" >
-                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36">
+                                        <Button x:Name="btnPlay" Click="BtnPlay_Click" Style="{StaticResource TextButton}" Width="36" Height="36">
                                             <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play}"></FontIcon>
                                         </Button>
-                                        <Button Style="{StaticResource TextButton}" Width="36" Height="36">
+                                        <Button x:Name="btnLike" Click="BtnLike_Click" Style="{StaticResource TextButton}" Width="36" Height="36">
                                             <FontIcon FontSize="16" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Like_Border}"></FontIcon>
                                         </Button>
                                         <Button Style="{StaticResource TextButton}" Width="36" Height="36" Flyout="{StaticResource song_menu}">

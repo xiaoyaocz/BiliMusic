@@ -88,7 +88,8 @@ namespace BiliMusic.Modules
                     icon=(string)Application.Current.Resources["ICON_Search"],
                     title="搜索",
                     menuType= MenuType.Menuitem,
-                    openMode= MenuOpenMode.Search
+                    openMode= MenuOpenMode.Search,
+                    name="SearchPage"
                 },
                 new MenuModel(){
                     icon=(string)Application.Current.Resources["ICON_Local"],

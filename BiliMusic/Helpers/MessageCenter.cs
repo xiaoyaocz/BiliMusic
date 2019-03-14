@@ -13,6 +13,7 @@ namespace BiliMusic.Helpers
     {
         public static event EventHandler<object> Logined;
         public static event EventHandler Logouted;
+        public static event EventHandler<NavigateParameter> MainFrameNavigatedTo;
         /// <summary>
         /// 发送登录完成事件
         /// </summary>
@@ -29,7 +30,7 @@ namespace BiliMusic.Helpers
             UserHelper.isLogin = false;
             UserHelper.access_key = "";
             UserHelper.mid = 0;
-            Logouted?.Invoke(null,null);
+            Logouted?.Invoke(null, null);
         }
 
         public static BiliMusic.Modules.MusicPlay GetMusicPlay()
@@ -41,5 +42,16 @@ namespace BiliMusic.Helpers
             return ((Window.Current.Content as Frame).Content as MainPage).main;
         }
 
+        public static void SendMainFrameNavigated(NavigateParameter par)
+        {
+            MainFrameNavigatedTo?.Invoke(null, par);
+        }
+
+
+    }
+    public class NavigateParameter
+    {
+        public Type page { get; set; }
+        public object parameter { get; set; }
     }
 }

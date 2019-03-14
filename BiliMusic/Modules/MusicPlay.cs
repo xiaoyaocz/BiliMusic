@@ -426,7 +426,6 @@ namespace BiliMusic.Modules
         {
             totalDuration = mediaPlayer.PlaybackSession.NaturalDuration.TotalSeconds;
         }
-
         private void MediaPlaybackList_ItemFailed(MediaPlaybackList sender, MediaPlaybackItemFailedEventArgs args)
         {
             var index = sender.Items.IndexOf(args.Item);
@@ -470,8 +469,6 @@ namespace BiliMusic.Modules
             //}
 
         }
-
-
         private void PlaybackSession_PlaybackStateChanged(MediaPlaybackSession sender, object args)
         {
             switch (sender.PlaybackState)
@@ -500,24 +497,20 @@ namespace BiliMusic.Modules
                     break;
             }
         }
-
         private void PlaybackSession_DownloadProgressChanged(MediaPlaybackSession sender, object args)
         {
             bufferingProgress = mediaPlayer.PlaybackSession.DownloadProgress * 100;
         }
-
         private void PlaybackSession_NaturalDurationChanged(MediaPlaybackSession sender, object args)
         {
             totalDuration = sender.NaturalDuration.TotalSeconds;
         }
-
         private void PlaybackSession_PositionChanged(MediaPlaybackSession sender, object args)
         {
             position = sender.Position.TotalSeconds;
             totalDuration = mediaPlayer.PlaybackSession.NaturalDuration.TotalSeconds;
             durationStr = $"{sender.Position.ToString(@"mm\:ss")} / {sender.NaturalDuration.ToString(@"mm\:ss")}";
         }
-
         private void MediaPlaybackList_CurrentItemChanged(MediaPlaybackList sender, CurrentMediaPlaybackItemChangedEventArgs args)
         {
 
@@ -593,8 +586,6 @@ namespace BiliMusic.Modules
             updater.Update();
             loading = false;
         }
-
-
         private void PlaybackSession_BufferingEnded(MediaPlaybackSession sender, object args)
         {
             loading = false;

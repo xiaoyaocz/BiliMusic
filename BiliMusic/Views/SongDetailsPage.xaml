@@ -10,17 +10,16 @@
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <Grid>
-            <Image Stretch="UniformToFill" Source="http://i0.hdslb.com/bfs/music/61d3f8cfdce14d2d1b006af59559c9bd22a2d21b.jpg"></Image>
-            <Border BorderBrush="White" >
-                <Border.Background>
-                    <media:BackdropBlurBrush Amount="100" FallbackColor="White"/>
-                </Border.Background>
-            </Border>
-            <Grid Background="#4CFFFFFF">
-                
+
+    <ScrollViewer>
+        <StackPanel>
+            <Grid MaxWidth="800">
+              
+                <StackPanel Grid.Column="1" Margin="36">
+                    <TextBlock x:Name="id"></TextBlock>
+                </StackPanel>
             </Grid>
-        </Grid>
-    </Grid>
+        </StackPanel>
+    </ScrollViewer>
+
 </Page>

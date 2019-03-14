@@ -74,7 +74,7 @@ namespace BiliMusic
             });
             timer.Start();
 #endif
-           
+            MessageCenter.MainFrameNavigatedTo += MessageCenter_MainFrameNavigatedTo;
 
             main = new Main();
             main.MenuUpdated += Main_MenuUpdated;
@@ -89,7 +89,12 @@ namespace BiliMusic
            
             //(App.Current.Resources["song_menu"] as MenuFlyout).Items
         }
-       
+
+        private void MessageCenter_MainFrameNavigatedTo(object sender, NavigateParameter e)
+        {
+            MainFrame.Navigate(e.page, e.parameter);
+        }
+
         private void Main_MyCreateUpdated(object sender, ObservableCollection<MenuModel> e)
         {
             songFlyout.SetMenu();
@@ -185,6 +190,7 @@ namespace BiliMusic
                     MainFrame.Navigate(typeof(Views.HomePage), item.parameters);
                     break;
                 case MenuOpenMode.Search:
+                    MainFrame.Navigate(typeof(Views.SearchPage));
                     break;
                 case MenuOpenMode.Download:
                     break;
@@ -417,11 +423,23 @@ namespace BiliMusic
             musicPlay.mediaPlayer.IsMuted = false;
         }
 
-        private void BtnLike_Click(object sender, RoutedEventArgs e)
+        private async void BtnLike_Click(object sender, RoutedEventArgs e)
         {
-            
+            CollectionsDialog cd = new CollectionsDialog(musicPlay.playInfo.songid);
+            await cd.ShowAsync();
         }
 
-        
+        private void BtnOpenSongDetail_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (musicPlay.playInfo.songid!=0)
+            {
+                MessageCenter.SendMainFrameNavigated(new NavigateParameter()
+                {
+                    page = typeof(SongDetailsPage),
+                    parameter = musicPlay.playInfo.songid
+                });
+            }
+          
+        }
     }
 }

@@ -9,6 +9,7 @@
     xmlns:controls2="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:convert="using:BiliMusic.Converters"
+     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <convert:MusicPlayModeConvert x:Key="musicPlayModeConvert"></convert:MusicPlayModeConvert>
@@ -173,7 +174,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <controls2:ImageEx Grid.RowSpan="2" Background="#99FFFFFF" Width="48" Margin="0 0 8 0" Height="48" VerticalAlignment="Center" Source="{Binding Path=playInfo.pic}"></controls2:ImageEx>
+                    <controls2:ImageEx extensions:Mouse.Cursor="Hand" x:Name="btnOpenSongDetail" Tapped="BtnOpenSongDetail_Tapped" Grid.RowSpan="2" Background="#99FFFFFF" Width="48" Margin="0 0 8 0" Height="48" VerticalAlignment="Center" Source="{Binding Path=playInfo.pic}"></controls2:ImageEx>
                     <Grid  Grid.Column="1">
                         <TextBlock  VerticalAlignment="Bottom" FontSize="14" Foreground="#E5FFFFFF"><Run FontSize="12" Text="{Binding Path=playInfo.tag}"></Run><Run Text="{Binding Path=playInfo.title_show}"></Run></TextBlock>
                         <TextBlock VerticalAlignment="Bottom" FontSize="12" HorizontalAlignment="Right" Foreground="White" FocusVisualPrimaryBrush="#7F000000" Text="{Binding durationStr}"></TextBlock>

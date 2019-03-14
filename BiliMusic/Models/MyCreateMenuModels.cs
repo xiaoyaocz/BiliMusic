@@ -18,6 +18,8 @@ namespace BiliMusic.Models
         public bool isLastPage { get; set; }
         public bool hasPreviousPage { get; set; }
         public bool hasNextPage { get; set; }
+
+
         public List<MyCreateMenuItemModel> list { get; set; }
     }
     public class MyCreateMenuItemModel
@@ -29,5 +31,24 @@ namespace BiliMusic.Models
         public string img_url { get; set; }
         public int menu_id { get; set; }
         public int is_default { get; set; }
+        public int is_open { get; set; }
+        public string status
+        {
+            get
+            {
+                if (is_open==1)
+                {
+                    return "公开";
+                }
+                else
+                {
+                    return "私密";
+                }
+            }
+        }
+
+        public int records_num { get; set; }
+        public List<int> songsid_list { get; set; }
+
     }
 }

@@ -1,5 +1,7 @@
-﻿using BiliMusic.Helpers;
+﻿using BiliMusic.Controls;
+using BiliMusic.Helpers;
 using BiliMusic.Models;
+using BiliMusic.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,54 +32,29 @@ namespace BiliMusic.Modules
 
         public void SetMenu()
         {
+
             foreach (var item in menuFlyout.Items)
             {
                 switch (item.Name)
                 {
                     case "menuPlay":
+                        (item as MenuFlyoutItem).Click -= MenuPlay_Click;
                         (item as MenuFlyoutItem).Click += MenuPlay_Click;
                         break;
                     case "menuDown":
+                        (item as MenuFlyoutItem).Click -= MenuDownload_Click;
                         (item as MenuFlyoutItem).Click += MenuDownload_Click;
                         break;
                     case "menuShare":
+                        (item as MenuFlyoutItem).Click -= MenuShare_Click;
                         (item as MenuFlyoutItem).Click += MenuShare_Click;
                         break;
                     case "menuCollect":
-                        if (!UserHelper.isLogin)
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Visible;
-                            var collects = item as MenuFlyoutSubItem;
-                            collects.Items.Clear();
-                            if (main._MySonglistMenus != null)
-                            {
-                                foreach (var menuitem in main._MySonglistMenus)
-                                {
-                                    var menu = new MenuFlyoutItem()
-                                    {
-                                        Text = menuitem.title,
-                                        Tag = menuitem.parameters2
-                                    };
-                                    menu.Click += MenuCollect_Click;
-                                    collects.Items.Add(menu);
-                                }
-                            }
-                            collects.Items.Add(new MenuFlyoutSeparator());
-                            var menuCreate = new MenuFlyoutItem()
-                            {
-                                //Icon = new SymbolIcon(Symbol.Add),
-                                Text = "创建歌单"
-                            };
-                            menuCreate.Click += MenuCreate_Click;
-                            collects.Items.Add(menuCreate);
-                        }
-
+                        (item as MenuFlyoutItem).Click -= MenuCollect_Click; 
+                        (item as MenuFlyoutItem).Click += MenuCollect_Click; 
                         break;
                     case "menuInfo":
+                        (item as MenuFlyoutItem).Click -= MenuInfo_Click;
                         (item as MenuFlyoutItem).Click += MenuInfo_Click;
                         break;
                     default:
@@ -86,15 +63,11 @@ namespace BiliMusic.Modules
             }
         }
 
-        private void MenuCreate_Click(object sender, RoutedEventArgs e)
-        {
-           
-        }
 
         private async void MenuCollect_Click(object sender, RoutedEventArgs e)
         {
             var songId = 0;
-            var context= (sender as MenuFlyoutItem).DataContext;
+            var context = (sender as MenuFlyoutItem).DataContext;
             if (context is songsListModel)
             {
                 songId = (context as songsListModel).id;
@@ -103,23 +76,12 @@ namespace BiliMusic.Modules
             {
                 songId = (context as PlayModel).songid;
             }
-            if (UserHelper.isLogin||await Utils.ShowLoginDialog())
+            if (UserHelper.isLogin || await Utils.ShowLoginDialog())
             {
                 try
                 {
-                    IHttpResults re = await Api.CollectSong(songId, (int)(sender as MenuFlyoutItem).Tag).Request();
-                    if (!re.status)
-                    {
-                        Utils.ShowMessageToast(re.message);
-                        return;
-                    }
-                    var data = re.GetJson<ApiParseModel<object>>();
-                    if (data.code != 0)
-                    {
-                        Utils.ShowMessageToast(data.msg + data.message);
-                        return;
-                    }
-                    Utils.ShowMessageToast("收藏成功");
+                    CollectionsDialog cd = new CollectionsDialog(songId);
+                    await cd.ShowAsync();
                 }
                 catch (Exception ex)
                 {
@@ -132,16 +94,30 @@ namespace BiliMusic.Modules
             {
                 Utils.ShowMessageToast("请先登录");
             }
-          
+
 
         }
 
         private void MenuInfo_Click(object sender, RoutedEventArgs e)
         {
-           
+            var songId = 0;
+            var context = (sender as MenuFlyoutItem).DataContext;
+            if (context is songsListModel)
+            {
+                songId = (context as songsListModel).id;
+            }
+            else
+            {
+                songId = (context as PlayModel).songid;
+            }
+            MessageCenter.SendMainFrameNavigated(new NavigateParameter()
+            {
+                page = typeof(SongDetailsPage),
+                parameter = songId
+            });
         }
 
-      
+
 
 
         private void MenuShare_Click(object sender, RoutedEventArgs e)

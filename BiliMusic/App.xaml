@@ -44,8 +44,7 @@
                 <MenuFlyoutItem x:Name="menuPlay" Icon="Play">播放</MenuFlyoutItem>
                 <MenuFlyoutItem x:Name="menuDown" Icon="Download">下载</MenuFlyoutItem>
                 <MenuFlyoutItem x:Name="menuShare" Icon="Share">分享</MenuFlyoutItem>
-                <MenuFlyoutSubItem x:Name="menuCollect" Icon="OutlineStar" Text="收藏到">
-                </MenuFlyoutSubItem>
+                <MenuFlyoutItem x:Name="menuCollect" Icon="OutlineStar" Text="收藏到"></MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutItem x:Name="menuInfo">歌曲详情</MenuFlyoutItem>
             </MenuFlyout>
@@ -122,6 +121,8 @@
             <x:String x:Key="ICON_More">&#xE5D3;</x:String>
             <x:String x:Key="ICON_Delete">&#xE872;</x:String>
             <x:String x:Key="ICON_Close">&#xE5CD;</x:String>
+            <x:String x:Key="ICON_SelectAll">&#xE065;</x:String>
+            <x:String x:Key="ICON_Singer">&#xE02A;</x:String>
             
             <!--主颜色-->
             <SolidColorBrush x:Key="COLOR_Main" Color="#FFEA92A7"></SolidColorBrush>
