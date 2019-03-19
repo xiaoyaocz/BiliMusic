@@ -11,13 +11,52 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 
-    <ScrollViewer>
+    <ScrollViewer Margin="0 32 0 0">
         <StackPanel>
-            <Grid MaxWidth="800">
-              
-                <StackPanel Grid.Column="1" Margin="36">
-                    <TextBlock x:Name="id"></TextBlock>
-                </StackPanel>
+            <TextBlock x:Name="id"></TextBlock>
+            <Grid Margin="12"   MaxWidth="1024">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="300"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Image Source="http://i0.hdslb.com/bfs/music/506e006ad9b5ddd01d985b057df1cc4485d8a397.jpg"></Image>
+                    </StackPanel>
+                    <Grid Grid.Column="1" Margin="12 0 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <TextBlock>believer（雷总翻唱版）</TextBlock>
+                            <TextBlock Margin="0 8 0 0" FontSize="14" Foreground="Gray">歌手：雷军</TextBlock>
+                        </StackPanel>
+                       
+                        <ScrollViewer Margin="0 12 0 0" Grid.Row="1">
+                            <TextBlock Margin="0 8 0 0" FontSize="14" Foreground="Gray">当前歌曲没有歌词</TextBlock>
+                        </ScrollViewer>
+                        
+                    </Grid>
+
+                </Grid>
+                <Grid Grid.Column="1" Grid.RowSpan="2" Height="600" Margin="12 0 0 0">
+                    <StackPanel >
+                        <TextBlock>关联视频</TextBlock>
+                        <TextBlock Margin="0 12 0 0">音乐人的热门歌曲</TextBlock>
+                        <TextBlock Margin="0 12 0 0">浏览相似歌曲</TextBlock>
+                        <TextBlock Margin="0 12 0 0">相关歌单推荐</TextBlock>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </StackPanel>
     </ScrollViewer>

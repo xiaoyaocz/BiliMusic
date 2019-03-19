@@ -15,7 +15,7 @@
     <Grid>
         <Grid DataContext="{Binding Datas}">
             <Grid VerticalAlignment="Top">
-                <Image Source="{Binding Path=menusRespones.bg}" Height="360" Stretch="Fill"></Image>
+                <controls:ImageEx Source="{Binding Path=menusRespones.bg}" Height="360" Stretch="Fill"></controls:ImageEx>
                 <Border BorderBrush="White" >
                     <Border.Background>
                         <media:BackdropBlurBrush Amount="200" FallbackColor="White"/>
@@ -26,7 +26,7 @@
 
                 </Border>
             </Grid>
-            <ScrollViewer Margin="0 32 0 0">
+            <ScrollViewer Margin="0 32 0 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="24 8">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -111,7 +111,7 @@
                                 </Button>
                                 <Button Margin="4 0" Style="{StaticResource TextButton}" MinHeight="32" MinWidth="100" Background="#4CF5F5F5" BorderThickness="0" BorderBrush="#FFBFBFBF" Padding="8 4">
                                     <StackPanel Orientation="Horizontal">
-                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Comment2}"></FontIcon>
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Comment3}"></FontIcon>
                                         <TextBlock Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">评论(<Run Text="{Binding Path=menusRespones.commentNum,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
                                     </StackPanel>
                                 </Button>

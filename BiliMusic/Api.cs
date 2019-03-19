@@ -462,6 +462,22 @@ namespace BiliMusic
             return api;
         }
 
+        /// <summary>
+        /// 榜单
+        /// </summary>
+        /// <returns></returns>
+        public static ApiModel Ranks()
+        {
+            ApiModel api = new ApiModel()
+            {
+                method = RestSharp.Method.GET,
+                baseUrl = $"https://api.bilibili.com/audio/music-service-c/menus/rank",
+                parameter = ApiHelper.MustParameter(false),
+                headers = Utils.GetDefaultHeaders()
+            };
+            api.parameter += ApiHelper.GetSign(api.parameter);
+            return api;
+        }
 
     }
 

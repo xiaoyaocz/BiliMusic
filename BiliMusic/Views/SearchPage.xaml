@@ -15,7 +15,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <AutoSuggestBox x:Name="txtSearch" QuerySubmitted="TxtSearch_QuerySubmitted" QueryIcon="Find" Margin="12 0" PlaceholderText="搜索单曲/歌单/音乐人/AU号"></AutoSuggestBox>
-        <ScrollViewer  x:Name="searchInfo" Grid.Row="1"  Margin="12 8">
+        <ScrollViewer  x:Name="searchInfo" Visibility="Visible" Grid.Row="1"  Margin="12 8">
             <StackPanel>
                 <TextBlock Margin="0 0 0 8">大家都在搜</TextBlock>
                 <ItemsControl ItemsSource="{Binding hotWords}">
@@ -35,26 +35,155 @@
                 </ItemsControl>
                 <Grid Margin="0 8 0 8">
                     <TextBlock>搜索历史</TextBlock>
-                    <Button Style="{StaticResource TextButton}" HorizontalAlignment="Right">清除历史</Button>
+                    <Button x:Name="btnClearHistory" Click="BtnClearHistory_Click" Style="{StaticResource TextButton}" HorizontalAlignment="Right">清除历史</Button>
                 </Grid>
-               
+                <ItemsControl ItemsSource="{Binding historyWords}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <HyperlinkButton  Foreground="{ThemeResource COLOR_Main}" Margin="0 0 12 0"  Click="BtnWord_Click">
+                                <TextBlock Text="{Binding}"></TextBlock>
+                            </HyperlinkButton>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
             </StackPanel>
         </ScrollViewer>
-        <Pivot x:Name="pivotResults" Grid.Row="1" Margin="0 8" Visibility="Collapsed">
+        <Pivot x:Name="pivotResults" Visibility="Collapsed" Grid.Row="1" Margin="0 8" >
             <PivotItem>
                 <PivotItem.Header>
                     <TextBlock FontSize="18">单曲</TextBlock>
                 </PivotItem.Header>
+                <ScrollViewer x:Name="svSongs" ViewChanged="SvSongs_ViewChanged" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <ListView x:Name="listSongs" ItemClick="ListSongs_ItemClick" ItemsSource="{Binding Path=searchSongs.result}" SelectionMode="None" IsItemClickEnabled="True" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:ImageEx Width="64" CornerRadius="4" Height="64" Margin="0 0 8 0" PlaceholderSource="ms-appx:///Assets/Placeholde300W300H.png" Source="{Binding Path=cover,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                            <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+                                                <FontIcon  FontSize="14" Foreground="Gray" Margin="0 0 4 0" Glyph="{StaticResource ICON_Singer}" FontFamily="{StaticResource FONTS_MaterialIcons}"></FontIcon>
+                                                <TextBlock  FontSize="14" Foreground="Gray" Text="{Binding author}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                                                <FontIcon  FontSize="14" Foreground="Gray" Margin="0 0 4 0" Glyph="{StaticResource ICON_Music2}" FontFamily="{StaticResource FONTS_MaterialIcons}"></FontIcon>
+                                                <TextBlock  FontSize="14" Foreground="Gray" Text="{Binding Path=play_count,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                                <FontIcon  FontSize="14" Foreground="Gray" Margin="8 0 4 0" Glyph="{StaticResource ICON_Comment3}" FontFamily="{StaticResource FONTS_MaterialIcons}"></FontIcon>
+                                                <TextBlock  FontSize="14" Foreground="Gray" Text="{Binding Path=review_count,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
+
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
                     <TextBlock FontSize="18">歌单</TextBlock>
                 </PivotItem.Header>
+                <ScrollViewer x:Name="svMenus" ViewChanged="SvMenus_ViewChanged" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <ListView  ItemClick="ListMenus_ItemClick" ItemsSource="{Binding Path=searchMenus.result}" SelectionMode="None" IsItemClickEnabled="True" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:ImageEx Width="64" CornerRadius="4" Height="64" PlaceholderSource="ms-appx:///Assets/Placeholde300W300H.png" Margin="0 0 8 0" Source="{Binding Path=cover,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                            <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+
+                                                <TextBlock  FontSize="14" Foreground="Gray"><Run Text="{Binding music_count}"></Run>首歌</TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                                                <FontIcon  FontSize="14" Foreground="Gray" Margin="0 0 4 0" Glyph="{StaticResource ICON_Music2}" FontFamily="{StaticResource FONTS_MaterialIcons}"></FontIcon>
+                                                <TextBlock  FontSize="14" Foreground="Gray" Text="{Binding Path=play_count,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                                <FontIcon  FontSize="14" Foreground="Gray" Margin="8 0 4 0" Glyph="{StaticResource ICON_Like_Border}" FontFamily="{StaticResource FONTS_MaterialIcons}"></FontIcon>
+                                                <TextBlock  FontSize="14" Foreground="Gray" Text="{Binding Path=favor_count,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
                     <TextBlock FontSize="18">音乐人</TextBlock>
                 </PivotItem.Header>
+                <ScrollViewer x:Name="svMusician" ViewChanged="SvMusician_ViewChanged" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <ListView x:Name="listMusicians" ItemClick="ListMusicians_ItemClick" ItemsSource="{Binding Path=searchAuthors.result}" SelectionMode="None" IsItemClickEnabled="True" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <controls:ImageEx Width="48" CornerRadius="24" Height="48" Margin="0 0 8 0" PlaceholderSource="ms-appx:///Assets/Placeholde300W300H.png" Source="{Binding Path=cover,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding uname}"></TextBlock>
+                                          
+                                            <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+
+                                                <TextBlock  FontSize="14" Foreground="Gray" >粉丝:<Run Text="{Binding Path=fans_count,Converter={StaticResource numberToStringConvert}}"></Run></TextBlock>
+                                                <TextBlock  FontSize="14" Foreground="Gray" Margin="8 0 4 0">音频播放:<Run Text="{Binding Path=play_count,Converter={StaticResource numberToStringConvert}}"></Run></TextBlock>
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
             </PivotItem>
         </Pivot>
         <ProgressRing x:Name="loading" Grid.RowSpan="2" Visibility="{Binding loading}" Foreground="{StaticResource COLOR_Main}" IsActive="True" Width="56" Height="56"></ProgressRing>

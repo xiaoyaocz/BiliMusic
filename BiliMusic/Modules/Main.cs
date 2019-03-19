@@ -114,6 +114,7 @@ namespace BiliMusic.Modules
                     openMode= MenuOpenMode.Radio
                 },
                 new MenuModel(){
+                    name="RankPage",
                     icon=(string)Application.Current.Resources["ICON_Rank"],
                     title="榜单",
                     menuType= MenuType.Menuitem,
@@ -370,6 +371,7 @@ namespace BiliMusic.Modules
                 });
                 _HomeMenus.Add(new MenuModel()
                 {
+                    name = "RankPage",
                     icon = (string)Application.Current.Resources["ICON_Rank"],
                     title = "榜单",
                     menuType = MenuType.Menuitem,

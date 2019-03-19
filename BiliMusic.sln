@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiliMusic.JS", "BiliMusic.J
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiliMusic.SqliteModel", "BiliMusic.SqliteModel\BiliMusic.SqliteModel.csproj", "{BB7C60F3-3215-442E-85AE-A6D5F406D1EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiliMusic.Migrations.Startup", "BiliMusic.Migrations.Startup\BiliMusic.Migrations.Startup.csproj", "{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,26 @@ Global
 		{BB7C60F3-3215-442E-85AE-A6D5F406D1EC}.Release|x64.Build.0 = Release|Any CPU
 		{BB7C60F3-3215-442E-85AE-A6D5F406D1EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{BB7C60F3-3215-442E-85AE-A6D5F406D1EC}.Release|x86.Build.0 = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|ARM.Build.0 = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|ARM64.Build.0 = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|x64.Build.0 = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2CF32EC-5DB9-4E11-B450-A2E051F0BD8F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

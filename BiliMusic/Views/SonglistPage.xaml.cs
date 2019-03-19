@@ -87,7 +87,7 @@ namespace BiliMusic.Views
         {
             var item = (sender as Grid).DataContext as songsListModel;
             var player = MessageCenter.GetMusicPlay();
-            player.AddPlay(new PlayModel()
+            player.AddToPlay(new PlayModel()
             {
                 author = item.author,
                 title = item.title,
@@ -161,7 +161,7 @@ namespace BiliMusic.Views
         {
             var item = (sender as Button).DataContext as songsListModel;
             var player = MessageCenter.GetMusicPlay();
-            player.AddPlay(new PlayModel()
+            player.AddToPlay(new PlayModel()
             {
                 author = item.author,
                 title = item.title,

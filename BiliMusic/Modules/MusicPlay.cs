@@ -603,6 +603,7 @@ namespace BiliMusic.Modules
         {
             if (playList.FirstOrDefault(x => x.songid == play.songid) != null)
             {
+             
                 return;
             }
             if (!play.pic.Contains("300w_300h_1e_1c"))
@@ -618,12 +619,35 @@ namespace BiliMusic.Modules
             source.CustomProperties["id"] = play.songid;
             mediaPlaybackList.Items.Add(new MediaPlaybackItem(source));
 
-         
             //var item = new MediaPlaybackItem(MediaSource.CreateFromUri(play.play_url));
             //mediaPlaybackList.Items.Add(item);
-
-
         }
+        public void AddToPlay(PlayModel play)
+        {
+            var item = playList.FirstOrDefault(x => x.songid == play.songid);
+            if (item != null)
+            {
+                mediaPlaybackList.MoveTo(Convert.ToUInt32(playList.IndexOf(item)));
+                return;
+            }
+            if (!play.pic.Contains("300w_300h_1e_1c"))
+            {
+                play.pic = play.pic + "@300w_300h_1e_1c.jpg";
+            }
+            playList.Add(play);
+
+            var binder = new MediaBinder();
+            binder.Token = play.songid.ToString();
+            binder.Binding += Binder_Binding;
+            var source = MediaSource.CreateFromMediaBinder(binder);
+            source.CustomProperties["id"] = play.songid;
+            mediaPlaybackList.Items.Add(new MediaPlaybackItem(source));
+            mediaPlaybackList.MoveTo(Convert.ToUInt32(playList.IndexOf(play)));
+            //var item = new MediaPlaybackItem(MediaSource.CreateFromUri(play.play_url));
+            //mediaPlaybackList.Items.Add(item);
+        }
+
+
 
         /// <summary>
         /// 替换播放列表

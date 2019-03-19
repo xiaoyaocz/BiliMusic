@@ -91,7 +91,7 @@ namespace BiliMusic.Views
         {
             var item = e.ClickedItem as songsModel;
             var player = MessageCenter.GetMusicPlay();
-            player.AddPlay(new PlayModel()
+            player.AddToPlay(new PlayModel()
             {
                 author = item.author,
                 title = item.title,

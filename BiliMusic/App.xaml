@@ -114,6 +114,7 @@
 
             <x:String x:Key="ICON_Comment">&#xE0B7;</x:String>
             <x:String x:Key="ICON_Comment2">&#xE0CA;</x:String>
+            <x:String x:Key="ICON_Comment3">&#xE0CB;</x:String>
             <x:String x:Key="ICON_Share">&#xE80D;</x:String>
             <x:String x:Key="ICON_Listen">&#xE310;</x:String>
 

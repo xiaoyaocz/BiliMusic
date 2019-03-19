@@ -148,7 +148,7 @@ namespace BiliMusic.Modules
             if (data is songsListModel)
             {
                 var item = data as songsListModel;
-                player.AddPlay(new PlayModel()
+                player.AddToPlay(new PlayModel()
                 {
                     author = item.author,
                     title = item.title,

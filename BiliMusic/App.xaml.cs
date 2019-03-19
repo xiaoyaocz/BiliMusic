@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using BiliMusic.SqliteModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace BiliMusic
 {
@@ -31,6 +33,10 @@ namespace BiliMusic
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            using (var db = new BiliMusicContext())
+            {
+                db.Database.Migrate();
+            }
         }
 
         /// <summary>

@@ -212,6 +212,7 @@ namespace BiliMusic
                 case MenuOpenMode.Account:
                     break;
                 case MenuOpenMode.Rank:
+                    MainFrame.Navigate(typeof(Views.RankPage));
                     break;
                 case MenuOpenMode.Radio:
                     break;
@@ -425,8 +426,12 @@ namespace BiliMusic
 
         private async void BtnLike_Click(object sender, RoutedEventArgs e)
         {
-            CollectionsDialog cd = new CollectionsDialog(musicPlay.playInfo.songid);
-            await cd.ShowAsync();
+            if (musicPlay.playInfo.songid!=0)
+            {
+                CollectionsDialog cd = new CollectionsDialog(musicPlay.playInfo.songid);
+                await cd.ShowAsync();
+            }
+          
         }
 
         private void BtnOpenSongDetail_Tapped(object sender, TappedRoutedEventArgs e)
@@ -440,6 +445,11 @@ namespace BiliMusic
                 });
             }
           
+        }
+
+        private void Flyout_Opened(object sender, object e)
+        {
+            listPlaylist.ScrollIntoView(musicPlay.playInfo);
         }
     }
 }

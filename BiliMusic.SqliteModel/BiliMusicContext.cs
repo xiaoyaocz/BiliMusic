@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace BiliMusic.SqliteModel
@@ -17,6 +19,8 @@ namespace BiliMusic.SqliteModel
 
     public class SearchHistory
     {
+        [Required,Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
         public DateTime datetime { get; set; }
         public string content { get; set; }
     }

@@ -176,8 +176,12 @@
                     </Grid.RowDefinitions>
                     <controls2:ImageEx extensions:Mouse.Cursor="Hand" x:Name="btnOpenSongDetail" Tapped="BtnOpenSongDetail_Tapped" Grid.RowSpan="2" Background="#99FFFFFF" Width="48" Margin="0 0 8 0" Height="48" VerticalAlignment="Center" Source="{Binding Path=playInfo.pic}"></controls2:ImageEx>
                     <Grid  Grid.Column="1">
-                        <TextBlock  VerticalAlignment="Bottom" FontSize="14" Foreground="#E5FFFFFF"><Run FontSize="12" Text="{Binding Path=playInfo.tag}"></Run><Run Text="{Binding Path=playInfo.title_show}"></Run></TextBlock>
-                        <TextBlock VerticalAlignment="Bottom" FontSize="12" HorizontalAlignment="Right" Foreground="White" FocusVisualPrimaryBrush="#7F000000" Text="{Binding durationStr}"></TextBlock>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock  VerticalAlignment="Bottom" FontSize="14" TextTrimming="CharacterEllipsis" Foreground="#E5FFFFFF" ><Run FontSize="12" Text="{Binding Path=playInfo.tag}"></Run><Run Text="{Binding Path=playInfo.title_show}"></Run></TextBlock>
+                        <TextBlock VerticalAlignment="Bottom" FontSize="12" Grid.Column="1" Foreground="White" FocusVisualPrimaryBrush="#7F000000" Text="{Binding durationStr}"></TextBlock>
                     </Grid>
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Slider VerticalAlignment="Center"  Style="{StaticResource MuiscProgressSliderBGStyle}"  Background="#00000000" Value="{Binding Path=bufferingProgress,Mode=TwoWay}" Maximum="100" Foreground="#7FFFFFFF"></Slider>
@@ -248,7 +252,7 @@
                             <TextBlock FontSize="14" Text="{Binding Path=playList.Count}" Margin="4 0 0 0"></TextBlock>
                         </StackPanel>
                         <Button.Flyout>
-                            <Flyout>
+                            <Flyout Opened="Flyout_Opened">
                                 <Grid Height="400" Width="400" RowSpacing="4" Margin="-8">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -268,7 +272,7 @@
                                         </Button>
 
                                     </Grid>
-                                    <ListView ItemsSource="{Binding Path=playList}"  Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True">
+                                    <ListView x:Name="listPlaylist" ItemsSource="{Binding Path=playList}"  Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>

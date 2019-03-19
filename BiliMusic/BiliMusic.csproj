@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>BiliMusic_StoreKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>72C9EA9DFD72F6C9F5E9C8A11231A173799E250E</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
@@ -130,6 +130,7 @@
     <Compile Include="Helpers\HttpHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MessageCenter.cs" />
+    <Compile Include="Models\RankModels.cs" />
     <Compile Include="Models\SearchModels.cs" />
     <Compile Include="Modules\MusicPlay.cs" />
     <Compile Include="Helpers\SettingHelper.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Modules\Account.cs" />
     <Compile Include="Modules\MenuDetail.cs" />
+    <Compile Include="Modules\Ranks.cs" />
     <Compile Include="Modules\Search.cs" />
     <Compile Include="Modules\SongDetail.cs" />
     <Compile Include="Modules\SongFlyoutMenu.cs" />
@@ -164,6 +166,9 @@
     </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RankPage.xaml.cs">
+      <DependentUpon>RankPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
@@ -279,6 +284,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\RankPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -301,6 +310,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore">
+      <Version>2.2.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
     </PackageReference>
@@ -336,6 +348,10 @@
     <ProjectReference Include="..\BiliMusic.JS\BiliMusic.JS.csproj">
       <Project>{97c7b171-e341-4ac4-9720-14e7b1ecf2a3}</Project>
       <Name>BiliMusic.JS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BiliMusic.SqliteModel\BiliMusic.SqliteModel.csproj">
+      <Project>{bb7c60f3-3215-442e-85ae-a6d5f406d1ec}</Project>
+      <Name>BiliMusic.SqliteModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
