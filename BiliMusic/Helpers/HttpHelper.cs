@@ -112,6 +112,49 @@ namespace BiliMusic.Helpers
         }
 
         /// <summary>
+        /// 发送一个GET请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <param name="cookie"></param>
+        /// <returns></returns>
+        public async static Task<String> GetString(string url, IDictionary<string, string> headers = null, IDictionary<string, string> cookie = null)
+        {
+            try
+            {
+                var client = new RestClient(url);
+                var request = new RestRequest(Method.GET);
+                if (headers != null)
+                {
+                    foreach (var item in headers)
+                    {
+                        request.AddHeader(item.Key, item.Value);
+                    }
+                }
+                if (cookie != null)
+                {
+                    foreach (var item in cookie)
+                    {
+                        request.AddCookie(item.Key, item.Value);
+                    }
+                }
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+
+                return response.Content;
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Log("读取String失败" + url, LogType.ERROR, ex);
+                return null;
+
+            }
+
+
+
+        }
+
+        /// <summary>
         /// 发送一个POST请求
         /// </summary>
         /// <param name="url"></param>
@@ -164,7 +207,7 @@ namespace BiliMusic.Helpers
         }
         
       
-
+         
 
         private static string StatusCodeToMessage(int code)
         {

@@ -11,9 +11,10 @@ namespace BiliMusic.Helpers
 {
     public static class MessageCenter
     {
+        public delegate void MainFrameNavigateHandler(Type page,object par);
         public static event EventHandler<object> Logined;
         public static event EventHandler Logouted;
-        public static event EventHandler<NavigateParameter> MainFrameNavigatedTo;
+        public static event MainFrameNavigateHandler MainFrameNavigatedTo;
         /// <summary>
         /// 发送登录完成事件
         /// </summary>
@@ -42,16 +43,12 @@ namespace BiliMusic.Helpers
             return ((Window.Current.Content as Frame).Content as MainPage).main;
         }
 
-        public static void SendMainFrameNavigated(NavigateParameter par)
+        public static void SendMainFrameNavigate(Type page, object par)
         {
-            MainFrameNavigatedTo?.Invoke(null, par);
+            MainFrameNavigatedTo?.Invoke(page, par);
         }
 
 
     }
-    public class NavigateParameter
-    {
-        public Type page { get; set; }
-        public object parameter { get; set; }
-    }
+ 
 }

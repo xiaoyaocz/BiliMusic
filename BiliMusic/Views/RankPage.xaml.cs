@@ -42,11 +42,7 @@ namespace BiliMusic.Views
         private void ListRank_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item= e.ClickedItem as Models.RankModel;
-            MessageCenter.SendMainFrameNavigated(new NavigateParameter()
-            {
-                page = typeof(SonglistPage),
-                parameter = item.menuId
-            });
+            MessageCenter.SendMainFrameNavigate(typeof(SonglistPage), item.menuId);
 
 
         }

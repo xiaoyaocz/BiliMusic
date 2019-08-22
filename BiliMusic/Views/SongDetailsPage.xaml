@@ -11,10 +11,48 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 
-    <ScrollViewer Margin="0 32 0 0">
+    <ScrollViewer Margin="0 32 0 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RightPanel.(Grid.Row)" Value="0"/>
+                        <Setter Target="RightPanel.(Grid.Column)" Value="1"/>
+                        <Setter Target="RightPanel.(Grid.ColumnSpan)" Value="1"/>
+                        <Setter Target="RightPanel.Margin" Value="12 0 0 0"/>
+                        <Setter Target="LeftPanel.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btnTxtCollect.Visibility" Value="Visible"></Setter>
+                        <Setter Target="btnTxtDown.Visibility" Value="Visible"></Setter>
+                        <Setter Target="btnTxtCoin.Visibility" Value="Visible"></Setter>
+                        <Setter Target="btnTxtShare.Visibility" Value="Visible"></Setter>
+                        <Setter Target="btnTxtPlay.Visibility" Value="Visible"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RightPanel.(Grid.Row)" Value="1"/>
+                        <Setter Target="RightPanel.(Grid.Column)" Value="0"/>
+                        <Setter Target="RightPanel.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="RightPanel.Margin" Value="0 12"/>
+                        <Setter Target="LeftPanel.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btnTxtCollect.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="btnTxtCoin.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="btnTxtDown.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="btnTxtShare.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="btnTxtPlay.Visibility" Value="Collapsed"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <StackPanel>
-            <TextBlock x:Name="id"></TextBlock>
-            <Grid Margin="12"   MaxWidth="1024">
+            <Grid Margin="12"  DataContext="{Binding detail}"  MaxWidth="1024">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.7*"/>
                     <ColumnDefinition Width="0.3*"/>
@@ -23,13 +61,35 @@
                     <RowDefinition MaxHeight="300"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid>
+                <Grid x:Name="LeftPanel">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <Image Source="http://i0.hdslb.com/bfs/music/506e006ad9b5ddd01d985b057df1cc4485d8a397.jpg"></Image>
+                        <Grid>
+                            <controls:ImageEx 
+                        Source="{Binding Path=cover_url,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W300H300}}"
+                        Style="{StaticResource ImageExBaseStyle}" />
+                            <Border Background="Orange" Visibility="{Binding isPay}" VerticalAlignment="Top" CornerRadius="0 0 0 4" HorizontalAlignment="Right">
+                                <TextBlock Foreground="White" Margin="8 4" FontSize="12">付费</TextBlock>
+                            </Border>
+                            <Grid VerticalAlignment="Bottom" >
+                                <Grid.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#7F000000" Offset="1"/>
+                                        <GradientStop Color="#00000000" Offset="0"/>
+                                    </LinearGradientBrush>
+                                </Grid.Background>
+                                <StackPanel Orientation="Horizontal" Padding="8 4">
+
+                                    <FontIcon  Foreground="White" FontSize="14"  VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F6;"></FontIcon>
+                                    <TextBlock Foreground="White"  FontSize="12" VerticalAlignment="Center" Margin="4 0 0 0" Text="{Binding Path=play_count,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                    <TextBlock Foreground="White"  FontSize="12" VerticalAlignment="Center" Margin="8 0 0 0" Text="{Binding Path=ctime_str}"></TextBlock>
+                                </StackPanel>
+
+                            </Grid>
+                        </Grid>
                     </StackPanel>
                     <Grid Grid.Column="1" Margin="12 0 0 0">
                         <Grid.RowDefinitions>
@@ -38,23 +98,163 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel>
-                            <TextBlock>believer（雷总翻唱版）</TextBlock>
-                            <TextBlock Margin="0 8 0 0" FontSize="14" Foreground="Gray">歌手：雷军</TextBlock>
+                            <TextBlock Text="{Binding title}" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock Margin="0 4 0 0" FontSize="14" TextWrapping="Wrap" Foreground="Gray" Text="{Binding author}"></TextBlock>
+                            <TextBlock Margin="0 4 0 0" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"  Tapped="TxtIntro_Tapped" FontSize="14"  Foreground="Gray">简介：<Run Text="{Binding intro}"/></TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0 8 0 0" Visibility="{Binding Path=menusRespones.showPlayNum}">
+                                <Button Margin="0 0 4 0" x:Name="btnPlay" Click="BtnPlay_Click" Foreground="White" MinWidth="32" Background="{StaticResource COLOR_Main}" Style="{StaticResource TextButton}"  MinHeight="32" Padding="8 4" FontFamily="Material Icons">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Play}"></FontIcon>
+                                        <TextBlock  x:Name="btnTxtPlay" Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center" >立即播放</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="4 0" x:Name="btnCollect" Click="BtnCollect_Click" MinWidth="32" Style="{StaticResource TextButton}"  MinHeight="32"  Background="WhiteSmoke"  Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Like}"></FontIcon>
+                                        <TextBlock x:Name="btnTxtCollect" Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center" >收藏(<Run Text="{Binding Path=collect_count,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="4 0" Style="{StaticResource TextButton}" MinWidth="32" MinHeight="32" Background="WhiteSmoke"  Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="&#xE8DC;"></FontIcon>
+                                        <TextBlock x:Name="btnTxtCoin" Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">投币(<Run Text="{Binding Path=coin_num,Converter={StaticResource numberToStringConvert}}"></Run>)</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="4 0" Style="{StaticResource TextButton}" MinWidth="32" MinHeight="32"  Background="WhiteSmoke"  Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Download}"></FontIcon>
+                                        <TextBlock x:Name="btnTxtDown" Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">下载</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="btnShare" Margin="4 0" Click="BtnShare_Click" Style="{StaticResource TextButton}" MinWidth="32" MinHeight="32" Background="WhiteSmoke" Padding="8 4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon FontSize="14" FontFamily="{StaticResource FONTS_MaterialIcons}"  Glyph="{StaticResource ICON_Share}"></FontIcon>
+                                        <TextBlock x:Name="btnTxtShare" Margin="4 0 0 0" FontSize="12" VerticalAlignment="Center">分享</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
                        
-                        <ScrollViewer Margin="0 12 0 0" Grid.Row="1">
-                            <TextBlock Margin="0 8 0 0" FontSize="14" Foreground="Gray">当前歌曲没有歌词</TextBlock>
-                        </ScrollViewer>
+                      
                         
                     </Grid>
 
                 </Grid>
-                <Grid Grid.Column="1" Grid.RowSpan="2" Height="600" Margin="12 0 0 0">
+                <Grid x:Name="RightPanel" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0 12">
                     <StackPanel >
-                        <TextBlock>关联视频</TextBlock>
-                        <TextBlock Margin="0 12 0 0">音乐人的热门歌曲</TextBlock>
-                        <TextBlock Margin="0 12 0 0">浏览相似歌曲</TextBlock>
-                        <TextBlock Margin="0 12 0 0">相关歌单推荐</TextBlock>
+                        <Button Margin="0 0 0 12"  Visibility="{Binding showName}" Style="{StaticResource TextButton}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <controls:ImageEx Width="36" CornerRadius="18" Style="{StaticResource ImageExBaseStyle}" Height="36" Source="{Binding Path=up_img,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                <StackPanel Grid.Column="1"  Margin="8 0 0 0">
+                                    <TextBlock  TextTrimming="CharacterEllipsis" Text="{Binding up_name}"></TextBlock>
+                                    <TextBlock   FontSize="14" Foreground="Gray" TextTrimming="CharacterEllipsis"><Run Text="{Binding Path=fans,Converter={StaticResource numberToStringConvert}}"/>粉丝</TextBlock>
+                                </StackPanel>
+                                <HyperlinkButton Visibility="{Binding _showfollow}" Grid.Column="2" VerticalAlignment="Center" Foreground="{StaticResource COLOR_Main}">
+                                    <TextBlock>关注</TextBlock>
+                                </HyperlinkButton>
+                                <HyperlinkButton Visibility="{Binding _up_is_follow}" Grid.Column="2" VerticalAlignment="Center" Foreground="Gray">
+                                    <TextBlock>已关注</TextBlock>
+                                </HyperlinkButton>
+                            </Grid>
+                        </Button>
+                        <ListView Header="创作团队" ItemClick="ListUps_ItemClick" Margin="0 0 0 12" Visibility="{Binding showMemberList}" ItemsSource="{Binding memberList}" IsItemClickEnabled="True" SelectionMode="None">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:ImageEx Width="36" CornerRadius="18" Style="{StaticResource ImageExBaseStyle}" Height="36" Source="{Binding Path=face,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                        <StackPanel Grid.Column="1"  Margin="8 0 0 0">
+                                            <TextBlock  TextTrimming="CharacterEllipsis" Text="{Binding name}"></TextBlock>
+                                            <TextBlock   FontSize="14" Foreground="Gray" TextTrimming="CharacterEllipsis" Text="{Binding info}"></TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView Header="关联视频"  ItemClick="ListVideos_ItemClick" Visibility="{Binding showVideos}" Margin="0 0 0 12" ItemsSource="{Binding videos}" IsItemClickEnabled="True" SelectionMode="None">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:ImageEx Width="90" Height="64" CornerRadius="4" Style="{StaticResource ImageExBaseStyle}"  Source="{Binding Path=pic,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W480H300}}"></controls:ImageEx>
+                                        <StackPanel  Grid.Column="1"  Margin="4 0 0 0" >
+                                            <TextBlock TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                            <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+                                                <FontIcon  Foreground="Gray" FontSize="14"  VerticalAlignment="Center" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Play}"></FontIcon>
+                                                <TextBlock Foreground="Gray"  FontSize="12" VerticalAlignment="Center" Margin="4 0 0 0" Text="{Binding Path=view,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                                <FontIcon  Foreground="Gray" FontSize="14" Margin="8 0 0 0" VerticalAlignment="Center" FontFamily="{StaticResource FONTS_MaterialIcons}" Glyph="{StaticResource ICON_Comment}"></FontIcon>
+                                                <TextBlock Foreground="Gray"  FontSize="12" VerticalAlignment="Center" Margin="4 0 0 0" Text="{Binding Path=reply,Converter={StaticResource numberToStringConvert}}"></TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+                                       
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView Header="音乐人的热门歌曲" ItemClick="ListHitSongs_ItemClick" Visibility="{Binding showUp_hit_audios}" Margin="0 0 0 12" ItemsSource="{Binding up_hit_audios}" IsItemClickEnabled="True" SelectionMode="None">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:ImageEx Width="48" CornerRadius="4" Style="{StaticResource ImageExBaseStyle}" Height="48" Source="{Binding Path=cover,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                        <TextBlock  Grid.Column="1" Margin="4 0 0 0" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <ListView Header="相关歌单推荐"  ItemClick="ListMenus_ItemClick" Visibility="{Binding showMenusRespones}" Margin="0 0 0 12" ItemsSource="{Binding menusRespones}" IsItemClickEnabled="True" SelectionMode="None">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0 4"></Setter>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:ImageEx Width="48" CornerRadius="4" Style="{StaticResource ImageExBaseStyle}" Height="48" Source="{Binding Path=coverUrl,Converter={StaticResource imageCompressionConvert},ConverterParameter={StaticResource W100H100}}"></controls:ImageEx>
+                                        <TextBlock  Grid.Column="1" Margin="4 0 0 0" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
                 </Grid>
             </Grid>

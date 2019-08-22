@@ -82,7 +82,7 @@ namespace BiliMusic.Modules
         {
             //注册登录完成事件
             MessageCenter.Logined += MessageCenter_Logined;
-
+            MessageCenter.Logouted += MessageCenter_Logouted;
             _TopMenus = new ObservableCollection<MenuModel>() {
                 new MenuModel(){
                     icon=(string)Application.Current.Resources["ICON_Search"],
@@ -132,6 +132,11 @@ namespace BiliMusic.Modules
 
             CreateMenus();
 
+        }
+
+        private void MessageCenter_Logouted(object sender, EventArgs e)
+        {
+            Logout();
         }
 
         private void MessageCenter_Logined(object sender, object e)
@@ -185,6 +190,7 @@ namespace BiliMusic.Modules
             };
             _MySonglistMenus = null;
             _MyLikeSonglistMenus = null;
+            _MyAlbumMenus = null;
             CreateMenus();
         }
 

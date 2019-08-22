@@ -41,6 +41,10 @@ namespace BiliMusic.Modules
                         (item as MenuFlyoutItem).Click -= MenuPlay_Click;
                         (item as MenuFlyoutItem).Click += MenuPlay_Click;
                         break;
+                    case "menuAdd":
+                        (item as MenuFlyoutItem).Click -= MenuAdd_Click;
+                        (item as MenuFlyoutItem).Click += MenuAdd_Click;
+                        break;
                     case "menuDown":
                         (item as MenuFlyoutItem).Click -= MenuDownload_Click;
                         (item as MenuFlyoutItem).Click += MenuDownload_Click;
@@ -63,6 +67,23 @@ namespace BiliMusic.Modules
             }
         }
 
+        private void MenuAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var player = MessageCenter.GetMusicPlay();
+            var data = (sender as MenuFlyoutItem).DataContext;
+            if (data is songsListModel)
+            {
+                var item = data as songsListModel;
+                player.AddPlay(new PlayModel()
+                {
+                    author = item.author,
+                    title = item.title,
+                    pic = item.cover_url,
+                    songid = item.id
+                });
+
+            }
+        }
 
         private async void MenuCollect_Click(object sender, RoutedEventArgs e)
         {
@@ -110,11 +131,7 @@ namespace BiliMusic.Modules
             {
                 songId = (context as PlayModel).songid;
             }
-            MessageCenter.SendMainFrameNavigated(new NavigateParameter()
-            {
-                page = typeof(SongDetailsPage),
-                parameter = songId
-            });
+            MessageCenter.SendMainFrameNavigate(typeof(SongDetailsPage),songId);
         }
 
 

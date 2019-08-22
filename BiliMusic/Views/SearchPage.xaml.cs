@@ -102,20 +102,13 @@ namespace BiliMusic.Views
         private void ListMenus_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as SearchMenuResultModel;
-            MessageCenter.SendMainFrameNavigated(new NavigateParameter() {
-                page=typeof(SonglistPage),
-                parameter=item.id
-            });
+            MessageCenter.SendMainFrameNavigate(typeof(SonglistPage), item.id);
         }
 
         private void ListSongs_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as SearchSongResultModel;
-            MessageCenter.SendMainFrameNavigated(new NavigateParameter()
-            {
-                page = typeof(SongDetailsPage),
-                parameter = item.id
-            });
+            MessageCenter.SendMainFrameNavigate(typeof(SongDetailsPage), item.id);
         }
 
        

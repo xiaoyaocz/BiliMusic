@@ -42,6 +42,7 @@
 
             <MenuFlyout x:Key="song_menu">
                 <MenuFlyoutItem x:Name="menuPlay" Icon="Play">播放</MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="menuAdd" Icon="Add">稍后播</MenuFlyoutItem>
                 <MenuFlyoutItem x:Name="menuDown" Icon="Download">下载</MenuFlyoutItem>
                 <MenuFlyoutItem x:Name="menuShare" Icon="Share">分享</MenuFlyoutItem>
                 <MenuFlyoutItem x:Name="menuCollect" Icon="OutlineStar" Text="收藏到"></MenuFlyoutItem>
